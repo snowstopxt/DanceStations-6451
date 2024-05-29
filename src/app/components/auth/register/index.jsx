@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import { doCreateUserWithEmailAndPassword, doSignInWithGoogle} from '../../../firebase/auth'
 import { useAuth } from '../../../../contexts/authContext'
 import Link from 'next/link';
-//import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 
 
 const Register = () => {
-
     const { userLoggedIn } = useAuth()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
     const [username, setUsername] = useState('')
     const [isSigningUp, setIsSigningUp] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    //const navigate = useNavigate();
+    const router = useRouter();
 
     
     const onSubmit = async (e) => {
@@ -22,7 +21,7 @@ const Register = () => {
             setIsSigningUp(true)
             try {
                 await doCreateUserWithEmailAndPassword(email, password)
-                //navigate("/login")       //CHECK IF CORREK
+                router.push('/login');
             } catch (error) {
                 setErrorMessage(error.message)
                 setIsSigningUp(false)
@@ -30,10 +29,12 @@ const Register = () => {
        }
     }
 
+    document.body.style = 'background: #CCABDB;';
+
     return (
         <div>
             <main className="w-full h-screen flex self-center place-content-center place-items-center">
-                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl">
+                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl bg-white">
                    
                     <div className="text-center">
                         <div className="mt-2">
@@ -91,7 +92,7 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={isSigningUp}
-                            className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningUp ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition duration-300'}`}
+                            className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningUp ? 'bg-gray-300 cursor-not-allowed' : 'bg-teal-500 hover:bg-teal-600 hover:shadow-xl transition duration-300'}`}
                         >
                             {isSigningUp ? 'Signing Up...' : 'Sign Up'}
                         </button>
