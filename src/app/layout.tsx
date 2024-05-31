@@ -1,8 +1,17 @@
 import React from 'react';
-import { nunito } from '@/app/ui/fonts';
+import type { Metadata } from 'next'
 import { AuthProvider } from '../contexts/authContext';
 import "./ui/globals.css";
+import { Nunito } from 'next/font/google';
 
+const nunito = Nunito({
+  subsets: ['latin'],
+});
+
+export const metadata: Metadata = {
+  title: "DanceStations",
+  description: "DanceStations is created by next app"
+};
 
 export default function RootLayout({
   children,
@@ -10,11 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
     <html lang="en">
-      <body className={`${nunito.className} antialiased`}>{children}</body>
+      <body className={nunito.className}>
+          <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
-    </AuthProvider>
-
   );
 }

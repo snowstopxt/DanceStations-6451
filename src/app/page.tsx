@@ -1,30 +1,17 @@
-import React from 'react';
-import Header from '@/app/components/header/index';
-import ReactDOM from 'react-dom/client';
-/*
-import { BrowserRouter } from 'react-router-dom';
-import App from '@/app';
+"use client";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
-);
-*/
+import React from 'react';
+import Header from './components/header/index';
+import Home from './components/home/index';
 
 const HomePage = () => {
-  return (
-  <div className="w-full h-screen flex flex-col">
-      <Header />
-      <div>
-        <h1>Welcome to the Home Page</h1>
-        {/* You can add more content here if needed */}
-      </div>
-    </div>
-  );
-};
+    return (
+        <div className="w-full h-screen flex flex-col bg-brand-purple">
+            <Header />
+            <Home />
+        </div>
+    );
+}
 
-export default HomePage;
+export default HomePage
+

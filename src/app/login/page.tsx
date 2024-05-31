@@ -6,7 +6,7 @@ import { AuthProvider } from "@/contexts/authContext";
 
 const LoginPage = () => {
     return (
-        <div className="flex-grow flex items-center justify-center">
+        <div className="bg-brand-purple flex-grow flex items-center justify-center">
         <Login />
       </div>
     );
