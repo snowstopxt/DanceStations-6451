@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from "react";
 import { doCreateUserWithEmailAndPassword, doSignInWithGoogle} from '../../../firebase/auth'
 import { useAuth } from '../../../../contexts/authContext'
@@ -29,16 +30,16 @@ const Register = () => {
        }
     }
 
-    document.body.style = 'background: #CCABDB;';
+    // document.body.style = 'background: #CCABDB;';
 
     return (
         <div>
             <main className="w-full h-screen flex self-center place-content-center place-items-center">
-                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl bg-white">
+                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl rounded-xl bg-white">
                    
                     <div className="text-center">
                         <div className="mt-2">
-                            <h3 className="text-gray-800 text-xl font-semibold sm:text-2xl">Welcome to DanceStations</h3>
+                            <h3 className="text-gray-800 text-h2-l font-semibold sm:text-2xl">Welcome to DanceStations</h3>
                         </div>
                     </div>
 
@@ -47,41 +48,36 @@ const Register = () => {
                         className="space-y-5"
                     >
                         <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Username
-                            </label>
+                        
                             <input
                                 type="text"
                                 autoComplete='text'
+                                placeholder="Username"
                                 required
                                 value={username} onChange={(e) => { setUsername(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
+                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Email
-                            </label>
                             <input
                                 type="email"
+                                placeholder="Email"
                                 autoComplete='email'
                                 required
                                 value={email} onChange={(e) => { setEmail(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
+                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none focus:border-brand-dark-purple shadow-sm rounded-lg transition duration-300"
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Password
-                            </label>
                             <input
                                 type="password"
+                                placeholder="Password"
                                 autoComplete='current-password'
                                 required
                                 value={password} onChange={(e) => { setPassword(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
+                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none focus:border-brand-dark-purple shadow-sm rounded-lg transition duration-300"
                             />
                         </div>
 
@@ -92,7 +88,7 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={isSigningUp}
-                            className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningUp ? 'bg-gray-300 cursor-not-allowed' : 'bg-teal-500 hover:bg-teal-600 hover:shadow-xl transition duration-300'}`}
+                            className={`w-full px-4 py-2 text-white font-medium shadow-md rounded-lg ${isSigningUp ? 'bg-gray-300 cursor-not-allowed' : 'bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}`}
                         >
                             {isSigningUp ? 'Signing Up...' : 'Sign Up'}
                         </button>
