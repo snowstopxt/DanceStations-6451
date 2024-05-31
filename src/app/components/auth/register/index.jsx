@@ -4,7 +4,7 @@ import { doCreateUserWithEmailAndPassword, doSignInWithGoogle} from '../../../fi
 import { useAuth } from '../../../../contexts/authContext'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
+import Image from 'next/image';
 
 const Register = () => {
     const { userLoggedIn } = useAuth()
@@ -33,8 +33,13 @@ const Register = () => {
     // document.body.style = 'background: #CCABDB;';
 
     return (
-        <div>
-            <main className="w-full h-screen flex self-center place-content-center place-items-center">
+      
+        <div className=" w-screen h-screen flex place-items-center place-content-center">
+            <div className="bg-white absolute w-full h-20 border border-gray-300 place-self-start">
+                <Image className="absolute left-8 top-5" src="/dancestations-high-resolution-logo-transparent.png" alt="DanceStations Logo" width={200} height={200} />
+            </div>
+            
+            <main className="place-self-center">
                 <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl rounded-xl bg-white">
                    
                     <div className="text-center">
