@@ -13,7 +13,7 @@ const config: Config = {
       lg: '976px',
       xl: '1440px',
     },
-    colours: {
+    colors: {
       'brand-purple': '#ccabd8',
       'brand-dark-purple': '#8474a1',
       'brand-teal': '#6ec6ca',
@@ -49,6 +49,7 @@ const config: Config = {
       },
     },
   },
+  
   fontFamily: {
     'sans': ['Nunito'],
   },
