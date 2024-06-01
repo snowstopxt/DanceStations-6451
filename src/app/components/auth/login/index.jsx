@@ -4,7 +4,7 @@ import { doSignInWithEmailAndPassword, doSignInWithGoogle} from '../../../fireba
 import { useAuth } from '../../../../contexts/authContext'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import Header from '../../header/index';
 
 const Login = () => {
     const { userLoggedIn } = useAuth()
@@ -46,20 +46,15 @@ const Login = () => {
 
     return (
 
-        <div className=" w-screen h-screen flex place-items-center place-content-center">
+        <div className="flex flex-col h-screen">
 
-            {/* {userLoggedIn && (<Navigate to={'/home'} replace={true} />)} */}
-
-            <div className="bg-white absolute w-full h-20 border place-self-start">
-                <Image className="absolute left-8 top-5" src="/dancestations-high-resolution-logo-transparent.png" alt="DanceStations Logo" width={200} height={200} />
-            </div>
-            
-            <main className="place-self-center">
-                <div className="w-96 text-dark-grey space-y-5 p-4 shadow-xl rounded-xl bg-white">
-                   
-                    <div className="text-center">
-                       
-                        <div className="mt-2">
+        <Header />
+        
+        <main className="flex w-full h-full place-items-center place-content-center">
+            <div className="w-96 text-dark-grey space-y-5 p-4 shadow-xl rounded-xl bg-white">
+               
+                <div className="text-center">
+                    <div className="mt-2">
                             <h3 className="text-black text-h2-l font-semibold sm:text-2xl">Log in to DanceStations</h3>
                         </div>
                     </div>
