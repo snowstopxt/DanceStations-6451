@@ -4,7 +4,7 @@ import { doCreateUserWithEmailAndPassword, doSignInWithGoogle} from '../../../fi
 import { useAuth } from '../../../../contexts/authContext'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import Header from '../../header/index';
 
 const Register = () => {
     const { userLoggedIn } = useAuth()
@@ -34,12 +34,11 @@ const Register = () => {
 
     return (
       
-        <div className=" w-screen h-screen flex place-items-center place-content-center">
-            <div className="bg-white absolute w-full h-20 border place-self-start">
-                <Image className="absolute left-8 top-5" src="/dancestations-high-resolution-logo-transparent.png" alt="DanceStations Logo" width={200} height={200} />
-            </div>
+        <div className="flex flex-col h-screen">
+
+            <Header />
             
-            <main className="place-self-center">
+            <main className="flex w-full h-full place-items-center place-content-center">
                 <div className="w-96 text-dark-grey space-y-5 p-4 shadow-xl rounded-xl bg-white">
                    
                     <div className="text-center">
