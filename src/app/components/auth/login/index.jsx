@@ -50,17 +50,17 @@ const Login = () => {
 
             {/* {userLoggedIn && (<Navigate to={'/home'} replace={true} />)} */}
 
-            <div className="bg-white absolute w-full h-20 border border-gray-300 place-self-start">
+            <div className="bg-white absolute w-full h-20 border place-self-start">
                 <Image className="absolute left-8 top-5" src="/dancestations-high-resolution-logo-transparent.png" alt="DanceStations Logo" width={200} height={200} />
             </div>
             
             <main className="place-self-center">
-                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl rounded-xl bg-white">
+                <div className="w-96 text-dark-grey space-y-5 p-4 shadow-xl rounded-xl bg-white">
                    
                     <div className="text-center">
                        
                         <div className="mt-2">
-                            <h3 className="text-gray-800 text-h2-l font-semibold sm:text-2xl">Log in to DanceStations</h3>
+                            <h3 className="text-black text-h2-l font-semibold sm:text-2xl">Log in to DanceStations</h3>
                         </div>
                     </div>
                     <form
@@ -97,7 +97,7 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={isSigningIn}
-                            className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningIn ? 'bg-gray-300 cursor-not-allowed' : 'bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}`}
+                            className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningIn ? 'bg-brand-dark-teal cursor-not-allowed' : 'bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}`}
                         >
                             {isSigningIn ? 'Signing In...' : 'Sign In'}
                         </button>
@@ -109,7 +109,7 @@ const Login = () => {
                     <button
                         disabled={isSigningIn}
                         onClick={(e) => { onGoogleSignIn(e) }}
-                        className={`w-full flex items-center justify-center gap-x-3 py-2.5 shadow-md rounded-lg text-sm font-medium ${isSigningIn ? 'cursor-not-allowed' : 'hover:bg-gray-100 transition duration-300 active:bg-gray-100'}`}>
+                        className={`w-full flex items-center justify-center gap-x-3 py-2.5 shadow-md rounded-lg text-sm font-medium ${isSigningIn ? 'cursor-not-allowed' : 'hover:bg-light-grey transition duration-300 active:bg-light-grey'}`}>
                         <svg className="w-5 h-5" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clipPath="url(#clip0_17_40)">
                                 <path d="M47.532 24.5528C47.532 22.9214 47.3997 21.2811 47.1175 19.6761H24.48V28.9181H37.4434C36.9055 31.8988 35.177 34.5356 32.6461 36.2111V42.2078H40.3801C44.9217 38.0278 47.532 31.8547 47.532 24.5528Z" fill="#4285F4" />
