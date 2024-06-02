@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import Header from './components/header/index';
 import Home from './components/home/index';
