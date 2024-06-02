@@ -26,7 +26,6 @@ const config: Config = {
       'button-l': '0.875rem',
     },
 
-
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

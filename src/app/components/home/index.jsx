@@ -7,9 +7,9 @@ const Home = () => {
         <Image 
             src="/main-page.jpg"
             alt="Main Page"
-            layout="fill"
-            objectFit='cover'
+            fill={true}
             quality={100}
+            priority
         />
       <div className="absolute text-h1-l text-white">Find Your Nearest Dance Station</div>
     </div>

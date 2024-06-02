@@ -33,11 +33,9 @@ export function AuthProvider({ children }) {
             setIsEmailUser(isEmail);
 
             const isGoogle = user.providerData.some(
-                    (provider) => provider.providerId === GoogleAuthProvider.PROVIDER_ID
+                (provider) => provider.providerId === GoogleAuthProvider.PROVIDER_ID
             );
             setIsGoogleUser(isGoogle);
-            
-
             setUserLoggedIn(true);
         } else {
             setCurrentUser(null);
