@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import MainSearch from '../searchInput/mainSearch/index';
 
 const Home = () => {
   return (
@@ -7,11 +8,14 @@ const Home = () => {
         <Image 
             src="/main-page.jpg"
             alt="Main Page"
-            layout="fill"
-            objectFit='cover'
+            fill={true}
             quality={100}
+            priority
         />
-      <div className="absolute text-h1-l text-white">Find Your Nearest Dance Station</div>
+      <div className="inline-flex flex-col">
+        <div className="absolute top-48 text-h1-l text-white">Find Your Nearest Dance Station</div>
+        <div><MainSearch /></div>
+      </div>  
     </div>
   );
 };

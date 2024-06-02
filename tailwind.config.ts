@@ -37,7 +37,6 @@ const config: Config = {
   },
     },
 
-
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -49,10 +48,12 @@ const config: Config = {
         '144': '36rem',
       },
   },
+},
   
   fontFamily: {
     'sans': ['Nunito'],
   },
   plugins: [],
+  
 };
 export default config;
