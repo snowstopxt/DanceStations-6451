@@ -1,15 +1,39 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
 import { useAuth } from '../../../contexts/authContext';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 const Header = () => {
   const { user } = useAuth();
+  const pathname = usePathname();
 
   return (
-    <div className="relative bg-white w-screen h-20 border">
-      <Image className="absolute left-8 top-5" src="/dancestations-high-resolution-logo-transparent.png" alt="DanceStations Logo" width={200} height={200} />
+    <nav className="bg-white"> 
+    <div className="relative w-screen mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between h-20">
+        <div className="flex items-center">
+          <div className="flex-shrink-0">
+            <Link href="/">
+            <Image className="absolute left-8 top-5" src="/logo-transparent.png" alt="DanceStations Logo" width={200} height={200}/> 
+            </Link>
+      </div>
+      </div>
+      {pathname !== '/login' && pathname !== '/register' && (
+      <div className="hidden md:block">
+        <div className="ml-4 flex items-center space-x-4">
+          
+            <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >Home</Link>
+            <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Chats</Link>
+            <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Bookings</Link>
+            <Link href="/login" className="text-slate-500 hover:text-black text-h3-l" >{user ? user.displayName : 'Login'}</Link>
+        </div>
+      </div>
+    )}
     </div>
+    </div>
+    </nav>
   );
 };
 

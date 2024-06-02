@@ -13,16 +13,6 @@ const config: Config = {
       lg: '976px',
       xl: '1440px',
     },
-    colors: {
-      'brand-purple': '#ccabd8',
-      'brand-dark-purple': '#8474a1',
-      'brand-teal': '#6ec6ca',
-      'brand-dark-teal': '#08979d',
-      'white': '#ffffff',
-      'black': '#000000',
-      'light-grey': '#F5F5F7',
-      'dark-grey': '#8B8FA8',
-    },
     fontSize: {
       'h1-s': '2.0rem',
       'h1-l': '2.188rem',
@@ -34,6 +24,8 @@ const config: Config = {
       'body-l': '1.0rem',
       'button-s': '0.625rem',
       'button-l': '0.875rem',
+    },
+  
     },
 
 
@@ -47,6 +39,15 @@ const config: Config = {
         '128': '32rem',
         '144': '36rem',
       },
+      colors: {
+        'brand-purple': '#ccabd8',
+        'brand-dark-purple': '#8474a1',
+        'brand-teal': '#6ec6ca',
+        'brand-dark-teal': '#08979d',
+        'white': '#ffffff',
+        'black': '#000000',
+        'light-grey': '#F5F5F7',
+        'dark-grey': '#8B8FA8',
     },
   },
   
