@@ -4,7 +4,7 @@ import { doCreateUserWithEmailAndPassword, doSignInWithGoogle} from '../../../fi
 import { useAuth } from '../../../../contexts/authContext'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
+import Header from '../../header/index';
 
 const Register = () => {
     const { userLoggedIn } = useAuth()
@@ -33,13 +33,17 @@ const Register = () => {
     // document.body.style = 'background: #CCABDB;';
 
     return (
-        <div>
-            <main className="w-full h-screen flex self-center place-content-center place-items-center">
-                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl rounded-xl bg-white">
+      
+        <div className="flex flex-col h-screen">
+
+            <Header />
+            
+            <main className="flex w-full h-full place-items-center place-content-center">
+                <div className="w-96 text-dark-grey space-y-5 p-4 shadow-xl rounded-xl bg-white">
                    
                     <div className="text-center">
                         <div className="mt-2">
-                            <h3 className="text-gray-800 text-h2-l font-semibold sm:text-2xl">Welcome to DanceStations</h3>
+                            <h3 className="text-black text-h2-l font-semibold sm:text-2xl">Welcome to DanceStations</h3>
                         </div>
                     </div>
 
@@ -55,7 +59,7 @@ const Register = () => {
                                 placeholder="Username"
                                 required
                                 value={username} onChange={(e) => { setUsername(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
+                                className="w-full mt-2 px-3 py-2 bg-transparent outline-none focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
                             />
                         </div>
 
@@ -66,7 +70,7 @@ const Register = () => {
                                 autoComplete='email'
                                 required
                                 value={email} onChange={(e) => { setEmail(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none focus:border-brand-dark-purple shadow-sm rounded-lg transition duration-300"
+                                className="w-full mt-2 px-3 py-2 bg-transparent outline-none focus:border-brand-dark-purple shadow-sm rounded-lg transition duration-300"
                             />
                         </div>
 
@@ -77,7 +81,7 @@ const Register = () => {
                                 autoComplete='current-password'
                                 required
                                 value={password} onChange={(e) => { setPassword(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none focus:border-brand-dark-purple shadow-sm rounded-lg transition duration-300"
+                                className="w-full mt-2 px-3 py-2 bg-transparent outline-none focus:border-brand-dark-purple shadow-sm rounded-lg transition duration-300"
                             />
                         </div>
 
@@ -88,12 +92,12 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={isSigningUp}
-                            className={`w-full px-4 py-2 text-white font-medium shadow-md rounded-lg ${isSigningUp ? 'bg-gray-300 cursor-not-allowed' : 'bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}`}
+                            className={`w-full px-4 py-2 text-white font-medium shadow-md rounded-lg ${isSigningUp ? 'bg-brand-dark-teal cursor-not-allowed' : 'bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}`}
                         >
                             {isSigningUp ? 'Signing Up...' : 'Sign Up'}
                         </button>
                     </form>
-                <p className="text-center text-sm">Already have an account? <Link href={'/login'} className="hover:underline font-bold">Sign in</Link></p>
+                <p className="text-center text-sm">Already have an account? <Link href={'/login'} className="hover:underline font-bold text-brand-dark-teal">Sign in</Link></p>
                 </div>
             </main>
         </div>
