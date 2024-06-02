@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { AuthProvider } from '../contexts/authContext';
 import "./ui/globals.css";
 import { Nunito } from 'next/font/google';
+import { ChakraProviders } from './chakra/chakra';
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-          <AuthProvider>{children}</AuthProvider>
+          <ChakraProviders><AuthProvider>{children}</AuthProvider></ChakraProviders>
       </body>
     </html>
   );
