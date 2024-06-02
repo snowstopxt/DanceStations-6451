@@ -25,8 +25,6 @@ const config: Config = {
       'button-s': '0.625rem',
       'button-l': '0.875rem',
     },
-  
-    },
 
 
     extend: {
@@ -50,10 +48,12 @@ const config: Config = {
         'dark-grey': '#8B8FA8',
     },
   },
+},
   
   fontFamily: {
     'sans': ['Nunito'],
   },
   plugins: [],
+  
 };
 export default config;
