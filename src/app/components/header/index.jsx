@@ -3,21 +3,22 @@ import React from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { auth, user } from '../../firebase/clientApp';
+import { auth } from '../../firebase/clientApp';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const Header = () => {
   const pathname = usePathname();
+  const user = auth.currentUser;
+
+  const [displayName, setDisplayName] = React.useState(null);
 
   onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    return uid;
-  } else {
-    return null;
-  }
-});
-
+    if (user) {
+      setDisplayName(user.displayName);
+    } else {
+      setDisplayName(null);
+    }
+  });
 
   return (
     <nav className="bg-white"> 
@@ -37,7 +38,8 @@ const Header = () => {
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >Home</Link>
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Chats</Link>
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Bookings</Link>
-            <Link href="/login" className="text-slate-500 hover:text-black text-h3-l" >Login</Link>
+            {!user && <Link href="/login" className="text-slate-500 hover:text-black text-h3-l" > Login</Link>}
+            {user && <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >{user.displayName}</Link>}
         </div>
       </div>
     )}

@@ -1,7 +1,8 @@
 'use client'
 import React, { useState } from "react";
-import { doCreateUserWithEmailAndPassword, doSignInWithGoogle} from '../../../firebase/auth'
-import { useAuth } from '../../../../contexts/authContext'
+import { doCreateUserWithEmailAndPassword, doSignInWithGoogle} from '../../../firebase/auth';
+import { updateProfile } from 'firebase/auth';
+import { useAuth } from '../../../../contexts/authContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Header from '../../header/index';
@@ -17,20 +18,22 @@ const Register = () => {
 
     
     const onSubmit = async (e) => {
-        e.preventDefault()
-        if (!isSigningUp) {
-            setIsSigningUp(true)
-            try {
-                await doCreateUserWithEmailAndPassword(email, password)
-                router.push('/login');
-            } catch (error) {
-                setErrorMessage(error.message)
-                setIsSigningUp(false)
-            }
-       }
+            e.preventDefault()
+            if (!isSigningUp) {
+                setIsSigningUp(true)
+                try {
+                    await doCreateUserWithEmailAndPassword(email, password).then((userCreds) => {
+                        const user = userCreds.user;
+                        updateProfile(user, {displayName: `${username}`})
+                    }
+                    );
+                    router.push('/login');
+                } catch (error) {
+                    setErrorMessage(error.message)
+                    setIsSigningUp(false)
+                }
+           }
     }
-
-    // document.body.style = 'background: #CCABDB;';
 
     return (
       
