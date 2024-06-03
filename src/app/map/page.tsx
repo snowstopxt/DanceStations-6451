@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-
 // referred to https://www.npmjs.com/package/google-maps-react
 
 /*
