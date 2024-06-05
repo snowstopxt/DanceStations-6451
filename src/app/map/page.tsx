@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react';
-import GoogleMap from 'google-map-react';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+//import GoogleMap from 'google-map-react';
+//import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
 // referred to https://www.npmjs.com/package/google-maps-react
 

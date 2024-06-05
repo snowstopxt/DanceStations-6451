@@ -48,7 +48,7 @@ const config: Config = {
         '144': '36rem',
       },
   },
-},
+
   
   fontFamily: {
     'sans': ['Nunito'],
