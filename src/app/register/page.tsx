@@ -1,6 +1,5 @@
-import Register from "@/app/components/auth/register"
+import Register from "../components/auth/register"
 import React, { ReactElement } from 'react'
-import { AuthProvider } from "@/contexts/authContext";
 
 
 const RegisterPage = () => {

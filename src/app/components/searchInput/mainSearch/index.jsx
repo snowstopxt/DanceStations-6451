@@ -7,8 +7,8 @@ import { BsGeoAlt, BsCurrencyDollar, BsSearch } from "react-icons/bs";
 
 const MainSearch = () => {
     return (
-    <Card overflow='hidden' bg='white' w={[300, 400, 1500]} h ={200} >
-        <Center w={[300, 400, 1500]} h ={200}>
+    <Card overflow='hidden' bg='white' w={[300, 400, 970]} h ={200} >
+        <Center w={[300, 400, 970]} h ={200}>
         <Stack direction='row' spacing = {3}>
         <Input type="name" placeholder="Studio Name" size="lg" maxW={400}/>
           <InputGroup width='auto'>

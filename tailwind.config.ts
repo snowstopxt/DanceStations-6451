@@ -6,6 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  
   theme: {
     screens: {
       sm: '480px',
@@ -25,16 +26,6 @@ const config: Config = {
       'button-s': '0.625rem',
       'button-l': '0.875rem',
     },
-    colors: {
-      'brand-purple': '#ccabd8',
-      'brand-dark-purple': '#8474a1',
-      'brand-teal': '#6ec6ca',
-      'brand-dark-teal': '#08979d',
-      'white': '#ffffff',
-      'black': '#000000',
-      'light-grey': '#F5F5F7',
-      'dark-grey': '#8B8FA8',
-  },
     },
 
     extend: {
@@ -47,8 +38,17 @@ const config: Config = {
         '128': '32rem',
         '144': '36rem',
       },
+      colors: {
+        'brand-purple': '#ccabd8',
+        'brand-dark-purple': '#8474a1',
+        'brand-teal': '#6ec6ca',
+        'brand-dark-teal': '#08979d',
+        'white': '#ffffff',
+        'black': '#000000',
+        'light-grey': '#F5F5F7',
+        'dark-grey': '#8B8FA8',
+    },
   },
-
   
   fontFamily: {
     'sans': ['Nunito'],

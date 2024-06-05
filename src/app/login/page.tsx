@@ -1,7 +1,6 @@
 'use client';
-import Login from "@/app/components/auth/login"
+import Login from "../components/auth/login"
 import React, { ReactElement } from 'react'
-import { AuthProvider } from "@/contexts/authContext";
 
 
 const LoginPage = () => {
