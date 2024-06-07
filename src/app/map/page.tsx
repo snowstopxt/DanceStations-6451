@@ -9,30 +9,6 @@ import {
     InfoWindow,
 } from '@vis.gl/react-google-maps';
 
-/*
-const Map = GoogleApiWrapper({
-    apiKey: 'AIzaSyCfyy-Icn8NV2nmaxvxyxzT0LXJSdg5ICU'
-})(props => (
-    <div>
-        <h1>Map</h1>
-        <GoogleMap
-            google={props.google}
-            zoom={8}
-            initialCenter={{ lat: 47.444, lng: -122.176}}
-        >
-            <Marker
-                title={'The marker`s title will appear as a tooltip.'}
-                name={'SOMA'}
-                position={{lat: 37.778519, lng: -122.405640}} />
-            <Marker
-                name={'Dolores park'}
-                position={{lat: 37.759703, lng: -122.428093}} />
-            <Marker />
-        </GoogleMap>
-    </div>
-))
-*/
-
 const MapPage = () => {
     const position = {lat: 1.3521, lng: 103.8198};
     console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
