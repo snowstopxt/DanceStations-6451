@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next'
 import { AuthProvider } from '../contexts/authContext';
-import "./ui/globals.css";
+import "./globals.css";
 import { Nunito } from 'next/font/google';
 import { ChakraProviders } from './chakra/chakra';
 

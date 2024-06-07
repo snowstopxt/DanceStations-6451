@@ -1,4 +1,3 @@
-'use client';
 import Login from "../components/auth/login"
 import React, { ReactElement } from 'react'
 
