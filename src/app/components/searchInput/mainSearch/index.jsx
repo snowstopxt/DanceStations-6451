@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, Center, Button, InputLeftElement, Input, Stack, InputGroup, } from '@chakra-ui/react';
 import { BsGeoAlt, BsCurrencyDollar, BsSearch } from "react-icons/bs";
+import Link from 'next/link';
 
 
 const MainSearch = () => {
@@ -23,7 +24,9 @@ const MainSearch = () => {
             </InputLeftElement>
             <Input size="lg" type='price' placeholder='Price per hour'  />
         </InputGroup> 
-        <Button leftIcon={<BsSearch/>} size="lg" bg='brand.100' color='white'>Find Studio</Button>           
+        <Link href="/map" passHref legacyBehavior>
+            <Button leftIcon={<BsSearch/>} size="lg" variant='brand-lg'>Find Studio</Button>
+        </Link>
         </Stack>
         </Center>
         </Card>
