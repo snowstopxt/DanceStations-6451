@@ -9,6 +9,8 @@ import {
     InfoWindow,
 } from '@vis.gl/react-google-maps';
 
+import NavSearch from '../components/searchInput/mainSearch/navSearch/index';
+import MainSearch from '../components/searchInput/mainSearch/index';
 /*
 const Map = GoogleApiWrapper({
     apiKey: 'AIzaSyCfyy-Icn8NV2nmaxvxyxzT0LXJSdg5ICU'
@@ -31,6 +33,20 @@ const Map = GoogleApiWrapper({
         </GoogleMap>
     </div>
 ))
+*/
+
+/*
+//test
+const Page = () => {
+    return (
+        <div className="flex-col w-full">
+            <h1>Map Page</h1>
+            <NavSearch />
+            <MainSearch />
+            <MapPage />
+        </div>
+    );
+}
 */
 
 const MapPage = () => {

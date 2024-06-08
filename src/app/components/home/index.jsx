@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import MainSearch from '../searchInput/mainSearch/index';
-import NavSearch from '../navSearch/index';
 
 const Home = () => {
   return (
