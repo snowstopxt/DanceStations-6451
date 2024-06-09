@@ -22,7 +22,7 @@ const Header = () => {
   });
 
   return (
-    <nav className="bg-white"> 
+    <nav className="bg-white border"> 
     <div className="relative mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between h-20">
         <div className="flex items-center">
@@ -30,12 +30,13 @@ const Header = () => {
             <Link href="/">
             <Image className="absolute left-8 top-5" src="/logo-transparent.png" alt="DanceStations Logo" width={200} height={200}/> 
             </Link>
-      </div>
-      </div>
+          </div>
+        </div>
+      {pathname !== '/login' && pathname !== '/register'&& pathname != '/' && <NavSearch/>}
       {pathname !== '/login' && pathname !== '/register' && (
       <div className="hidden md:block">
         <div className="ml-4 flex items-center space-x-4">
-            {pathname != '/' && <NavSearch/>}
+            
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >Home</Link>
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Chats</Link>
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Bookings</Link>

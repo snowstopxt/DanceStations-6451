@@ -17,7 +17,7 @@ const MainSearch = () => {
             <InputLeftElement pointerEvents='none' pt='1.5'>
             <BsGeoAlt className='size-5' />
             </InputLeftElement>
-            <Input size="lg" type='mrt' placeholder='MRT station'/>
+            <Input size="lg" type='mrt' placeholder='MRT Station'/>
         </InputGroup>  
         <InputGroup width='auto'>
             <InputLeftElement pointerEvents='none' pt='1.5'>
