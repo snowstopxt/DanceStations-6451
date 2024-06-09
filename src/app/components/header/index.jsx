@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '../../firebase/clientApp';
 import { onAuthStateChanged } from 'firebase/auth';
+import NavSearch from '../searchInput/navSearch/index';
 
 const Header = () => {
   const pathname = usePathname();
@@ -34,7 +35,7 @@ const Header = () => {
       {pathname !== '/login' && pathname !== '/register' && (
       <div className="hidden md:block">
         <div className="ml-4 flex items-center space-x-4">
-          
+            {pathname != '/' && <NavSearch/>}
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >Home</Link>
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Chats</Link>
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Bookings</Link>
