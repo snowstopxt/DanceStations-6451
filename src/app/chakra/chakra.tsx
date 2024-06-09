@@ -12,14 +12,14 @@ const theme = extendTheme({
             400: '#08979d',  
         }
     },
-components: {
-    Button: {
-        variants: {
-            'brand-lg': {
-                bg: 'brand.100',
-                color: 'white',
-                _hover: {
-                    bg: 'brand.110',
+    components: {
+        Button: {
+            variants: {
+                'brand-lg': {
+                    bg: 'brand.100',
+                    color: 'white',
+                    _hover: {
+                        bg: 'brand.110',
                     },
                 },
             }, // Add a closing curly brace here

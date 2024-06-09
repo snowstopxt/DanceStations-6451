@@ -4,6 +4,7 @@ import MyMap from '../components/map/index';
 import { Grid, GridItem } from '@chakra-ui/react';
 import Header from '../components/header/index';
 
+
 const MapPage = () => {
 
     return (
