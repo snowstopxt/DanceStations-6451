@@ -1,12 +1,19 @@
 'use client';
 
 import React from 'react';
-import { Card, CardBody, Center, Button, InputLeftElement, Input, Stack, InputGroup, } from '@chakra-ui/react';
+import { Card, CardBody, Center, Button, InputLeftElement, Input, Stack, InputGroup, Numbe} from '@chakra-ui/react';
 import { BsGeoAlt, BsCurrencyDollar, BsSearch } from "react-icons/bs";
 import Link from 'next/link';
 
 
 const MainSearch = () => {
+
+    const handleKeyDown = (event) => {
+        if(isNaN(event.key) && event.key !== 'Backspace' && event.key !== '.') {
+            event.preventDefault();
+        }
+    };
+
     return (
     <Card overflow='hidden' bg='white' w={1000} h ={200} >
         <CardBody h ={200}>
@@ -23,7 +30,7 @@ const MainSearch = () => {
             <InputLeftElement pointerEvents='none' pt='1.5'>
             <BsCurrencyDollar className='size-5' />
             </InputLeftElement>
-            <Input size="lg" type='price' placeholder='Price per hour'  />
+            <Input size="lg" type='price' placeholder='Price per hour' onKeyDown={handleKeyDown} />
         </InputGroup> 
         <Link href="/map" passHref legacyBehavior>
             <Button leftIcon={<BsSearch/>} size="lg" variant='brand-lg'>Find Studio</Button>
