@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -11,15 +11,21 @@ const Header = () => {
   const pathname = usePathname();
   const user = auth.currentUser;
 
-  const [displayName, setDisplayName] = React.useState(null);
+  const [displayName, setDisplayName] = useState(null);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setDisplayName(user.displayName);
-    } else {
-      setDisplayName(null);
-    }
+  
+  useEffect (() => {
+    const name = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setDisplayName(user.displayName);
+      } else {
+        setDisplayName(null);
+      }
   });
+
+  return () => name();
+}, []);
+
 
   return (
     <nav className="bg-white border"> 
