@@ -8,9 +8,8 @@ import Link from 'next/link';
 
 const NavSearch = () => {
     return (
-        <Center h={90}>
-        <Stack direction='row' spacing = {3} >
-        <Input type="name" placeholder="Studio Name" size="lg" maxW={400} />
+        <Stack direction='row' spacing = {3} fle>
+        <Input type="name" placeholder="Studio Name" size="lg" maxW={250} />
 
         <InputGroup width='auto'>
             <InputLeftElement pointerEvents='none' pt='1.5'>
@@ -20,10 +19,9 @@ const NavSearch = () => {
         </InputGroup>  
     
         <Link href="/map" passHref legacyBehavior>
-            <Button width={300} leftIcon={<BsSearch/>} size="lg" variant='brand-lg'>Find Studio</Button>
+            <Button width={160} leftIcon={<BsSearch/>} size="lg" variant='brand-lg'>Find Studio</Button>
         </Link>
         </Stack>
-        </Center>
     );
 };
 
