@@ -8,20 +8,23 @@ const navSearch = () => {
     <Card overflow='hidden' bg='white' w={[300, 400, 1500]} h ={200} >
         <Center w={[300, 400, 1500]} h ={200}>
         <Stack direction='row' spacing = {3}>
+
         <Input type="name" placeholder="Studio Name" size="lg" maxW={400}/>
           <InputGroup width='auto'>
             <InputLeftElement pointerEvents='none' pt='1.5'>
             <BsGeoAlt className='size-5' />
             </InputLeftElement>
             <Input size="lg" type='mrt' placeholder='MRT station'/>
-        </InputGroup>  
+        </InputGroup>
+
         <InputGroup width='auto'>
             <InputLeftElement pointerEvents='none' pt='1.5'>
             <BsCurrencyDollar className='size-5' />
             </InputLeftElement>
             <Input size="lg" type='price' placeholder='Price per hour'  />
         </InputGroup> 
-        <Button leftIcon={<BsSearch/>} size="lg" bg='brand.100' color='white'>Find Studio</Button>           
+
+        <a href="/map"><Button leftIcon={<BsSearch/>} size="lg" bg='brand.100' color='white'>Find Studio</Button></a>           
         </Stack>
         </Center>
         </Card>
