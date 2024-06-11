@@ -5,27 +5,34 @@ import List from '../components/list/index';
 import MyMap from '../components/map/index';
 import { 
     APIProvider,
-    useMap,
 } from '@vis.gl/react-google-maps';
 import { Grid, GridItem } from '@chakra-ui/react';
 import Header from '../components/header/index';
+import { getData } from '../firebase/clientApp'
+
+interface Studio {
+    lat: number;
+    lng: number;
+    mrt: string;
+    name: string;
+    price: number;
+    size: number;
+  }
 
 const MapPage = () => {
-    const [bounds, setBounds] = useState(null);
+    const [studios, setStudios] = useState<Studio[]>([]);
     const [coordinates, setCoordinates] = useState({});
-    // const map = useMap();
+    const [bounds, setBounds] = useState(null);
 
-    // useEffect(() => {
-    //     if (navigator.geolocation && map) {
-    //     navigator.geolocation.getCurrentPosition((position) => {
-    //         const pos = {
-    //             lat: position.coords.latitude,
-    //             lng: position.coords.longitude
-    //         };
-    //         map.setCenter(pos);
-    //     });
-    // } 
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getData();
+            setStudios(data || []);
+        };
+
+        fetchData();
+    }, []);
+
 
     return (
         <div>

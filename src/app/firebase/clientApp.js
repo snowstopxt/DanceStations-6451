@@ -52,7 +52,10 @@ const getData = async () => {
     const docSnap = await getDocs(q);
 
     docSnap.forEach((doc) => {
-      studiosData.push(doc.data());
+      const data = doc.data();
+      const lat = data.location.latitude
+      const lng = data.location.longitude
+      studiosData.push({...data, lat, lng});
     });
     return studiosData;
   } catch (error) {
