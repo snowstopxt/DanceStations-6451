@@ -5,10 +5,16 @@ import {
   getFirestore, 
   doc,
   setDoc,
+  updateDoc,
   getDocs,
   query,
-  where
+  where,
+  orderBy, 
+  startAt, 
+  endAt
 } from "firebase/firestore";
+
+import * as geofire from 'geofire-common';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCaBqTXR0IcD3qYuWdt3pwD_SeJFz0AbZQ",
@@ -44,24 +50,57 @@ const db  = getFirestore()
 
 // collection ref
 
-const getData = async () => {
+const getData = async (info) => {
   try {
-    const colRef = collection(db, 'studios');
-    const studiosData = [];
-    const q = query(colRef);
-    const docSnap = await getDocs(q);
+    console.log('info: ', info);
+    const radius = geofire.distanceBetween(info.coords, info.north);
+    console.log('radius: ', radius);
+  
+    const bounds = geofire.geohashQueryBounds(info.coords, radius*1000);
+    const promises = [];
 
-    docSnap.forEach((doc) => {
-      const data = doc.data();
-      const lat = data.location.latitude
-      const lng = data.location.longitude
-      studiosData.push({...data, lat, lng});
-    });
+    for (const b of bounds) {
+      const q = query(
+        collection(db, 'studios'),
+        orderBy('geohash'),
+        startAt(b[0]),
+        endAt(b[1]));
+      promises.push(getDocs(q));
+    }
+
+    const snapshots = await Promise.all(promises);
+    const studiosData = [];
+
+    for(const snap of snapshots) {
+      for (const doc of snap.docs) {
+        const data = doc.data();
+        const lat = data.location.latitude;
+        const lng = data.location.longitude;
+        
+        const distanceInKm = geofire.distanceBetween([lat, lng], info.coords);
+        if (distanceInKm <= radius) {
+          studiosData.push(data);
+        }
+      }
+    }
+
+
+    // docSnap.forEach((doc) => {
+    //   const data = doc.data();
+    //   const hash = geofire.geohashForLocation([data.location.latitude, data.location.longitude]);
+    //   console.log('doc id: ', doc.id, 'hash: ', hash);
+    //   const lat = data.location.latitude
+    //   const lng = data.location.longitude
+    //   studiosData.push({...data, lat, lng, hash});
+    // });
     return studiosData;
   } catch (error) {
     console.log(error.message);
   }
 };
 
+const returnData = async () => {
+  return studiosData;
+}
 
-export{ app, auth, getData};
+export{ app, auth, getData, returnData};

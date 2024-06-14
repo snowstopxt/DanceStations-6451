@@ -2,19 +2,16 @@
 import React, { useEffect, useState} from 'react';
 import { Button, Stack, Card, GridItem, Grid, Box, Text, FormControl, } from '@chakra-ui/react'; 
 import { useMap } from '@vis.gl/react-google-maps';
+import { useStudios } from '../../../contexts/studiosContext';
 
 const List = () => {
     const map = useMap();
-    const studios = [
-        { name: 'Studio 1' },
-        { name: 'Studio 2' },
-        { name: 'Studio 3' },
-
-    ];
+    const studios = useStudios();
 
     const handleClick = () => {
         if (navigator.geolocation && map) {
             navigator.geolocation.getCurrentPosition((position) => {
+                console.log(position);
                 const pos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
@@ -24,9 +21,13 @@ const List = () => {
         }
     };
 
+    if (!Array.isArray(studios)) {
+        return;
+    }
+
     return (
         <Box padding='25px'>
-            <Text fontSize='md'>1 studio in this area</Text>
+            <Text fontSize='md'>{ studios.length > 1 ? `${studios.length} studios in this area` : `${studios.length} studio in this area` }</Text>
             <FormControl margin={3} mb='30px' minW='120px'>
             <Grid templateColumns='repeat(2, 1fr)'>
             <GridItem colStart={1}>
