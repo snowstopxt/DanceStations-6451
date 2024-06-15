@@ -3,6 +3,7 @@ import React, { useEffect, useState} from 'react';
 import { Button, Stack, Card, GridItem, Grid, Box, Text, FormControl, } from '@chakra-ui/react'; 
 import { useMap } from '@vis.gl/react-google-maps';
 import { useStudios } from '../../../contexts/studiosContext';
+import StudioCard from '../card/index'
 
 const List = () => {
     const map = useMap();
@@ -45,10 +46,10 @@ const List = () => {
             </GridItem>
             </Grid>
             </FormControl>
-            <Grid spacing={3}>
-                {studios?.map((studios, i) => (
+            <Grid templateColumns='repeat(auto-fill, minmax(350px, 1fr))' spacing={3}>
+                {studios?.map((studio, i) => (
                     <GridItem key={i} xs={12} colSpan={1}>
-                        <Card>{studios.name}</Card>
+                        <StudioCard studio ={studio}></StudioCard>
                     </GridItem>
                 ))}
             </Grid>
