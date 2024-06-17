@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect , useRef } from 'react';
+import React, { useState, useCallback, useEffect , useRef } from 'react';
 
 import { 
     APIProvider, 
@@ -8,11 +8,21 @@ import {
     AdvancedMarker,
     Pin,
     InfoWindow,
-    useCallback
+    useAdvancedMarkerRef
 } from '@vis.gl/react-google-maps';
 
 import { getData } from '../../firebase/clientApp';
 import { useStudios } from '../../../contexts/studiosContext';
+import MiniCard from '../minicard/index';
+import { 
+    PopoverTrigger, 
+    PopoverContent, 
+    PopoverHeader, 
+    PopoverArrow, 
+    PopoverCloseButton, 
+    Popover, 
+    PopoverBody,
+    forwardRef } from '@chakra-ui/react';
 
 const MyMap = (x) => {
     // const defaultCoordinates = { lat: 1.3521, lng: 103.8198 }; // Singapore coordinates
@@ -21,8 +31,6 @@ const MyMap = (x) => {
 
     const handleCameraChange = (ev) => {
         const details = ev.detail
-        // const Northeast = new firebase.firestore.Geopoint(bounds.north, bounds.east);
-        // const Southwest = new firebase.firestore.Geopoint(bounds.south, bounds.west);
         console.log('camera changed: ', details);
         x.setCoords([details.center.lat, details.center.lng]);
         x.setNorth([details.bounds.north, (details.bounds.east+details.bounds.west)/2]);
@@ -51,9 +59,10 @@ export default MyMap;
 
 
 const Markers = () => {
- 
+    const [infoWindowShown, setInfoWindowShown] = useState(false);
     const studios = useStudios();
     console.log('markers studios: ', studios)
+
 
     if (!Array.isArray(studios)) {
         return;
@@ -62,8 +71,44 @@ const Markers = () => {
     return (
         <div>
         {studios?.map((studio, index) => (
-            <AdvancedMarker key={index} position={{ lat: studio.location.latitude, lng: studio.location.longitude }} />
+            <MarkerWithInfoWindow studio={studio} key={index}/>
         ))}
         </div>
     );
 }
+
+
+
+const MarkerWithInfoWindow = (obj) => {
+    const [markerRef, marker] = useAdvancedMarkerRef();
+  
+    const [infoWindowShown, setInfoWindowShown] = useState(false);
+    
+    const studio = obj.studio;
+    console.log('info studio', obj.studio);
+    // clicking the marker will toggle the infowindow
+    const handleMarkerClick = useCallback(
+      () => setInfoWindowShown(isShown => !isShown),
+      []
+    );
+  
+    // if the maps api closes the infowindow, we have to synchronize our state
+    const handleClose = useCallback(() => setInfoWindowShown(false), []);
+  
+    return (
+      <>
+        <AdvancedMarker
+          ref={markerRef}
+          position={{ lat: studio.location.latitude, lng: studio.location.longitude }}
+          onClick={handleMarkerClick}
+        />
+  
+        {infoWindowShown && (
+          <InfoWindow anchor={marker} onClose={handleClose}>
+            <h2>InfoWindow content!</h2>
+            <p>Some arbitrary html to be rendered into the InfoWindow.</p>
+          </InfoWindow>
+        )}
+      </>
+    );
+  };
