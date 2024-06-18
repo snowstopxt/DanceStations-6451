@@ -13,16 +13,7 @@ import {
 
 import { getData } from '../../firebase/clientApp';
 import { useStudios } from '../../../contexts/studiosContext';
-import MiniCard from '../minicard/index';
-import { 
-    PopoverTrigger, 
-    PopoverContent, 
-    PopoverHeader, 
-    PopoverArrow, 
-    PopoverCloseButton, 
-    Popover, 
-    PopoverBody,
-    forwardRef } from '@chakra-ui/react';
+
 
 const MyMap = (x) => {
     // const defaultCoordinates = { lat: 1.3521, lng: 103.8198 }; // Singapore coordinates
@@ -39,7 +30,7 @@ const MyMap = (x) => {
     return (
         <div style={{ width: '100vh', height: '100vh' }}>
                 <Map
-                    defaultZoom={14}
+                    defaultZoom={12}
                     defaultCenter={ {lat: 1.3521, lng: 103.8198} }
                     mapId={process.env.NEXT_PUBLIC_MAP_ID}
                     clickableIcons = {false}

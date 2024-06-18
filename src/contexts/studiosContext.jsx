@@ -7,18 +7,26 @@ export function useStudios() {
     return useContext(StudiosContext);
 }
 
-export const StudiosProvider = ({ coords, north, children }) => {
+export const StudiosProvider = ({ queries, children}) => {
     const [studios, setStudios] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
-        const data = await getData({coords, north});
-        setStudios(data);
-      };
-  
-      fetchData();
+            let data = await getData({ coords: queries.coords, north: queries.north });
+            if (queries.name !== '' || queries.mrt !== '') {
+                data = data.filter((studio) => 
+                    studio.name.toLowerCase().includes(queries.name.toLowerCase()) || 
+                    studio.mrt.toLowerCase().includes(queries.mrt.toLowerCase())
+            
+                );
+            }
+            setStudios(data);  
+            
+        };
+
+        fetchData();
       
-    }, [coords, north]);
+    }, [queries]);
   
     return (
       <StudiosContext.Provider value={studios}>

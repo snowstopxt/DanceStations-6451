@@ -9,6 +9,7 @@ import {
 import { Grid, GridItem } from '@chakra-ui/react';
 import Header from '../components/header/index';
 import { StudiosProvider } from '../../contexts/studiosContext';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Studio {
     geohash: string;
@@ -20,14 +21,31 @@ interface Studio {
   }
 
 const MapPage = () => {
+    const searchParams = useSearchParams()
+    const name = searchParams.get('studioName');
+    const mrt = searchParams.get('mrt');
     const defaultCoordinates = { lat: 1.3521, lng: 103.8198 }; // Singapore coordinates
     const [coords, setCoords] = useState([1.3521, 103.8198]);
-    const [ north, setNorth ] = useState([1.3900692049787553, (103.78181992034912+103.85778007965088)/2]);
+    const [north, setNorth ] = useState([1.3900692049787553, (103.78181992034912+103.85778007965088)/2]);
+    const [studioName, setStudioName] = useState(name || '');
+    const [mrtStation, setMrtStation] = useState(mrt || ''); 
+    
+    useEffect(() => {
+        setStudioName(name || '');
+        setMrtStation(mrt || '');
+    }, [name, mrt]);
+
+    const queries = {
+        name: studioName,
+        mrt: mrtStation,
+        coords: coords,
+        north: north,
+    }
 
     return (
         <div>
             <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '' }>
-            <StudiosProvider coords={coords} north={north}>
+            <StudiosProvider queries = {queries}>
             <Header />
             <Grid templateColumns='repeat(2, 1fr)' gap={0}>
                 <GridItem bg='white'>
