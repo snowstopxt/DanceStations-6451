@@ -4,13 +4,12 @@ import React, { useState } from 'react';
 import { Card, CardBody, Center, Button, InputLeftElement, Input, Stack, InputGroup } from '@chakra-ui/react';
 import { BsGeoAlt, BsCurrencyDollar, BsSearch } from "react-icons/bs";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 
 const MainSearch = () => {
     const [studioName, setStudioName] = useState('');
     const [mrtStation, setMrtStation] = useState('');
-    const router = useRouter();
+    const [ values, setValues] = useState( [0, 100] );
 
     const handleKeyDown = (event) => {
         if(isNaN(event.key) && event.key !== 'Backspace' && event.key !== '.') {
