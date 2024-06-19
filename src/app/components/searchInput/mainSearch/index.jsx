@@ -23,21 +23,21 @@ const MainSearch = () => {
         <CardBody h ={200}>
         <Center h={150}> 
         <Stack direction='row' spacing = {3} >
-        <Input type="name" placeholder="Studio Name" size="lg" maxW={400} onChange={(e) => setStudioName(e.target.value)} value={studioName}/>
-          <InputGroup width='auto'>
+        <Input type="name" placeholder="Studio Name" size="lg" minW="400px" onChange={(e) => setStudioName(e.target.value)} value={studioName}/>
+          <InputGroup >
             <InputLeftElement pointerEvents='none' pt='1.5'>
             <BsGeoAlt className='size-5' />
             </InputLeftElement>
-            <Input size="lg" type='mrt' placeholder='MRT Station' onChange={(e) => setMrtStation(e.target.value)} value={mrtStation}/>
+            <Input size="lg" minW='250px' type='mrt' placeholder='MRT Station' onChange={(e) => setMrtStation(e.target.value)} value={mrtStation}/>
         </InputGroup>  
-        <InputGroup width='auto'>
+        {/* <InputGroup width='auto'>
             <InputLeftElement pointerEvents='none' pt='1.5'>
             <BsCurrencyDollar className='size-5' />
             </InputLeftElement>
             <Input size="lg" type='price' placeholder='Price per hour' onKeyDown={handleKeyDown}  />
-        </InputGroup> 
+        </InputGroup>  */}
         <Link href={{ pathname: "/map", query: {studioName: studioName, mrt: mrtStation}}} passHref legacyBehavior> 
-            <Button leftIcon={<BsSearch/>} size="lg" variant='brand-lg' >Find Studio</Button>
+            <Button leftIcon={<BsSearch/>} size='lg' minW='150px' variant='brand-lg' >Find Studio</Button>
         </Link>
         </Stack>
         </Center>
