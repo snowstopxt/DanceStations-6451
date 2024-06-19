@@ -9,6 +9,8 @@ export function useStudios() {
 
 export const StudiosProvider = ({ queries, children}) => {
     const [studios, setStudios] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [studiosPerPage] = useState(5);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,6 +22,7 @@ export const StudiosProvider = ({ queries, children}) => {
             
                 );
             }
+            data = data.filter((studio) => studio.price <= queries.max && studio.price >= queries.min);
             setStudios(data);  
             
         };
@@ -27,6 +30,14 @@ export const StudiosProvider = ({ queries, children}) => {
         fetchData();
       
     }, [queries]);
+
+    // const indexOfLastStudio = currentPage * studiosPerPage;
+    // const indexOfFirstStudio = indexOfLastStudio - studiosPerPage;
+    // const currentStudios = studios.slice(indexOfFirstStudio, indexOfLastStudio);
+
+    // // Change page
+    // const paginate = pageNumber => setCurrentPage(pageNumber);
+
   
     return (
       <StudiosContext.Provider value={studios}>

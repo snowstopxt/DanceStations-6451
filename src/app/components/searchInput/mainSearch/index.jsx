@@ -34,7 +34,7 @@ const MainSearch = () => {
             <InputLeftElement pointerEvents='none' pt='1.5'>
             <BsCurrencyDollar className='size-5' />
             </InputLeftElement>
-            <Input size="lg" type='price' placeholder='Price per hour' onKeyDown={handleKeyDown} />
+            <Input size="lg" type='price' placeholder='Price per hour' onKeyDown={handleKeyDown}  />
         </InputGroup> 
         <Link href={{ pathname: "/map", query: {studioName: studioName, mrt: mrtStation}}} passHref legacyBehavior> 
             <Button leftIcon={<BsSearch/>} size="lg" variant='brand-lg' >Find Studio</Button>

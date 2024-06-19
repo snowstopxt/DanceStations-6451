@@ -29,17 +29,24 @@ const MapPage = () => {
     const [north, setNorth ] = useState([1.3900692049787553, (103.78181992034912+103.85778007965088)/2]);
     const [studioName, setStudioName] = useState(name || '');
     const [mrtStation, setMrtStation] = useState(mrt || ''); 
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(100)
     
     useEffect(() => {
         setStudioName(name || '');
         setMrtStation(mrt || '');
     }, [name, mrt]);
 
+    console.log('minPrice: ', minPrice);
+    console.log('maxPrice: ', maxPrice);    
+
     const queries = {
         name: studioName,
         mrt: mrtStation,
         coords: coords,
         north: north,
+        min: minPrice,
+        max: maxPrice
     }
 
     return (
@@ -49,7 +56,7 @@ const MapPage = () => {
             <Header />
             <Grid templateColumns='repeat(2, 1fr)' gap={0}>
                 <GridItem bg='white'>
-                    <List/>
+                    <List setMinPrice={setMinPrice} setMaxPrice={setMaxPrice}/>
                 </GridItem>
                 <GridItem>
                     <MyMap setCoords={setCoords} setNorth={setNorth}/>

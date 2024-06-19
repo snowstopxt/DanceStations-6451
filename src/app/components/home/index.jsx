@@ -11,6 +11,7 @@ const Home = () => {
             fill={true}
             quality={100}
             priority
+            object-fit='cover'
         />
       <div className="inline-flex flex-col">
         <div className="absolute top-48 left-40 text-h1-l text-white">Find Your Nearest Dance Station</div>
