@@ -36,9 +36,7 @@ const MapPage = () => {
         setStudioName(name || '');
         setMrtStation(mrt || '');
     }, [name, mrt]);
-
-    console.log('minPrice: ', minPrice);
-    console.log('maxPrice: ', maxPrice);    
+    
 
     const queries = {
         name: studioName,
