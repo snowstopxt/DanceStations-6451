@@ -9,7 +9,7 @@ import { Card, CardBody, Image, Stack, Link, Text } from '@chakra-ui/react';
 const StudioCard = ({ studio }) => {
   return (
     <Card>
-        <Link href="/">
+        <Link href={`/studio/${studio.id}`}>
         <CardBody>
             <Image objectFit='cover' src="/logo-transparent.png" alt={studio.name} borderRadius='lg'/>
                 <Stack mt='6' spacing = {0} >
