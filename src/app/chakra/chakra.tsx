@@ -1,6 +1,8 @@
 'use client'
 
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import {menuTheme} from "../components/list/menu"
+  
 
 const theme = extendTheme({
     colors: {
@@ -9,6 +11,7 @@ const theme = extendTheme({
             110: '#b89ac2',
             200: '#8474a1',
             300: '#6ec6ca',
+            310: '#63b2b5',
             400: '#08979d',  
         }
     },
@@ -22,8 +25,17 @@ const theme = extendTheme({
                         bg: 'brand.110',
                     },
                 },
-            }, // Add a closing curly brace here
+                'brand-blue': {
+                    bg: 'brand.300',
+                    color: 'white',
+                    _hover: {
+                        bg: 'brand.310',
+                    },
+                },
+            }, 
         },
+        Menu: menuTheme,
+        
     },
 })
 
