@@ -30,14 +30,14 @@ try {
     return (
       <div>
         <Header />
-        
+
         <div className="flex flex-row">
           
-          <div className="basis-1/2">
+          <div className="m-3 basis-1/2 self-start place-self-center">
             <StudioInfo studio={studio} />
           </div>
 
-          <div>
+          <div className="m-8 basis-1/2 self-start place-self-center">
             <Availability />
           </div>
 
