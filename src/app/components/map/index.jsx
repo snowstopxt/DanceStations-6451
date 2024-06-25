@@ -13,6 +13,7 @@ import {
 
 import { getData } from '../../firebase/clientApp';
 import { useStudios } from '../../../contexts/studiosContext';
+import Minicard from '../minicard';
 
 
 const MyMap = (x) => {
@@ -96,8 +97,7 @@ const MarkerWithInfoWindow = (obj) => {
   
         {infoWindowShown && (
           <InfoWindow anchor={marker} onClose={handleClose}>
-            <h2>InfoWindow content!</h2>
-            <p>Some arbitrary html to be rendered into the InfoWindow.</p>
+            <Minicard studio={studio} />
           </InfoWindow>
         )}
       </>
