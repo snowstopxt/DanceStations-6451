@@ -1,28 +1,19 @@
-/*const StudioPage = ({params} : {params: {studioId: string}}) => {
-    return (
-        <div>Studio Details {params.studioId}
-      </div>
-    );
-}
-
-export default StudioPage;
-
-*/
 'use client'
 
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { fetchStudioById } from '../../firebase/clientApp';
+import StudioInfo from '../../components/StudioInfo';
+import Availability from '../../components/Availability';
+import Header from '../../components/header';
 
 const StudioDetailsPage = ({params} : {params: {studioId: string}}) => {
-  //const router = useRouter();
-  //const { studioId } = router.query;
-  const [studio, setStudio] = useState(null);
+  
+  const [studio, setStudio] = useState<any>(null);
 
+try {
   useEffect(() => {
     const fetchStudio = async () => {
-      // Fetch studio data based on studioId
-      // Example: Assuming you have a function to fetch studio data
+
       const fetchedStudio = await fetchStudioById(params.studioId);
       setStudio(fetchedStudio);
     };
@@ -34,14 +25,29 @@ const StudioDetailsPage = ({params} : {params: {studioId: string}}) => {
 
   if (!studio) {
     return <div>Loading...</div>;
-  }
+  } else {
+    console.log(studio);
+    return (
+      <div>
+        <Header />
+        
+        <div className="flex flex-row">
+          
+          <div className="basis-1/2">
+            <StudioInfo studio={studio} />
+          </div>
 
-  return (
-    // Render studio details using the fetched studio data
-    <div>
-      <h1>heh</h1>
-    </div>
-  );
-};
+          <div>
+            <Availability />
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+} catch (error) {
+  console.error('Error fetching studio', error);
+}
+}
 
 export default StudioDetailsPage;
