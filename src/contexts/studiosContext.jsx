@@ -22,9 +22,14 @@ export const StudiosProvider = ({ queries, children}) => {
             
                 );
             }
+
+            if (data == null) {
+                console.log('no data');
+            } else {
+
             data = data.filter((studio) => studio.price <= queries.max && studio.price >= queries.min);
             setStudios(data);  
-            
+            }
         };
 
         fetchData();
