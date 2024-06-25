@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import Availability from '../components/availability/index'
+import Availability from '../components/Availability/index'
 import { useSearchParams } from 'next/navigation';
 
 

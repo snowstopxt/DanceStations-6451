@@ -6,6 +6,7 @@ import {
   doc,
   setDoc,
   updateDoc,
+  getDoc,
   getDocs,
   query,
   where,
@@ -84,8 +85,6 @@ const getData = async (info) => {
         }
       }
     }
-
-
     // docSnap.forEach((doc) => {
     //   const data = doc.data();
     //   const hash = geofire.geohashForLocation([data.location.latitude, data.location.longitude]);
@@ -105,8 +104,9 @@ const returnData = async () => {
 }
 
 const fetchStudioById = async (studioId) => {
+  /*
   try {
-    const docRef = await db.collection('studios').doc(studioId).get();
+    const docRef = await collection(db, 'studios').doc(studioId).get();
 
     if (docRef.exists) {
       return { id: docRef.id, ...docRef.data() };
@@ -115,6 +115,27 @@ const fetchStudioById = async (studioId) => {
       return null;
     }
   } catch (error) {
+    console.error('Error fetching studio:', error);
+    return null;
+  }
+    */
+
+
+
+  const docRef = doc(db, 'studios', studioId);
+  const docSnap = await getDoc(docRef);
+  try {
+    if (docSnap.exists()) {
+      const studioData = docSnap.data();
+      console.log(docSnap.data());
+      return {...studioData, id: docSnap.id};
+
+    } else {
+      console.log('No such document!');
+      return null;
+    }
+  }
+  catch (error) {
     console.error('Error fetching studio:', error);
     return null;
   }
