@@ -79,7 +79,8 @@ const getData = async (info) => {
         
         const distanceInKm = geofire.distanceBetween([lat, lng], info.coords);
         if (distanceInKm <= radius) {
-          studiosData.push(data);
+          //console.log('Data structure:', data);
+          studiosData.push({...data, id: doc.id});
         }
       }
     }
@@ -103,4 +104,20 @@ const returnData = async () => {
   return studiosData;
 }
 
-export{ app, auth, getData, returnData};
+const fetchStudioById = async (studioId) => {
+  try {
+    const docRef = await db.collection('studios').doc(studioId).get();
+
+    if (docRef.exists) {
+      return { id: docRef.id, ...docRef.data() };
+    } else {
+      console.log('No such document!');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching studio:', error);
+    return null;
+  }
+};
+
+export{ app, auth, getData, returnData, fetchStudioById};
