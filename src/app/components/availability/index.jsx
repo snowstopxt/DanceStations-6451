@@ -99,9 +99,10 @@ const Availability = (props) => {
                                 for (let minute = 0; minute < 60; minute += 60) { 
                                     const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
                                     const isBooked = bookedSlots.some(slot => slot.time == hour);
+                                    const userBooked = bookedSlots.some(slot => slot.userId === userId && slot.time === hour);
                                     timeSlots.push(
                                         <Tr key={time}>
-                                            <Th textAlign='center' textColor={isBooked ? 'white' : 'brand.600'} bg={isBooked ? 'brand.500' : 'white'}>{time}</Th>
+                                            <Th textAlign='center' textColor={isBooked ? 'white' : userBooked ? 'red' : 'brand.600'} bg={userBooked ? 'brand.300' : isBooked ? 'brand.500' : 'white'}>{time}</Th>
                                         </Tr>
                                     );
                                 }
