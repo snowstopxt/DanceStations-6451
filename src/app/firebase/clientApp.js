@@ -8,7 +8,6 @@ import {
   updateDoc,
   getDoc,
   getDocs,
-  getDoc,
   query,
   where,
   orderBy, 
@@ -59,13 +58,13 @@ const getData = async (info) => {
     console.log('info: ', info);
     const radius = geofire.distanceBetween(info.coords, info.north);
     console.log('radius: ', radius);
-    const hash = geofire.geohashForLocation([1.3112579452023452, 103.8549410172018])
-    const newRef = doc(db, 'studios', 'LON');
-    await updateDoc(newRef, {
-      geohash: hash,
-      lat: lat,
-      lng: lng
-    });
+    // const hash = geofire.geohashForLocation([1.3112579452023452, 103.8549410172018])
+    // const newRef = doc(db, 'studios', 'LON');
+    // await updateDoc(newRef, {
+    //   geohash: hash,
+    //   lat: lat,
+    //   lng: lng
+    // });
 
 
     const bounds = geofire.geohashQueryBounds(info.coords, radius*1000);

@@ -5,9 +5,11 @@ import { fetchStudioById } from '../../firebase/clientApp';
 import StudioInfo from '../../components/StudioInfo';
 import Availability from '../../components/Availability';
 import Header from '../../components/header';
+import { auth } from '../../firebase/clientApp';
+
 
 const StudioDetailsPage = ({params} : {params: {studioId: string}}) => {
-  
+  const user = auth.currentUser;
   const [studio, setStudio] = useState<any>(null);
 
 try {
