@@ -8,6 +8,7 @@ import {
   updateDoc,
   getDoc,
   getDocs,
+  getDoc,
   query,
   where,
   orderBy, 
@@ -16,6 +17,8 @@ import {
 } from "firebase/firestore";
 
 import * as geofire from 'geofire-common';
+import { get } from "http";
+import { setUncaughtExceptionCaptureCallback } from "process";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCaBqTXR0IcD3qYuWdt3pwD_SeJFz0AbZQ",
@@ -56,7 +59,15 @@ const getData = async (info) => {
     console.log('info: ', info);
     const radius = geofire.distanceBetween(info.coords, info.north);
     console.log('radius: ', radius);
-  
+    const hash = geofire.geohashForLocation([1.3112579452023452, 103.8549410172018])
+    const newRef = doc(db, 'studios', 'LON');
+    await updateDoc(newRef, {
+      geohash: hash,
+      lat: lat,
+      lng: lng
+    });
+
+
     const bounds = geofire.geohashQueryBounds(info.coords, radius*1000);
     const promises = [];
 
@@ -85,14 +96,7 @@ const getData = async (info) => {
         }
       }
     }
-    // docSnap.forEach((doc) => {
-    //   const data = doc.data();
-    //   const hash = geofire.geohashForLocation([data.location.latitude, data.location.longitude]);
-    //   console.log('doc id: ', doc.id, 'hash: ', hash);
-    //   const lat = data.location.latitude
-    //   const lng = data.location.longitude
-    //   studiosData.push({...data, lat, lng, hash});
-    // });
+
     return studiosData;
   } catch (error) {
     console.log(error.message);
@@ -101,6 +105,44 @@ const getData = async (info) => {
 
 const returnData = async () => {
   return studiosData;
+}
+
+
+async function createBooking(roomId, userId, date, startTime, endTime) {
+    const hour = startTime.toString().split(':')[0];
+    for (let i = parseInt(hour); i < parseInt(endTime); i+=1) {
+      console.log('i:', i);
+      const bookingRef = doc(db, `reservations/${roomId}/${date}/${i}`);
+
+      await getDoc(bookingRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log('Slot is already booked');
+        } else {
+          setDoc(bookingRef, { userId : userId })
+            .then(() => console.log('Booking successful'))
+            .catch((error) => console.log(error.message));
+        }
+      }).catch((error) => {
+        console.error('Error checking slot availability:', error);
+      });
+  }
+  
+}
+
+async function fetchBookingsForDay(roomId, date) {
+  const bookingRef = collection(db, `reservations/${roomId}/${date}`);
+  const bookingSnapshot = await getDocs(bookingRef);
+  const bookings = [];
+
+  bookingSnapshot.forEach((doc) => {
+    const data = doc.data();
+    const time = parseInt(doc.id);
+    bookings.push({ time, ...data });
+  });
+
+  console.log('firestore bookings', bookings);
+  return bookings;
+  
 }
 
 const fetchStudioById = async (studioId) => {
@@ -141,4 +183,4 @@ const fetchStudioById = async (studioId) => {
   }
 };
 
-export{ app, auth, getData, returnData, fetchStudioById};
+export{ app, auth, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay};
