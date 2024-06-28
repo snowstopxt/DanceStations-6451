@@ -132,6 +132,8 @@ const Availability = (props) => {
                 <Text mb='-15px' paddingInlineEnd='140px'>Start Time:</Text>
                 <input
                     type="time"
+                    min="09:00:00"
+                    max={endTime}
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value.split(':')[0] + ':00')}
                     className={styles.input}
@@ -141,6 +143,8 @@ const Availability = (props) => {
                 <input
                     type="time"
                     value={endTime}
+                    min={startTime}
+                    max='24:00:00'
                     onChange={(e) => { setEndTime(e.target.value.split(':')[0] + ':00')}}
                     className={styles.input}
                     step={3600} // Set the step to 1 hour (3600 seconds)
