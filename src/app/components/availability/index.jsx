@@ -22,6 +22,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from './styles.css'
 import { createBooking, fetchBookingsForDay } from '../../firebase/clientApp';
+import { useRouter } from 'next/navigation';
 
 
 const Availability = (props) => {
@@ -31,6 +32,8 @@ const Availability = (props) => {
     const [endTime, setEndTime] = useState('');
     const [bookedSlots, setBookedSlots] = useState([]);
     const [showSlots, setShowSlots] = useState(false); 
+    const router = useRouter();
+    const [newBooking, setNewBooking] = useState(0);
 
     useEffect(() => {
         async function fetchData() {
@@ -42,10 +45,15 @@ const Availability = (props) => {
         }
         fetchData();
         console.log('bookedSlots: ', bookedSlots);
-    }, [date, studioId]);
+        }, [date, newBooking]);
+
 
     const handleViewAvailabilityClick = () => {
         // Call createBooking with the current startTime and endTime
+        if (userId == null) {
+            alert('Please login to book a studio');
+            router.push('/login')
+        }
         if (date && startTime && endTime) {
             setShowSlots(true);
         } else {
@@ -53,8 +61,15 @@ const Availability = (props) => {
         }
     };
 
-    const handleReserveClick = () => {
-        createBooking(studioId, userId, date, startTime, endTime);
+    const handleReserveClick = async () => {
+        const isBooked = await createBooking(studioId, userId, date, startTime, endTime);
+        if(isBooked === false) {
+            alert('Booking successful');
+        } else {
+            alert('Slot is unavailable, please choose another timing or date');
+        }
+        setNewBooking(newBooking + 1);
+
     };
 
     const handleDateChange = (date) => {
@@ -63,7 +78,9 @@ const Availability = (props) => {
         setDate(dateWithoutTime);
     };
 
-    const renderTimeSlots = (date) => {
+
+    
+    const renderTimeSlots = (date) => { 
 
         const displayDate = new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
@@ -95,7 +112,7 @@ const Availability = (props) => {
                 </Table>
             </TableContainer>
         );
-    };
+    }
     
     
     return (

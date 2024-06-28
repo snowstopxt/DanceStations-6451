@@ -108,23 +108,32 @@ const returnData = async () => {
 
 
 async function createBooking(roomId, userId, date, startTime, endTime) {
-    const hour = startTime.toString().split(':')[0];
-    for (let i = parseInt(hour); i < parseInt(endTime); i+=1) {
+    let isBooked = false;
+
+    for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
       console.log('i:', i);
       const bookingRef = doc(db, `reservations/${roomId}/${date}/${i}`);
 
       await getDoc(bookingRef).then((snapshot) => {
         if (snapshot.exists()) {
           console.log('Slot is already booked');
-        } else {
-          setDoc(bookingRef, { userId : userId })
-            .then(() => console.log('Booking successful'))
-            .catch((error) => console.log(error.message));
-        }
+          isBooked = true;
+        } 
       }).catch((error) => {
         console.error('Error checking slot availability:', error);
       });
+  } 
+
+  if (isBooked) {
+    return isBooked;
   }
+
+  for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
+      const bookingRef = doc(db, `reservations/${roomId}/${date}/${i}`);
+      await setDoc(bookingRef, { userId: userId });
+      console.log('Booking successful')
+  }
+  return isBooked;
   
 }
 
