@@ -130,8 +130,62 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
 
   for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
       const bookingRef = doc(db, `reservations/${roomId}/${date}/${i}`);
-      await setDoc(bookingRef, { userId: userId });
-      console.log('Booking successful')
+      await setDoc(bookingRef, { userId: userId }).then(async () => {
+
+
+    // Create a reference to the user's document
+    const userDocRef = doc(db, 'users', userId);
+
+    // Create a reference to the dates subcollection under the user's document
+    //const datesCollectionRef = collection(userDocRef, 'dates');
+    //const dateDocRef = doc(datesCollectionRef, date);
+
+    // Create a reference to the reservations subcollection under the date document
+    const reservationsCollectionRef = collection(userDocRef, 'reservations');
+    const reservationDocRef = doc(reservationsCollectionRef);
+
+    await setDoc(reservationDocRef, {
+      studioId: roomId,
+      date: date,
+      startTime: startTime,
+      endTime: endTime
+    }).then(() => {
+      console.log('Booking successful!!')});
+
+/*
+      // Create a reference to the user's document
+      const userDocRef = doc(db, 'users', userId);
+
+      // Create a reference to the studio subcollection under the user's document
+      const studioCollectionRef = collection(userDocRef, 'studios');
+      const studioDocRef = doc(studioCollectionRef, roomId);
+
+      // Create a reference to the date subcollection under the studio document
+      const dateCollectionRef = collection(studioDocRef, 'dates');
+      const dateDocRef = doc(dateCollectionRef, date);
+
+      // Create a reference to the time subcollection under the date document
+      //const timeCollectionRef = collection(dateDocRef, 'times');
+      //const timeDocRef = doc(timeCollectionRef, timeSlot);
+
+      await setDoc(dateDocRef, {
+        studioId: roomId,
+        date: date,
+        startTime: startTime,
+        endTime: endTime
+      }).then(() => {
+        console.log('Booking successful')});
+
+        /*
+      db.collection('users').doc(userId).set({
+        studioId: roomId,   // brush up, such that userid > studioId > date > time
+        date: date,
+        startTime: startTime,
+        endTime: endTime
+      }).then(() => {
+      console.log('Booking successful')});
+      */
+  })
   }
   return isBooked;
   
@@ -154,24 +208,7 @@ async function fetchBookingsForDay(roomId, date) {
 }
 
 const fetchStudioById = async (studioId) => {
-  /*
-  try {
-    const docRef = await collection(db, 'studios').doc(studioId).get();
-
-    if (docRef.exists) {
-      return { id: docRef.id, ...docRef.data() };
-    } else {
-      console.log('No such document!');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error fetching studio:', error);
-    return null;
-  }
-    */
-
-
-
+  
   const docRef = doc(db, 'studios', studioId);
   const docSnap = await getDoc(docRef);
   try {
@@ -191,4 +228,44 @@ const fetchStudioById = async (studioId) => {
   }
 };
 
-export{ app, auth, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay};
+const fetchReservations = async () => {
+
+  const user = auth.currentUser;
+  if (user) {
+    const userId = user.uid;
+
+    // Create a reference to the user's document
+    const userDocRef = doc(db, 'users', userId);
+
+    //const reservationsSnapshot = await getDocs(userDocRef);
+
+    const reservations = [];
+
+    //for (const reservationDoc of reservationsSnapshot.docs) {
+
+      // Create a reference to the reservations subcollection
+      const reservationsCollectionRef = collection(userDocRef, 'reservations');
+
+      // Create a query to get all reservations sorted by date and startTime
+      const q = query(reservationsCollectionRef, orderBy('date'), orderBy('startTime'));
+
+      // Execute the query
+      const reservationsSnapshot = await getDocs(q);
+
+      reservationsSnapshot.forEach((doc) => {
+        reservations.push({id: doc.id, ...doc.data()});
+      });
+    //}
+
+    // Sort reservations by startTime
+    //reservations.sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+    return reservations;
+  } else {
+    console.log('User is not signed in');
+    return [];
+  }
+};
+
+
+export { app, auth, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations };
