@@ -63,8 +63,10 @@ const Login = () => {
                         className="space-y-5"
                     >
                         <div>
+                            <label htmlFor="email" className="text-sm font-medium">Email</label>
                             <input
                                 type="email"
+                                name='email'
                                 autoComplete='email'
                                 placeholder="Email"
                                 required
@@ -75,8 +77,10 @@ const Login = () => {
 
 
                         <div>
+                            <label htmlFor="password" className="text-sm font-medium">Password</label>
                             <input
                                 type="password"
+                                name='password'
                                 placeholder="Password"
                                 autoComplete='current-password'
                                 required
@@ -91,6 +95,8 @@ const Login = () => {
 
                         <button
                             type="submit"
+                            aria-label={isSigningIn ? 'Signing In...' : 'Sign In'}
+            
                             disabled={isSigningIn}
                             className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningIn ? 'bg-brand-dark-teal cursor-not-allowed' : 'bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}`}
                         >
