@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { fetchStudioById } from '../../firebase/clientApp';
-import StudioInfo from '../../components/StudioInfo';
-import Availability from '../../components/Availability';
+import StudioInfo from '../../components/studioInfo';
+import Availability from '../../components/availability';
 import Header from '../../components/header';
 import { auth } from '../../firebase/clientApp';
 
