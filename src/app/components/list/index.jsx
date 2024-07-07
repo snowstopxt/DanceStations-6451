@@ -56,7 +56,7 @@ const List = (x) => {
     }
 
     return (
-        <Box padding='25px'>
+        <Box padding='25px' overflow='auto'>
             <Text fontSize='md'>{ studios.length > 1 ? `${studios.length} studios in this area` : `${studios.length} studio in this area` }</Text>
             <FormControl margin={3} mb='30px' minW='120px'>
             <Grid templateColumns='repeat(2, 1fr)'>
@@ -109,7 +109,6 @@ const List = (x) => {
                     </Stack>
                     <>
                     <RangeSlider
-                        aria-label={['min', 'max']}
                         value={[min, max]}
                         onChange={(values) => {
                             setMin(values[0]);

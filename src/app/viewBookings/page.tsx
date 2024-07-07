@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { fetchReservations } from '../firebase/clientApp';
 import Header from '../components/header';
 import React from 'react';
-import { Stack, Grid, Text } from '@chakra-ui/react';
+import { Box, Stack, Grid, Text } from '@chakra-ui/react';
 import ReservationCard from '../components/reservationCard';
 
 const viewBookingsPage = () => {
@@ -30,13 +30,15 @@ useEffect(() => {
             <div><Header />
             <Text className="text-h1-s font-bold m-5">My Bookings</Text>
             <div> 
-            <Stack spacing={6} direction='column' m={5}>
+            <Box overflowX='hidden' overflowY='auto'>
+            <Stack spacing={6} direction='column' m={5} >
                 {reservations?.map((reservation, i) => (
                     console.log(reservation),
                     
                         <ReservationCard reservation ={reservation}></ReservationCard>
                 ))}
                 </Stack>
+            </Box>
             </div>
             </div>
         );
