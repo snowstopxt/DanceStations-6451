@@ -127,7 +127,7 @@ const Availability = (props) => {
                         placeholderText="Date"
                         className={styles.input}
                         selected ={date}
-                        // onSelect={''}
+                        minDate={new Date()}
                         onChange={(e) => {handleDateChange(e)}} />
                 <Text mb='-15px' paddingInlineEnd='140px'>Start Time:</Text>
                 <input

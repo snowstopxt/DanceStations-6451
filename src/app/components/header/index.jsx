@@ -47,7 +47,7 @@ const Header = () => {
             <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Chats</Link>
             <Link href="/viewBookings" className="text-slate-500 hover:text-black text-h3-l" >My Bookings</Link>
             {!user && <Link href="/login" className="text-slate-500 hover:text-black text-h3-l" > Login</Link>}
-            {user && <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >{user.displayName}</Link>}
+            {user && <div className="text-slate-500 hover:text-black text-h3-l">{user.displayName}</div>}
         </div>
       </div>
     )}

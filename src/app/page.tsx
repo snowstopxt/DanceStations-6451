@@ -3,7 +3,7 @@ import Header from './components/header/index';
 import Home from './components/home/index';
 
 
-const App = () => {
+export default function Page () {
     return (
         <div className="w-full h-screen flex flex-col bg-brand-purple">
             <Header />
@@ -13,5 +13,5 @@ const App = () => {
     );
 }
 
-export default App;
+
 

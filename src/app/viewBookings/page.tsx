@@ -7,7 +7,7 @@ import React from 'react';
 import { Box, Stack, Grid, Text } from '@chakra-ui/react';
 import ReservationCard from '../components/reservationCard';
 
-const viewBookingsPage = () => {
+export default function Page () {
   //const user = auth.currentUser;
   //const userId = user?.uid || null;
 const [reservations, setReservations] = useState<any[]>([]);
@@ -47,5 +47,3 @@ useEffect(() => {
   console.error('Error fetching reservations', error);
 }
 }
-
-export default viewBookingsPage;

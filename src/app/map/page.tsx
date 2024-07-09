@@ -20,7 +20,7 @@ interface Studio {
     size: number;
   }
 
-const MapPage = () => {
+export default function Page () {
     const searchParams = useSearchParams()
     const name = searchParams.get('studioName');
     const mrt = searchParams.get('mrt');
@@ -65,5 +65,3 @@ const MapPage = () => {
         </div>
     );
 };
-
-export default MapPage;
