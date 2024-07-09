@@ -12,11 +12,35 @@ jest.mock('../src/app/firebase/auth.js', () => ({
   doSignInWithEmailAndPassword: jest.fn(),
 }));
 
+/*
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+  usePathname: jest.fn(),
+}));
+*/
+
+jest.mock('next/navigation', () => {
+  return {
+    __esModule: true,
+    useRouter: () => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn()
+    }),
+    useSearchParams: () => ({
+      get: () => {}
+    }),
+    usePathname: () => {jest.fn()}
+  }
+})
+
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn().mockReturnValue({
     signInWithEmailAndPassword: jest.fn(),
   }),
-  onAuthStateChanged: jest.fn(),
+  onAuthStateChanged: (auth, callback) => {
+    // Simulate not logged in scenario
+    callback(null)},
   GoogleAuthProvider: {
     PROVIDER_ID: 'google.com',
   },
@@ -55,11 +79,15 @@ const mockInitializeUser = jest.fn(async (user) => {
 
 describe('LoginComponent', () => {
   it('allows the user to log in', async () => {
-    const { findByText, findByRole, findByPlaceholderText, findByLabelText} = render(<AuthProvider><Login/></AuthProvider>);
+
+    const children = true;
+    render(<Login/>);
+
+    //screen.debug();
 
     const emailInput =  await screen.findByPlaceholderText("Email");
     const passwordInput = await screen.findByPlaceholderText("Password");
-    const loginButton = await screen.findByRole('button', { name: 'Sign in' });
+    const loginButton = await screen.findByRole('button', { name: 'Sign In' });
     
     act(() => {
       fireEvent.change(emailInput, { target: { value: 'user@example.com' } })
@@ -69,7 +97,6 @@ describe('LoginComponent', () => {
 
     expect(doSignInWithEmailAndPassword).toHaveBeenCalledWith('user@example.com', 'password');
     });
-
 
 });
 

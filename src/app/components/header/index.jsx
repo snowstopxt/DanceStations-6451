@@ -23,7 +23,8 @@ const Header = () => {
       }
   });
 
-  return () => name();
+  return name;
+  //return () => name();
 }, []);
 
 
