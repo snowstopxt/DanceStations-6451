@@ -36,20 +36,24 @@ jest.mock('next/navigation', () => {
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn().mockReturnValue({
-    signInWithEmailAndPassword: jest.fn(),
+    createUserWithEmailAndPassword: jest.fn(),
   }),
+  
   onAuthStateChanged: (auth, callback) => {
     // Simulate not logged in scenario
     callback(null)},
   GoogleAuthProvider: {
     PROVIDER_ID: 'google.com',
   },
+  
+  
 }));
 
 const setCurrentUser = jest.fn();
 const setIsEmailUser = jest.fn();
 const setIsGoogleUser = jest.fn();
 const setUserLoggedIn = jest.fn();
+
 
 const mockInitializeUser = jest.fn(async (user) => {
   if (user) {
