@@ -35,7 +35,7 @@ const Header = () => {
         <div className="flex basis-1/6 items-center">
           <div className="flex-shrink-0">
             <Link href="/">
-            <Image className="absolute left-8 top-5" src="/logo-transparent.png" alt="DanceStations Logo" width={200} height={200}/> 
+            <Image className="absolute left-8 top-5" src="/logo-transparent.png" alt="DanceStations Logo" width={200} height={200} priority={true}/> 
             </Link>
           </div>
         </div>

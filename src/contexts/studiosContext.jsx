@@ -15,12 +15,20 @@ export const StudiosProvider = ({ queries, children}) => {
     useEffect(() => {
         const fetchData = async () => {
             let data = await getData({ coords: queries.coords, north: queries.north });
-            if (queries.name !== '' || queries.mrt !== '') {
+            if (queries.name !== '' && queries.mrt !== '') {
                 data = data.filter((studio) => 
                     studio.name.toLowerCase().includes(queries.name.toLowerCase()) || 
-                    studio.mrt.toLowerCase().includes(queries.mrt.toLowerCase())
-            
+                    studio.mrt.toLowerCase().includes(queries.mrt.toLowerCase()) 
                 );
+                console.log('both given')
+            } else if (queries.name == '') {
+                data = data.filter((studio) => studio.mrt.toLowerCase().includes(queries.mrt.toLowerCase()));
+                console.log('mrt given')
+            } else if (queries.mrt == '') {
+                data = data.filter((studio) => studio.name.toLowerCase().includes(queries.name.toLowerCase()));
+                console.log('name given')
+            } else {
+                console.log('no queries');
             }
 
             if (data == null) {

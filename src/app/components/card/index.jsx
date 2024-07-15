@@ -11,7 +11,7 @@ const StudioCard = ({ studio }) => {
     <Card>
         <Link href={`/studio/${studio.id}`}>
         <CardBody>
-            <Image objectFit='cover' src="/logo-transparent.png" alt={studio.name} borderRadius='lg'/>
+            <Image objectFit='cover' src="/logo-transparent.png" alt={studio.name} borderRadius='lg' width="auto" height="auto"/>
                 <Stack mt='6' spacing = {0} >
                 <Text className="text-h2-s font-bold ">{studio.name}</Text>
                 <Text className="text-body-l ">{studio.mrt}</Text>
