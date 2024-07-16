@@ -1,32 +1,45 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { auth } from '../../firebase/clientApp';
+import { auth, fetchUserData, doSignOut } from '../../firebase/clientApp';
 import { onAuthStateChanged } from 'firebase/auth';
 import NavSearch from '../searchInput/navSearch/index';
+import { Menu, MenuButton, MenuDivider, MenuList, MenuItem } from '@chakra-ui/react';
 
 const Header = () => {
   const pathname = usePathname();
-  const user = auth.currentUser;
-
+  const router = useRouter();
+  const [user, setUser] = useState(null);
   const [displayName, setDisplayName] = useState(null);
 
-  
-  useEffect (() => {
-    const name = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setDisplayName(user.displayName);
-      } else {
-        setDisplayName(null);
-      }
+
+const fetchName = async () => {
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      setUser(auth.currentUser)
+      setDisplayName(auth.currentUser.displayName);
+    } else {
+      console.log('no user')
+    }
   });
+}
 
-  return name;
-  //return () => name();
-}, []);
+useEffect(() => {
+  fetchName();
+},[]);
 
+
+
+const handleLogOut = async () => {
+  doSignOut();
+  setUser(null);
+  setDisplayName(null);
+  router.push('/login');
+  console.log('logged out');
+
+}
 
   return (
     <nav className="bg-white border"> 
@@ -44,11 +57,26 @@ const Header = () => {
       <div className="hidden md:block">
         <div className="ml-4 flex items-center space-x-4">
             
-            <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >Home</Link>
-            <Link href="/" className="text-slate-500 hover:text-black text-h3-l" >My Chats</Link>
+            <Link href="/" className="text-slate-500 hover:text-black text-1.125rem" >Home</Link>
+            <Link href="/" className="text-slate-500 hover:text-black text-1.125rem" >My Chats</Link>
             <Link href="/viewBookings" className="text-slate-500 hover:text-black text-h3-l" >My Bookings</Link>
             {!user && <Link href="/login" className="text-slate-500 hover:text-black text-h3-l" > Login</Link>}
-            {user && <div className="text-slate-500 hover:text-black text-h3-l">{user.displayName}</div>}
+            {user && 
+                <Menu>
+                <MenuButton textColor='gray.500' hover='black' fontSize="lg">{displayName}</MenuButton>
+                <MenuList >
+                  <MenuItem  as='a' href='/viewBookings' textColor='gray.500' fontSize="lg" hover="black">
+                    My Bookings
+                  </MenuItem>
+                  <MenuItem as='a' href='/' textColor='gray.500' fontSize="lg" hover="black">
+                    My Chats
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem as='button' onClick={handleLogOut} textColor='gray.500' fontSize="lg" hover="black">
+                    Log out
+                  </MenuItem>
+                </MenuList>
+              </Menu>}
         </div>
       </div>
     )}
