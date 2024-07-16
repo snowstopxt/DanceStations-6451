@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { 
   collection,
   getFirestore, 
@@ -52,6 +52,25 @@ const db  = getFirestore()
 
 
 // collection ref
+
+const fetchUserData = async () => {
+  auth.onAuthStateChanged(async (user) => {
+    console.log("client fetch", user);
+    if (user) {
+      return user;
+    } else {
+      return null;
+    }
+  });
+}
+
+export const doSignOut = () => {
+  signOut(auth).then(() => {
+      console.log('User signed out');
+    }).catch((error) => {
+      console.error('Error signing out:', error);
+    });
+};
 
 const getData = async (info) => {
   try {
@@ -268,4 +287,6 @@ const fetchReservations = async () => {
 };
 
 
-export { app, auth, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations };
+
+
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations };

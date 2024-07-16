@@ -1,12 +1,14 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updatePassword} from "firebase/auth";
+import { createUserWithEmailAndPassword, browserSessionPersistence, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updatePassword} from "firebase/auth";
 import { auth } from "./clientApp";
+import { setPersistence } from "firebase/auth";
 
 export const doCreateUserWithEmailAndPassword = async (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const doSignInWithEmailAndPassword = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+    setPersistance(auth, browserSessionPersistence).then(() => { return signInWithEmailAndPassword(auth, email, password);
+})
 
 };
 
@@ -17,9 +19,7 @@ export const doSignInWithGoogle = async () => {
     return result;
 };
 
-export const doSignOut = () => {
-    return auth.signOut();
-};
+
 
 // export const doPasswordReset = (email) => {
 //     return sendPasswordResetEmail(auth, email);
