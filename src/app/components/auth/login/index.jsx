@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Header from '../../header/index';
 
-const Login = () => {
+const Login = ({userType}) => {
     //const { userLoggedIn } = useAuth()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
@@ -55,7 +55,7 @@ const Login = () => {
                
                 <div className="text-center">
                     <div className="mt-2">
-                            <h3 className="text-black text-h2-l font-semibold sm:text-2xl">Log in to DanceStations</h3>
+                            <h3 className="text-black text-h2-l font-semibold sm:text-2xl">Log in as {userType === "dancer" ? "Dancer" : "Studio Owner"}</h3>
                         </div>
                     </div>
                     <form
@@ -103,7 +103,7 @@ const Login = () => {
                             {isSigningIn ? 'Signing In...' : 'Sign In'}
                         </button>
                     </form>
-                    <p className="text-center text-sm">Don&apos;t have an account? <Link href={'/register'} className="hover:underline font-bold text-brand-dark-teal">Sign up</Link></p>
+                    <p className="text-center text-sm">Don&apos;t have an account? <Link href={`/register/${userType}`} className="hover:underline font-bold text-brand-dark-teal">Sign up</Link></p>
                     <div className='flex flex-row text-center w-full'>
                         <div className='border-b-2 mb-2.5 mr-2 w-full'></div><div className='text-sm font-semi-bold w-fit'>OR</div><div className='border-b-2 mb-2.5 ml-2 w-full'></div>
                     </div>
