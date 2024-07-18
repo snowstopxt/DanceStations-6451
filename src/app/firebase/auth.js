@@ -1,13 +1,20 @@
 import { createUserWithEmailAndPassword, browserSessionPersistence, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updatePassword} from "firebase/auth";
 import { auth } from "./clientApp";
 import { setPersistence } from "firebase/auth";
+import { addToUserCollection } from "./clientApp";
 
-export const doCreateUserWithEmailAndPassword = async (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
-};
+export const doCreateUserWithEmailAndPassword = async (email, password, {userType}) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log('userCredential:', userCredential);
+    const user = userCredential.user;
+    console.log('user:', user);
+    console.log('user.uid:', user.uid);
+    await addToUserCollection({userId: user.uid, userType});
+    return userCredential;
+}
 
 export const doSignInWithEmailAndPassword = (email, password) => {
-    setPersistance(auth, browserSessionPersistence).then(() => { return signInWithEmailAndPassword(auth, email, password);
+    setPersistence(auth, browserSessionPersistence).then(() => { return signInWithEmailAndPassword(auth, email, password);
 })
 
 };

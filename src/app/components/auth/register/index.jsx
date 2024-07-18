@@ -22,12 +22,12 @@ const Register = ({userType}) => {
             if (!isSigningUp) {
                 setIsSigningUp(true)
                 try {
-                    await doCreateUserWithEmailAndPassword(email, password).then((userCreds) => {
+                    await doCreateUserWithEmailAndPassword(email, password, {userType}).then((userCreds) => {
                         const user = userCreds.user;
                         updateProfile(user, {displayName: `${username}`})
                     }
                     );
-                    router.push('/login');
+                    router.push('/login/' + userType);
                 } catch (error) {
                     setErrorMessage(error.message)
                     setIsSigningUp(false)

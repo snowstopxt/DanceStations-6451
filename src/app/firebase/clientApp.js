@@ -287,6 +287,19 @@ const fetchReservations = async () => {
 };
 
 
+// call this method directly under createNewAccount
+const addToUserCollection = async ({userId, userType}) => {
+
+  const userDocRef = doc(db, 'users', userId);
+
+  console.log('userId:', userId);
+  console.log('userType:', userType);
+
+  await setDoc(userDocRef, {
+    userType: userType
+  }, { merge: true });
+
+}
 
 
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations };
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, addToUserCollection };
