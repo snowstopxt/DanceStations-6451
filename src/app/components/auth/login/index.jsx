@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Header from '../../header/index';
 
-const Login = ({userType}) => {
+const Login = () => {
     //const { userLoggedIn } = useAuth()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
