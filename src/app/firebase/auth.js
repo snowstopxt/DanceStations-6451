@@ -7,7 +7,7 @@ export const doCreateUserWithEmailAndPassword = async (email, password) => {
 };
 
 export const doSignInWithEmailAndPassword = (email, password) => {
-    setPersistance(auth, browserSessionPersistence).then(() => { return signInWithEmailAndPassword(auth, email, password);
+    setPersistence(auth, browserSessionPersistence).then(() => { return signInWithEmailAndPassword(auth, email, password);
 })
 
 };
