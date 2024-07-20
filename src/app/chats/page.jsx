@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './components/header/index';
+import Header from "../components/header/index";
 
 
 export default function Page () {
@@ -7,6 +7,7 @@ export default function Page () {
         <div className="w-full h-screen flex flex-col bg-brand-purple">
             <Header />
             <div>
+                hello chats
                 
             </div>
         </div>

@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { auth, fetchUserData, doSignOut } from '../../firebase/clientApp';
+import { Link } from '@chakra-ui/next-js';
+import { auth, doSignOut } from '../../firebase/clientApp';
 import { onAuthStateChanged } from 'firebase/auth';
 import NavSearch from '../searchInput/navSearch/index';
 import { Menu, MenuButton, MenuDivider, MenuList, MenuItem } from '@chakra-ui/react';
@@ -56,11 +56,10 @@ const handleLogOut = async () => {
       {pathname !== '/login' && pathname !== '/register' && (
       <div className="hidden md:block">
         <div className="ml-4 flex items-center space-x-4">
-            
-            <Link href="/" className="text-slate-500 hover:text-black text-1.125rem" >Home</Link>
-            <Link href="/" className="text-slate-500 hover:text-black text-1.125rem" >My Chats</Link>
-            <Link href="/viewBookings" className="text-slate-500 hover:text-black text-h3-l" >My Bookings</Link>
-            {!user && <Link href="/login" className="text-slate-500 hover:text-black text-h3-l" > Login</Link>}
+          <Link href="/" color="gray.500" _hover={{color: "black"}}>Home</Link>
+            <Link href="/" color="gray.500" _hover={{color: "black"}} >My Chats</Link>
+            <Link href="/viewBookings" color="gray.500" _hover={{color: "black"}}>My Bookings</Link>
+            {!user && <Link href="/login" color="gray.500" _hover={{color: "black"}}> Login</Link>}
             {user && 
                 <Menu>
                 <MenuButton textColor='gray.500' hover='black' fontSize="lg">{displayName}</MenuButton>
