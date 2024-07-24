@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Header from '../../header/index';
 
-const Register = () => {
+const Register = ({userType}) => {
     const { userLoggedIn } = useAuth()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
@@ -22,12 +22,12 @@ const Register = () => {
             if (!isSigningUp) {
                 setIsSigningUp(true)
                 try {
-                    await doCreateUserWithEmailAndPassword(email, password).then((userCreds) => {
+                    await doCreateUserWithEmailAndPassword(email, password, {userType}).then((userCreds) => {
                         const user = userCreds.user;
                         updateProfile(user, {displayName: `${username}`})
                     }
                     );
-                    router.push('/login');
+                    router.push('/login/' + userType);
                 } catch (error) {
                     setErrorMessage(error.message)
                     setIsSigningUp(false)
@@ -98,10 +98,10 @@ const Register = () => {
                             disabled={isSigningUp}
                             className={`w-full px-4 py-2 text-white font-medium shadow-md rounded-lg ${isSigningUp ? 'bg-brand-dark-teal cursor-not-allowed' : 'bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}`}
                         >
-                            {isSigningUp ? 'Signing Up...' : 'Sign Up'}
+                            {isSigningUp ? 'Signing Up...' : userType ==="dancer" ? 'Sign Up as Dancer' : 'Sign Up as Studio Owner'}
                         </button>
                     </form>
-                <p className="text-center text-sm">Already have an account? <Link href={'/login'} className="hover:underline font-bold text-brand-dark-teal">Sign in</Link></p>
+                <p className="text-center text-sm">Already have an account? <Link href={`/login/${userType}`} className="hover:underline font-bold text-brand-dark-teal">Sign in</Link></p>
                 </div>
             </main>
         </div>
