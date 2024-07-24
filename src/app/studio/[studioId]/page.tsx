@@ -7,7 +7,7 @@ import Availability from '../../components/availability';
 import Header from '../../components/header';
 import { auth } from '../../firebase/clientApp';
 
-const StudioDetailsPage = ({params} : {params: {studioId: string}}) => {
+const Page = ({params} : {params: {studioId: string}}) => {
   const user = auth.currentUser;
   const userId = user?.uid || null;
   const [studio, setStudio] = useState<any>(null);
@@ -63,4 +63,4 @@ try {
 }
 }
 
-export default StudioDetailsPage;
+export default Page;

@@ -2,11 +2,11 @@ import React from 'react';
 import type { Metadata } from 'next'
 import { AuthProvider } from '../contexts/authContext';
 import "./globals.css";
-import { Nunito } from 'next/font/google';
+import { Nunito } from "next/font/google";
 import { ChakraProviders } from './chakra/chakra';
 
 const nunito = Nunito({
-  subsets: ['latin'],
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {

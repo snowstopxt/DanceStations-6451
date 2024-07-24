@@ -4,7 +4,7 @@ import MainSearch from '../searchInput/mainSearch/index';
 
 const Home = () => {
   return (
-    <div className="flex items-center justify-center min-h-[700px] relative w-full">
+    <div className="flex items-center justify-center min-h-[700px] relative w-full" style={{ position: 'relative' }}>
         <Image 
             src="/main-page.jpg"
             alt="Main Page"
