@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next'
 import { AuthProvider } from '../contexts/authContext';
-import "./globals.css";
+import "./global.css";
 import { Nunito } from "next/font/google";
 import { ChakraProviders } from './chakra/chakra';
 
@@ -12,7 +12,9 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   title: "DanceStations",
   description: "DanceStations is created by next app"
+  
 };
+
 
 export default function RootLayout({
   children,
@@ -22,8 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
+          <script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&callback=initMap&v=weekly`}></script>
           <ChakraProviders><AuthProvider>{children}</AuthProvider></ChakraProviders>
       </body>
     </html>
+    
   );
 }

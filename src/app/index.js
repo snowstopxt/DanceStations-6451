@@ -14,3 +14,5 @@ const app = initializeApp(firebaseConfig);
 // Initialize variables
 const auth = app.auth()
 const database = app.database()
+
+

@@ -6,6 +6,7 @@ import StudioInfo from '../../components/studioInfo';
 import Availability from '../../components/availability';
 import Header from '../../components/header';
 import { auth } from '../../firebase/clientApp';
+import { Box, Flex } from "@chakra-ui/react";
 
 const Page = ({params} : {params: {studioId: string}}) => {
   const user = auth.currentUser;
@@ -46,15 +47,15 @@ try {
         <div>
           <Header />
 
-          <div className="flex flex-row">
-        <div className="m-3 basis-1/2 self-start place-self-center"> 
+          <Flex flexDirection="row">
+        <Box m="3" flexBasis="50%" alignSelf="flex-start" justifySelf="center">
           <StudioInfo stars={stars} studio={studio} />
-        </div>
+        </Box>
 
-        <div className="m-8 basis-1/2 self-start place-self-center">
-          <Availability userId={userId} studioId={params.studioId}/>
-        </div>
-          </div>
+        <Box m="8" flexBasis="50%" alignSelf="flex-start" justifySelf="center">
+          <Availability userId={userId} studioId={params.studioId} />
+        </Box>
+      </Flex>
         </div>
       );
   }

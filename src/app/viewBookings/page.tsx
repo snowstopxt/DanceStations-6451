@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { fetchReservations } from '../firebase/clientApp';
-import Header from '../components/header';
+import Header from '../components/header/index';
 import React from 'react';
 import { Box, Stack, Grid, Text } from '@chakra-ui/react';
 import ReservationCard from '../components/reservationCard';
@@ -20,7 +20,7 @@ useEffect(() => {
         setReservations(fetchedReservations);
     };
     fetchData();
-});
+}, []);
 
     if (!reservations) {
         return <div>Loading...</div>;

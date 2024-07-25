@@ -31,8 +31,9 @@ const Availability = (props) => {
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [bookedSlots, setBookedSlots] = useState([]);
-    const [showSlots, setShowSlots] = useState(false); 
+    // const [showSlots, setShowSlots] = useState(false); 
     const router = useRouter();
+    const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
     const [newBooking, setNewBooking] = useState(0);
 
     useEffect(() => {
@@ -47,29 +48,28 @@ const Availability = (props) => {
         console.log('bookedSlots: ', bookedSlots);
         }, [date, newBooking]);
 
-
-    const handleViewAvailabilityClick = () => {
-        // Call createBooking with the current startTime and endTime
-        if (userId == null) {
-            alert('Please login to book a studio');
-            router.push('/login')
-        }
-        if (date && startTime && endTime) {
-            setShowSlots(true);
+    useEffect(() => {
+        if (selectedTimeSlots.length > 0) {
+            setStartTime(selectedTimeSlots[0]);
+            setEndTime((parseInt(selectedTimeSlots[selectedTimeSlots.length - 1].split(':')[0]) + 1).toString().padStart(2, '0') + ':00');
         } else {
-            alert('Invalid input. Please select a date, start time, and end time.');
+            setStartTime('');
+            setEndTime('');
         }
-    };
+    }, [selectedTimeSlots]);
 
+    
     const handleReserveClick = async () => {
-        const isBooked = await createBooking(studioId, userId, date, startTime, endTime);
-        if(isBooked === false) {
+        const promises = selectedTimeSlots.map(slot => createBooking(studioId, userId, date, slot, (parseInt(slot.split(':')[0]) + 1).toString().padStart(2, '0') + ':00'));
+        const results = await Promise.all(promises);
+        const allSuccessful = results.every(result => result === false);
+        if (allSuccessful) {
             alert('Booking successful');
         } else {
-            alert('Slot is unavailable, please choose another timing or date');
+            alert('Some slots are unavailable, please choose other timings or dates');
         }
         setNewBooking(newBooking + 1);
-
+        setSelectedTimeSlots([]);
     };
 
     const handleDateChange = (date) => {
@@ -78,7 +78,27 @@ const Availability = (props) => {
         setDate(dateWithoutTime);
     };
 
-
+    const handleSlotClick = (time) => {
+        setSelectedTimeSlots(prevState => {
+            if (prevState.includes(time)) {
+                // Deselecting a slot should clear the selection if it's not the first or last slot
+                if (time === prevState[0] || time === prevState[prevState.length - 1]) {
+                    const newState = prevState.filter(slot => slot !== time).sort();
+                    setStartTime(newState[0]);
+                    setEndTime((parseInt(newState[newState.length - 1]?.split(':')[0]) + 1).toString().padStart(2, '0') + ':00');
+                    return newState;
+                }
+            } else {
+                // Ensuring continuity
+                const lastSelectedSlot = prevState[prevState.length - 1];
+                const nextSlot = (parseInt(lastSelectedSlot?.split(':')[0]) + 1).toString().padStart(2, '0') + ':00';
+                if (prevState.length === 0 || time === nextSlot) {
+                    return [...prevState, time].sort();
+                }
+            }
+            return prevState;
+        });
+    };
     
     const renderTimeSlots = (date) => { 
 
@@ -100,9 +120,17 @@ const Availability = (props) => {
                                     const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
                                     const isBooked = bookedSlots.some(slot => slot.time == hour);
                                     const userBooked = bookedSlots.some(slot => slot.userId === userId && slot.time === hour);
+                                    const isSelected = selectedTimeSlots.includes(time);
                                     timeSlots.push(
                                         <Tr key={time}>
-                                            <Th textAlign='center' textColor={isBooked ? 'white' : userBooked ? 'red' : 'brand.600'} bg={userBooked ? 'brand.300' : isBooked ? 'brand.500' : 'white'}>{time}</Th>
+                                            <Th
+                                            textAlign='center'
+                                            textColor={isBooked || isSelected ? 'white' : userBooked ? 'red' : 'brand.600'}
+                                            bg={isSelected ? 'brand.300' : isBooked ? 'brand.500' : 'white'}
+                                            cursor='pointer'
+                                            onClick={() => handleSlotClick(time)}
+                                            >
+                                            {time}</Th>
                                         </Tr>
                                     );
                                 }
@@ -121,43 +149,40 @@ const Availability = (props) => {
             <CardHeader mb='-15px' fontSize='lg' alignSelf='center'>Book this station</CardHeader>
             <CardBody>
                 <FormControl>
-                <VStack justifyContent='center' alignItems='center' spacing={5}>
-                <Text mb='-15px' paddingInlineEnd='140px'>Select Date:</Text>
-                <DatePicker 
-                        placeholderText="Date"
-                        className={styles.input}
-                        selected ={date}
-                        minDate={new Date()}
-                        onChange={(e) => {handleDateChange(e)}} />
-                <Text mb='-15px' paddingInlineEnd='140px'>Start Time:</Text>
-                <input
-                    type="time"
-                    min="09:00:00"
-                    max={endTime}
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value.split(':')[0] + ':00')}
-                    className={styles.input}
-                    step={3600} // Set the step to 1 hour (3600 seconds)
-                />
-                <Text mb='-15px' paddingInlineEnd='140px'>End Time:</Text>
-                <input
-                    type="time"
-                    value={endTime}
-                    min={startTime}
-                    max='24:00:00'
-                    onChange={(e) => { setEndTime(e.target.value.split(':')[0] + ':00')}}
-                    className={styles.input}
-                    step={3600} // Set the step to 1 hour (3600 seconds)
-                />
-                <Button size="md" variant="brand-lg" onClick={handleViewAvailabilityClick}>View Availability</Button>
-                
-                {showSlots && <Divider/>}
-                    {showSlots && renderTimeSlots(date)}
-                    {showSlots && <Button variant='brand-lg' size='md' onClick={handleReserveClick}>Reserve Now</Button>} 
-                </VStack> 
+                    <VStack justifyContent='center' alignItems='center' spacing={5}>
+                        <Text mb='-15px' paddingInlineEnd='140px'>Select Date:</Text>
+                        <DatePicker
+                            placeholderText="Date"
+                            className={styles.input}
+                            selected={date ? new Date(date) : null}
+                            minDate={new Date()}
+                            onChange={(e) => { handleDateChange(e) }}
+                        />
+                        <Text mb='-15px' paddingInlineEnd='140px'>Start Time:</Text>
+                        <input
+                            type="time"
+                            min="09:00:00"
+                            max={endTime}
+                            value={startTime}
+                            onChange={(e) => setStartTime(e.target.value.split(':')[0] + ':00')}
+                            className={styles.input}
+                            step={3600} // Set the step to 1 hour (3600 seconds)
+                        />
+                        <Text mb='-15px' paddingInlineEnd='140px'>End Time:</Text>
+                        <input
+                            type="time"
+                            value={endTime}
+                            min={startTime}
+                            max='24:00:00'
+                            onChange={(e) => { setEndTime(e.target.value.split(':')[0] + ':00') }}
+                            className={styles.input}
+                            step={3600} // Set the step to 1 hour (3600 seconds)
+                        />
+                        {date && renderTimeSlots(date)}
+                        <Button variant="brand-lg" size='md' onClick={handleReserveClick}>Reserve Now</Button>
+                    </VStack>
                 </FormControl>
             </CardBody>
-            
         </Card>
     );
 };
