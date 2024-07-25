@@ -1,7 +1,7 @@
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { AiOutlineStar } from 'react-icons/ai';
 import React from 'react';
-import { Image } from '@chakra-ui/react';
+import { Box, Image, Text, Divider, Flex } from "@chakra-ui/react";
 
 const StudioInfo = ({ stars, studio }) => {
 
@@ -22,21 +22,29 @@ const StudioInfo = ({ stars, studio }) => {
     
 
     return (
-        <div className="flex-col">
-            <Image className="m-8" src="/logo-transparent.png" alt={studio.name} borderRadius='lg' objectFit='contain' width={400} height={300} />
-            <div className='flex items-center justify-between ml-8'>
-                <div className='text-h2-s font-bold'>{studio.name}</div>
-                <div className='ml-2'>{starRating}</div>
-            </div>
-            <div className='ml-8 text-body-l'>{studio.mrt}</div>
-            <div className='ml-8 text-body-l'>{studio.size} square meters</div>
-            <div className='ml-8 text-brand-purple text-body-l'>${studio.price}/h</div>
-
-            <div className='m-5 border-b-2 mb-2.5 mr-2 w-full'></div>
-
-            <div className='ml-8 text-h2-s font-bold'>About this station</div>
-        </div>
-    );
+        <Box display="flex" flexDirection="column">
+          <Image
+            m="8"
+            src="/logo-transparent.png"
+            alt={studio.name}
+            borderRadius="lg"
+            objectFit="contain"
+            width={400}
+            height={300}
+          />
+          <Flex width={400} alignItems="center" justifyContent="space-between" ml="8">
+            <Text fontSize="2xl" fontWeight="bold">{studio.name}</Text>
+            <Text ml="2">{starRating}</Text>
+          </Flex>
+          <Text ml="8" fontSize="lg">{studio.mrt}</Text>
+          <Text ml="8" fontSize="lg">{studio.size} square meters</Text>
+          <Text ml="8" color="brand.purple" fontSize="lg">${studio.price}/h</Text>
+    
+          <Divider my="5" borderBottomWidth="2px" mr="2" />
+    
+          <Text ml="8" fontSize="2xl" fontWeight="bold">About this station</Text>
+        </Box>
+      );
 }
 
 export default StudioInfo;

@@ -1,23 +1,40 @@
+'use client'
 import React from 'react';
-import Image from 'next/image';
 import MainSearch from '../searchInput/mainSearch/index';
+import { Box, Text, Image } from '@chakra-ui/react';
 
 const Home = () => {
   return (
-    <div className="flex items-center justify-center min-h-[700px] relative w-full" style={{ position: 'relative' }}>
-        <Image 
-            src="/main-page.jpg"
-            alt="Main Page"
-            fill={true}
-            quality={100}
-            priority
-            object-fit='cover'
+    <Box position="relative" overflow="hidden" maxH="60vh" >
+         <Image
+        src="/main-page.jpg"
+        alt="Main Page"
+        w="100%"
+        h="100vh"
+        quality={100}
         />
-      <div className="inline-flex flex-col">
-        <div className="relative float-left text-h1-l text-white">Find Your Nearest Dance Station</div>
-        <div><MainSearch /></div>
-      </div>  
-    </div>
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        display="flex"
+        flexDir="column"
+        justifyContent="center"
+        alignItems="center"
+        p="4"
+        color="white"
+        zIndex="1"
+      >
+        <Text fontSize="2xl" fontWeight="bold">
+          Find Your Nearest Dance Station
+        </Text>
+        <Box mt="4">
+          <MainSearch />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

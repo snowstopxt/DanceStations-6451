@@ -1,16 +1,17 @@
 import React from 'react';
 import Header from './components/header/index';
 import Home from './components/home/index';
+import { Box } from '@chakra-ui/react';
 
-
-export default function Page () {
+export default function Page() {
     return (
-        <div className="w-full h-screen flex flex-col bg-brand-purple">
-            <Header />
+        <Box alignContent='center'>
+          <Header />
+          <Box minH={{ base: "60vh", md: "80vh", lg: "100vh" }} alignItems='center'>
             <Home />
-            
-        </div>
-    );
+          </Box>
+        </Box>
+      );
 }
 
 

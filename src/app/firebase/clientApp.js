@@ -12,8 +12,10 @@ import {
   where,
   orderBy, 
   startAt, 
-  endAt
-} from "firebase/firestore";
+  endAt,
+ } from "firebase/firestore";
+
+import { getStorage, ref, uploadBytes} from "firebase/storage"
 
 import * as geofire from 'geofire-common';
 import { get } from "http";
@@ -32,6 +34,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig); 
 const auth = getAuth(app);
 const db  = getFirestore()
+const storage = getStorage(app);
+
 
 // const uploadProcessedData = async () => {
 //   const dataToUpload = {
@@ -126,7 +130,7 @@ const returnData = async () => {
 }
 
 
-async function createBooking(roomId, userId, date, startTime, endTime) {
+async function createBooking(roomId, userId, date, startTime, endTime, file) {
     let isBooked = false;
 
     for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
@@ -170,44 +174,43 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
       endTime: endTime
     }).then(() => {
       console.log('Booking successful!!')});
-
-/*
-      // Create a reference to the user's document
-      const userDocRef = doc(db, 'users', userId);
-
-      // Create a reference to the studio subcollection under the user's document
-      const studioCollectionRef = collection(userDocRef, 'studios');
-      const studioDocRef = doc(studioCollectionRef, roomId);
-
-      // Create a reference to the date subcollection under the studio document
-      const dateCollectionRef = collection(studioDocRef, 'dates');
-      const dateDocRef = doc(dateCollectionRef, date);
-
-      // Create a reference to the time subcollection under the date document
-      //const timeCollectionRef = collection(dateDocRef, 'times');
-      //const timeDocRef = doc(timeCollectionRef, timeSlot);
-
-      await setDoc(dateDocRef, {
-        studioId: roomId,
-        date: date,
-        startTime: startTime,
-        endTime: endTime
-      }).then(() => {
-        console.log('Booking successful')});
-
-        /*
-      db.collection('users').doc(userId).set({
-        studioId: roomId,   // brush up, such that userid > studioId > date > time
-        date: date,
-        startTime: startTime,
-        endTime: endTime
-      }).then(() => {
-      console.log('Booking successful')});
-      */
   })
   }
   return isBooked;
   
+}
+
+
+async function createStudio({name, mrt, geohash, location, size, price, description, image}) {
+  const studioRef = collection(db, 'studios');
+  const newStudioRef = doc(studioRef);
+  const studioId = newStudioRef.id;
+  const storageRef = ref(storage, `images/${studioId}_${Date.now()}`);
+
+  const snapshot = await uploadBytes(storageRef, file);
+  console.log('Uploaded a blob or file!');
+
+  const downloadURL = await getDownloadURL(snapshot.ref);
+  
+
+  // uploadBytes(storageRef, file).then((snapshot) => {
+  //   console.log('Uploaded a blob or file!');
+  // });
+
+  await setDoc(newStudioRef, {
+      name: name,
+      mrt: mrt,
+      geohash: geohash,
+      location: new firebase.firestore.GeoPoint(Number(location.lat), Number(location.lng)),
+      size: size,
+      price: price,
+      description: description,
+      image: image
+    }).then(() => {
+      console.log('Studio created successfully');
+    }).catch((error) => {
+      console.error('Error creating studio:', error);
+    });
 }
 
 async function fetchBookingsForDay(roomId, date) {
@@ -286,7 +289,6 @@ const fetchReservations = async () => {
   }
 };
 
-
 // call this method directly under createNewAccount
 const addToUserCollection = async ({userId, userType}) => {
 
@@ -302,4 +304,6 @@ const addToUserCollection = async ({userId, userType}) => {
 }
 
 
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, addToUserCollection };
+
+
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection };

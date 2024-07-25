@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect , useRef } from 'react';
 
 import { 
-    APIProvider, 
     Map,
     useMap,
     AdvancedMarker,
@@ -10,6 +9,10 @@ import {
     InfoWindow,
     useAdvancedMarkerRef
 } from '@vis.gl/react-google-maps';
+
+import {
+  Box
+} from '@chakra-ui/react'
 
 import { getData } from '../../firebase/clientApp';
 import { useStudios } from '../../../contexts/studiosContext';
@@ -29,7 +32,7 @@ const MyMap = (x) => {
     };
 
     return (
-        <div style={{ width: '100vh', height: '100vh' }}>
+        <Box width='100vh' height='100vh'>
                 <Map
                     defaultZoom={12}
                     defaultCenter={ {lat: 1.3521, lng: 103.8198} }
@@ -42,7 +45,7 @@ const MyMap = (x) => {
                     <Markers/>
 
                 </Map>
-        </div>
+        </Box>
     );
 };
 
