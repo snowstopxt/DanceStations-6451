@@ -13,9 +13,12 @@ import {
   orderBy, 
   startAt, 
   endAt,
-  GeoPoint
+  GeoPoint, 
+  limit,
+  serverTimestamp,
+  addDoc
  } from "firebase/firestore";
-
+ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
 
 import * as geofire from 'geofire-common';
@@ -297,21 +300,153 @@ const fetchReservations = async () => {
   }
 };
 
+
 // call this method directly under createNewAccount
-const addToUserCollection = async ({userId, userType}) => {
+const addToUserCollection = async ({userId, userType, username}) => {
 
   const userDocRef = doc(db, 'users', userId);
 
   console.log('userId:', userId);
+  console.log('username:', username);
   console.log('userType:', userType);
 
   await setDoc(userDocRef, {
-    userType: userType
+    userType: userType,
+    username: username
   }, { merge: true });
 
+};
+
+const retrieveMessages = (receiverId) => {
+  console.log('retrieving messages');
+
+
+  const senderId = auth.currentUser.uid;  
+
+  console.log('senderId:', senderId);
+  const senderDocRef = doc(db, 'users', senderId);
+  const sentCollectionRef = collection(senderDocRef, 'sentMsgs');
+  const receivedCollectionRef = collection(senderDocRef, 'receivedMsgs');
+
+  let sentMessages = [];
+  let receivedMessages = [];
+
+  // query messages sent to specific receiver first
+  const q = query(sentCollectionRef, where('sentTo', '==', receiverId), orderBy('createdAt'));
+  // retrieve messages sent to receiver by the current user in an array
+  sentMessages = useCollectionData(q, { idField: 'id' })[0];
+  //const sentMessagesSnapshot = await getDocs(q);
+  //sentMessagesSnapshot.forEach((doc) => {
+    //sentMessages.push({id: doc.id, ...doc.data()});
+  //});
+  
+  console.log('sent messages:', sentMessages);
+
+  // query messages received from specific sender
+  const q2 = query(receivedCollectionRef, where('sentBy', '==', receiverId), orderBy('createdAt'));
+  // retrieve messages received from sender by the current user in an array
+  receivedMessages = useCollectionData(q2, { idField: 'id' })[0];
+  //const receivedMessagesSnapshot = await getDocs(q2);
+  //receivedMessagesSnapshot.forEach((doc) => {
+    //receivedMessages.push({id: doc.id, ...doc.data()});
+  //});
+  console.log('received messages:', receivedMessages);
+
+  // merge the two arrays and sort by createdAt
+  //const messages = [...sentMessages, ...receivedMessages].sort((a, b) => a.createdAt - b.createdAt);
+  if (sentMessages && receivedMessages) {
+  const messages = sentMessages.concat(receivedMessages).sort((a, b) => a.createdAt - b.createdAt);
+  console.log('messages:', messages);
+    return messages;
+  } else if (sentMessages) {
+    return sentMessages;
+  } else if (receivedMessages) {
+    return receivedMessages;
+  } else {
+    console.log('No messages found');
+    return [];
+  }
+  
+/*
+  if (messages) {
+    return messages;
+  } else {
+    console.log('No messages found');
+    return [];
+  }
+    */
+
+
+/*
+  const messagesRef = collection(db, 'messages');
+  //const query = messagesRef.orderBy('createdAt').limit(25); 
+  const messagesQuery = query(messagesRef, orderBy('createdAt'), limit(25));
+  const [messages] = useCollectionData(messagesQuery, {idField: 'id'});
+
+  console.log('messages:', messages);
+  if (messages) {
+    return messages;
+  } else {
+    return [];
+  }
+    */
+  
+};
+
+// message will be stored in (i) user1 > sent and (ii) user2 > received
+// storage architecture:
+  // messages >> userid >> sent >> sentTo >> doc
+  //                    >> received >> sentBy >> doc
+const sendMessage = async (text, receiverId) => {
+  console.log('sending message');
+  console.log('sendMessages -- text:', text);
+  console.log('sendMessages -- receiverId:', receiverId);
+
+  const senderId = auth.currentUser.uid;  
+  //const receiverId = receiver.uid;
+
+  const senderDocRef = doc(db, 'users', senderId);
+  const sentCollectionRef = collection(senderDocRef, 'sentMsgs');
+
+  const receiverDocRef = doc(db, 'users', receiverId);
+  const receivedCollectionRef = collection(receiverDocRef, 'receivedMsgs');
+
+  try {
+   await addDoc(sentCollectionRef, {
+    text: text,
+    createdAt: serverTimestamp(),
+    sentTo: receiverId
+  });
+    await addDoc(receivedCollectionRef,{
+    text: text,
+    createdAt: serverTimestamp(),
+    sentBy: senderId
+  });
+} catch (error) {
+  console.error('Error sending message:', error);
+}
+};
+
+const fetchUserById = async (userId) => {
+  console.log('fetching user by id');
+  console.log('fetchUserById -- userId:', userId);
+  const docRef = doc(db, 'users', userId);
+  const docSnap = await getDoc(docRef);
+  console.log('fetchUserById -- docSnap:', docSnap);
+  try {
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      console.log(docSnap.data());
+      return {...userData, id: docSnap.id};
+
+    } else {
+      console.log('No such document!');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching receiving user:', error);
+    return null;
+  }
 }
 
-
-
-
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection };
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection, retrieveMessages, sendMessage, fetchUserById };
