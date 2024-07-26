@@ -1,19 +1,23 @@
 import React from 'react';
-import {Card, Link} from '@chakra-ui/react';
+import {Card, Box, Text, Flex, Link} from '@chakra-ui/react';
 import {BsFillPersonFill} from 'react-icons/bs';
 import {GoHomeFill } from 'react-icons/go';
+import "./selectLogin.css"
 
 const SelectLogin = ({userType}) => {
     return (
         <div>
-            <Card><div className='flex justify-center items-center'>
-                {userType==="dancer" ? <BsFillPersonFill size={50} /> : <GoHomeFill size={50}/>}</div>
-                <div>{userType==="dancer" ? 'Book a Dance Studio' : 'List a Dance Studio'}</div>
+            <Card p={10} textAlign="center" w="full" maxW="sm" m={4}>
+                <Flex justifyContent="center" alignItems="center" mb={4} w="100%">
+                    {userType==="dancer" ? <BsFillPersonFill size={50}  /> : <GoHomeFill size={50} />}
+                </Flex>
+                <Text mb={4}>
+                    {userType==="dancer" ? 'Book a Dance Studio' : 'List a Dance Studio'}
+                </Text>
                 <Link href={`/login/${userType}`}>
-                <button
+                        <button
                             type="submit"
-                            className={'w-full px-4 py-2 text-white font-medium shadow-md rounded-lg bg-brand-teal hover:bg-brand-dark-teal hover:shadow-xl transition duration-300'}
-                        >
+                            className="custom-button">
                             Login as {userType === "dancer" ? "Dancer" : "Studio Owner"}
                         </button>
                 </Link>    
