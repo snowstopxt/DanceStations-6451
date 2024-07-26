@@ -20,12 +20,13 @@ const StudioInfo = ({ stars, studio }) => {
         );
     });
     
+    console.log("studio.url", studio.url)
 
     return (
         <Box display="flex" flexDirection="column">
           <Image
             m="8"
-            src="/logo-transparent.png"
+            src={studio.url || "/logo-transparent.png"}
             alt={studio.name}
             borderRadius="lg"
             objectFit="contain"
@@ -43,6 +44,7 @@ const StudioInfo = ({ stars, studio }) => {
           <Divider my="5" borderBottomWidth="2px" mr="2" />
     
           <Text ml="8" fontSize="2xl" fontWeight="bold">About this station</Text>
+          <Text ml="8" fontSize="lg">{studio.description}</Text>
         </Box>
       );
 }

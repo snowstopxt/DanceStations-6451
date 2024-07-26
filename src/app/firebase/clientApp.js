@@ -13,9 +13,10 @@ import {
   orderBy, 
   startAt, 
   endAt,
+  GeoPoint
  } from "firebase/firestore";
 
-import { getStorage, ref, uploadBytes} from "firebase/storage"
+import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
 
 import * as geofire from 'geofire-common';
 import { get } from "http";
@@ -130,7 +131,7 @@ const returnData = async () => {
 }
 
 
-async function createBooking(roomId, userId, date, startTime, endTime, file) {
+async function createBooking(roomId, userId, date, startTime, endTime) {
     let isBooked = false;
 
     for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
@@ -181,37 +182,44 @@ async function createBooking(roomId, userId, date, startTime, endTime, file) {
 }
 
 
-async function createStudio({name, mrt, geohash, location, size, price, description, image}) {
+async function createStudio({name, mrt, geohash, geocode, size, price, description, image}) {
   const studioRef = collection(db, 'studios');
   const newStudioRef = doc(studioRef);
   const studioId = newStudioRef.id;
-  const storageRef = ref(storage, `images/${studioId}_${Date.now()}`);
+  const imageURL =`${studioId}_${Date.now()}`;
+  const storageRef = ref(storage, `images/${imageURL}.jpg`);
 
-  const snapshot = await uploadBytes(storageRef, file);
-  console.log('Uploaded a blob or file!');
+  console.log('image', image)
+ 
+  const snapshot = await uploadBytes(storageRef, image);
 
-  const downloadURL = await getDownloadURL(snapshot.ref);
-  
+  const url = await getDownloadURL(storageRef);
+  console.log('url', url);  
 
-  // uploadBytes(storageRef, file).then((snapshot) => {
-  //   console.log('Uploaded a blob or file!');
-  // });
-
+  console.log('Uploaded a blob or file')
   await setDoc(newStudioRef, {
       name: name,
       mrt: mrt,
       geohash: geohash,
-      location: new firebase.firestore.GeoPoint(Number(location.lat), Number(location.lng)),
-      size: size,
-      price: price,
+      location: new GeoPoint(geocode.lat, geocode.lng),
+      size: Number(size),
+      price: Number(price),
       description: description,
-      image: image
+      image: imageURL,
+      stars: [0, 0, 0, 0, 0],
+      totalStars: 0,
+
     }).then(() => {
       console.log('Studio created successfully');
     }).catch((error) => {
       console.error('Error creating studio:', error);
     });
 }
+
+// async function retrievePhoto (studio) {
+//   return studio;
+  
+// }
 
 async function fetchBookingsForDay(roomId, date) {
   const bookingRef = collection(db, `reservations/${roomId}/${date}`);

@@ -1,0 +1,28 @@
+
+.image-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #1475cf;
+    height: 150px;
+    width: 250px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.uploaded-row{
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 5px;
+    background-color: #e9f0ff; 
+    width: 250px; 
+}
+
+.upload-content{
+    display: flex;
+    align-items: center;
+}

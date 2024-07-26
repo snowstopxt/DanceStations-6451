@@ -5,6 +5,7 @@ import "./global.css";
 import { Nunito } from "next/font/google";
 import { ChakraProviders } from './chakra/chakra';
 
+
 const nunito = Nunito({
   subsets: ["latin"],
 });
@@ -24,7 +25,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-          <script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&callback=initMap&v=weekly`}></script>
           <ChakraProviders><AuthProvider>{children}</AuthProvider></ChakraProviders>
       </body>
     </html>
