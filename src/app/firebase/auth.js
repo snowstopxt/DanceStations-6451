@@ -3,13 +3,13 @@ import { auth } from "./clientApp";
 import { setPersistence } from "firebase/auth";
 import { addToUserCollection } from "./clientApp";
 
-export const doCreateUserWithEmailAndPassword = async (email, password, {userType}) => {
+export const doCreateUserWithEmailAndPassword = async (email, password, username, {userType}) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     console.log('userCredential:', userCredential);
     const user = userCredential.user;
     console.log('user:', user);
     console.log('user.uid:', user.uid);
-    await addToUserCollection({userId: user.uid, userType});
+    await addToUserCollection({userId: user.uid, username: username, userType});
     return userCredential;
 }
 

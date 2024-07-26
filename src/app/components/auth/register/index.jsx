@@ -35,7 +35,7 @@ const Register = ({userType}) => {
             if (!isSigningUp) {
                 setIsSigningUp(true)
                 try {
-                    await doCreateUserWithEmailAndPassword(email, password, {userType}).then((userCreds) => {
+                    await doCreateUserWithEmailAndPassword(email, password, username, {userType}).then((userCreds) => {
                         const user = userCreds.user;
                         updateProfile(user, {displayName: `${username}`})
                     }
