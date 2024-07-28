@@ -132,6 +132,7 @@ const returnData = async () => {
 
 
 async function createBooking(roomId, userId, date, startTime, endTime) {
+  console.log('creating booking');
     let isBooked = false;
 
     for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
@@ -152,9 +153,14 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
     return isBooked;
   }
 
+  
+
   for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
       const bookingRef = doc(db, `reservations/${roomId}/${date}/${i}`);
-      await setDoc(bookingRef, { userId: userId }).then(async () => {
+      //const bookingRef = doc(db, `reservations/${roomId}/${date}/-`);
+      await setDoc(bookingRef, { userId: userId })
+  }
+      //.then(async () => {
 
 
     // Create a reference to the user's document
@@ -175,8 +181,8 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
       endTime: endTime
     }).then(() => {
       console.log('Booking successful!!')});
-  })
-  }
+  
+  
   return isBooked;
   
 }
@@ -205,6 +211,7 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
       image: imageURL,
       stars: [0, 0, 0, 0, 0],
       totalStars: 0,
+      ownerId: auth.currentUser.uid
 
     }).then(() => {
       console.log('Studio created successfully');

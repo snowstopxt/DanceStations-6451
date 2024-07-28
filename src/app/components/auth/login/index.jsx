@@ -46,8 +46,15 @@ const Login = ({userType}) => {
                 if (userType == 'dancer') router.push('/');
                 else if (userType == 'studio owner') router.push('/ownerMain');
             } catch (error) {
-                setErrorMessage(error.message)
+                console.log('onsubmit error:', error)
+                if (error.code === 'auth/invalid-credential') {
+                    setErrorMessage('Invalid credentials. Please try again.');
+                } else {
+                    setErrorMessage(error.message);
+                }
+                //setErrorMessage(error.message)
                 setIsSigningIn(false)
+                router.push('/login');
             }
         }
     }
@@ -62,6 +69,7 @@ const Login = ({userType}) => {
             } catch (error) {
                 setErrorMessage(error.message)
                 setIsSigningIn(false)
+                router.push('/login');
             }
         }
     }

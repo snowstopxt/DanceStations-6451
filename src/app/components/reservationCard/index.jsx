@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Card, CardBody, Stack, Text } from '@chakra-ui/react';
+import { Card, CardBody, Stack, Text, Button, Link } from '@chakra-ui/react';
 import { fetchStudioById } from "../../firebase/clientApp";
 
 //for testing
@@ -35,10 +35,15 @@ const ReservationCard = ({ reservation }) => {
   return (
     <Card>
         <CardBody>
+          <Stack direction="row" justifyContent="space-between">
             <Stack spacing = {0}>
                 <Text className="text-h2-s font-bold ">{studio.name}</Text>
                 <Text className="text-body-l ">{reservation.date}</Text>
                 <Text className="text-body-l ">{reservation.startTime}-{reservation.endTime}</Text>
+            </Stack>
+            <Link href={`/chat/${studio.ownerId}`}>
+            <Button colorScheme="teal" marginRight={5}>Chat with owner</Button>
+            </Link>
             </Stack>
         </CardBody>
     </Card>
@@ -46,6 +51,7 @@ const ReservationCard = ({ reservation }) => {
 }
 } catch (error) {
     console.error('Error fetching reservations', error);
+    return (<div>Error fetching reservations</div>);
   }
 }
 
