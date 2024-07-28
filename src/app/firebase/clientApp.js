@@ -15,7 +15,7 @@ import {
   endAt,
   GeoPoint
  } from "firebase/firestore";
-
+ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
 
 import * as geofire from 'geofire-common';
@@ -539,4 +539,4 @@ const fetchUserById = async (userId) => {
   }
 }
 
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings };
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection,doSignOut, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings };
