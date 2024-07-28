@@ -43,7 +43,8 @@ const Login = ({userType}) => {
             setIsSigningIn(true)
             try {
                 await doSignInWithEmailAndPassword(email, password)
-                router.push('/');
+                if (userType == 'dancer') router.push('/');
+                else if (userType == 'studio owner') router.push('/ownerMain');
             } catch (error) {
                 setErrorMessage(error.message)
                 setIsSigningIn(false)

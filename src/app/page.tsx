@@ -4,14 +4,16 @@ import Home from './components/home/index';
 import { Box } from '@chakra-ui/react';
 
 export default function Page() {
-    return (
-        <Box alignContent='center'>
-          <Header />
-          <Box minH={{ base: "60vh", md: "80vh", lg: "100vh" }} alignItems='center'>
-            <Home />
-          </Box>
-        </Box>
-      );
+  return (
+    <Box position="relative">
+      <Box position="relative" zIndex="10">
+        <Header />
+      </Box>
+      <Box position="relative" zIndex="1">
+        <Home />
+      </Box>
+    </Box>
+  );
 }
 
 

@@ -13,12 +13,9 @@ import {
   orderBy, 
   startAt, 
   endAt,
-  GeoPoint, 
-  limit,
-  serverTimestamp,
-  addDoc
+  GeoPoint
  } from "firebase/firestore";
- import { useCollectionData } from 'react-firebase-hooks/firestore';
+
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
 
 import * as geofire from 'geofire-common';
@@ -72,7 +69,7 @@ const fetchUserData = async () => {
   });
 }
 
-export const doSignOut = () => {
+const doSignOut = () => {
   signOut(auth).then(() => {
       console.log('User signed out');
     }).catch((error) => {
@@ -196,9 +193,6 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
  
   const snapshot = await uploadBytes(storageRef, image);
 
-  const url = await getDownloadURL(storageRef);
-  console.log('url', url);  
-
   console.log('Uploaded a blob or file')
   await setDoc(newStudioRef, {
       name: name,
@@ -219,10 +213,12 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
     });
 }
 
-// async function retrievePhoto (studio) {
-//   return studio;
+async function retrievePhoto (studio) {
+  const storageRef = ref(storage, `images/${studio.image}.jpg`);
+  const url = await getBlob(storageRef);
+  return url;
   
-// }
+}
 
 async function fetchBookingsForDay(roomId, date) {
   const bookingRef = collection(db, `reservations/${roomId}/${date}`);
@@ -299,7 +295,6 @@ const fetchReservations = async () => {
     return [];
   }
 };
-
 
 // call this method directly under createNewAccount
 const addToUserCollection = async ({userId, userType, username}) => {
@@ -427,26 +422,8 @@ const sendMessage = async (text, receiverId) => {
 }
 };
 
-const fetchUserById = async (userId) => {
-  console.log('fetching user by id');
-  console.log('fetchUserById -- userId:', userId);
-  const docRef = doc(db, 'users', userId);
-  const docSnap = await getDoc(docRef);
-  console.log('fetchUserById -- docSnap:', docSnap);
-  try {
-    if (docSnap.exists()) {
-      const userData = docSnap.data();
-      console.log(docSnap.data());
-      return {...userData, id: docSnap.id};
 
-    } else {
-      console.log('No such document!');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error fetching receiving user:', error);
-    return null;
-  }
-}
 
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection, retrieveMessages, sendMessage, fetchUserById };
+
+
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection, retrievePhoto, doSignOut };

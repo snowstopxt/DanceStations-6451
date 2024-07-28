@@ -36,11 +36,11 @@ useEffect(() => {
 
 
 const handleLogOut = async () => {
+  console.log('logging out')
   doSignOut();
   setUser(null);
   setDisplayName(null);
   router.push('/login');
-  console.log('logged out');
 
 }
 
@@ -82,24 +82,17 @@ return (
           {!user ? (
             <Link href="/login" color="gray.500" _hover={{ color: "black" }}>Login</Link>
           ) : (
-            <Menu>
-              <MenuButton
-                as={Link}
-                color="gray.500"
-                _hover={{ color: "black" }}
-                fontSize="lg"
-              >
-                {displayName}
-              </MenuButton>
-              <MenuList>
-                <MenuItem as='a' href='/viewBookings' color='gray.500' fontSize="lg">
+              <Menu position='absolute'>
+              <MenuButton textColor='gray.500' hover='black' fontSize="lg">{displayName}</MenuButton>
+              <MenuList >
+                <MenuItem  as='a' href='/viewBookings' textColor='gray.500' fontSize="lg" hover="black">
                   My Bookings
                 </MenuItem>
-                <MenuItem as='a' href='/' color='gray.500' fontSize="lg">
+                <MenuItem as='a' href='/chat' textColor='gray.500' fontSize="lg" hover="black">
                   My Chats
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem as='button' onClick={handleLogOut} color='gray.500' fontSize="lg">
+                <MenuItem as='button' onClick={handleLogOut} textColor='gray.500' fontSize="lg" hover="black">
                   Log out
                 </MenuItem>
               </MenuList>
