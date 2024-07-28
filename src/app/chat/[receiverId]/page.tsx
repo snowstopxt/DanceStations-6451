@@ -28,14 +28,13 @@ export default function ChatPage ({params} : {params: {receiverId: string}}) {
     }
   }
 
+  
+
       return (
           <div>
              <Header />
             {/* Sidebar */}
             <Box className="w-1/4 bg-gray-800 text-white p-4">
-              <Text fontSize="xl" fontWeight="bold" mb={4}>
-                Chat Rooms
-              </Text>
               {/*<VStack align="start" spacing={3}>
                 <Button variant="link" colorScheme="whiteAlpha">
                   General

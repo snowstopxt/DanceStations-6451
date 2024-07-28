@@ -49,7 +49,21 @@ const Availability = (props) => {
         }, [date, newBooking]);
 
     useEffect(() => {
+        console.log('useEffect!!!!!!!');
+        console.log('startTime: ', startTime);
+        console.log('endTime: ', endTime);
+        if (startTime && endTime) {
+            const tempArray = [];
+            for (let hour = parseInt(startTime.split(':')[0]); hour < parseInt(endTime.split(':')[0]); hour++) {
+                tempArray.push(hour.toString().padStart(2, '0') + ':00');
+            }
+            setSelectedTimeSlots(tempArray);
+        }
+    }, [startTime, endTime]);
+
+    useEffect(() => {
         if (selectedTimeSlots.length > 0) {
+            console.log('useEffect selectedTimeSlots: ', selectedTimeSlots);
             setStartTime(selectedTimeSlots[0]);
             setEndTime((parseInt(selectedTimeSlots[selectedTimeSlots.length - 1].split(':')[0]) + 1).toString().padStart(2, '0') + ':00');
         } else {
@@ -58,18 +72,34 @@ const Availability = (props) => {
         }
     }, [selectedTimeSlots]);
 
-    
+    // right now, selectedTimeSlots not updated
     const handleReserveClick = async () => {
+
+        console.log('startTime: ', startTime);
+        console.log('endTime: ', endTime);
+        const promise = createBooking(studioId, userId, date, startTime, endTime);
+        const result = await promise;
+        if (result === false) {
+            setNewBooking(newBooking + 1);
+            alert('Reservation successful, please make payment through chat to confirm your booking');
+        } else {
+            alert('Slot is unavailable, please choose other timings or dates');
+        }
+        setSelectedTimeSlots([]);
+/*
+        console.log('selectedTimeSlots: ', selectedTimeSlots);
         const promises = selectedTimeSlots.map(slot => createBooking(studioId, userId, date, slot, (parseInt(slot.split(':')[0]) + 1).toString().padStart(2, '0') + ':00'));
         const results = await Promise.all(promises);
         const allSuccessful = results.every(result => result === false);
         if (allSuccessful) {
+            setNewBooking(newBooking + 1);
             alert('Booking successful');
         } else {
             alert('Some slots are unavailable, please choose other timings or dates');
         }
-        setNewBooking(newBooking + 1);
+        //setNewBooking(newBooking + 1);
         setSelectedTimeSlots([]);
+        */
     };
 
     const handleDateChange = (date) => {
@@ -79,6 +109,7 @@ const Availability = (props) => {
     };
 
     const handleSlotClick = (time) => {
+        console.log('time: ', time);
         setSelectedTimeSlots(prevState => {
             if (prevState.includes(time)) {
                 // Deselecting a slot should clear the selection if it's not the first or last slot
@@ -128,7 +159,7 @@ const Availability = (props) => {
                                             textColor={isBooked || isSelected ? 'white' : userBooked ? 'red' : 'brand.600'}
                                             bg={isSelected ? 'brand.300' : isBooked ? 'brand.500' : 'white'}
                                             cursor='pointer'
-                                            onClick={() => handleSlotClick(time)}
+                                            onClick ={() => handleSlotClick(time)}
                                             >
                                             {time}</Th>
                                         </Tr>
