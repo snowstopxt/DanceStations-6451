@@ -14,7 +14,9 @@ export default function ChatPage ({params} : {params: {receiverId: string}}) {
   //const receiver = fetchUserById(params.receiverId);
 
   const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('clicked');
     e.preventDefault();
+    
 
     if (formValue==='') return;
 

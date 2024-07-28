@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 // import { Link } from '@chakra-ui/next-js';
-import { auth, doSignOut } from '../../firebase/clientApp';
+import { auth, doSignOut, fetchUserById } from '../../firebase/clientApp';
 import { onAuthStateChanged } from 'firebase/auth';
 import NavSearch from '../searchInput/navSearch/index';
 import { Box, Flex, IconButton, Link, HStack, Menu, MenuButton, MenuList, MenuItem, MenuDivider, useBreakpointValue } from '@chakra-ui/react';
 
 
-const Header = ({userType}) => {
+const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState(null);
@@ -18,12 +18,16 @@ const Header = ({userType}) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
 
+
 const fetchName = async () => {
   auth.onAuthStateChanged(async (user) => {
     if (user) {
       setUser(auth.currentUser)
       setDisplayName(auth.currentUser.displayName);
-      setUserType(auth.currentUser.userType);
+      //setUserType(fetchUserById(auth.currentUser.uid).userType);
+      const userInfo = await fetchUserById(auth.currentUser.uid);
+      console.log('userInfo:', userInfo);
+      setUserType(userInfo.userType);
     } else {
       console.log('no user')
     }
@@ -45,6 +49,8 @@ const handleLogOut = async () => {
   router.push('/login');
 
 }
+
+console.log('userType:', userType);
 
 return (
   <Box bg="white" borderBottom="1px solid" borderColor="gray.200">
@@ -79,7 +85,7 @@ return (
         <Flex ml={4} align="center" padding={10}>
           <HStack spacing={4}>
           {userType == 'dancer' && <Link href="/" color="gray.500" _hover={{ color: "black" }}>Home</Link>}
-          {userType == 'owner' && <Link href="/ownerMain" color="gray.500" _hover={{ color: "black" }}>Dashboard</Link>}
+          {userType == 'studio owner' && <Link href="/ownerMain" color="gray.500" _hover={{ color: "black" }}>Dashboard</Link>}
           {userType == 'dancer' && <Link href="/viewBookings" color="gray.500" _hover={{ color: "black" }}>My Bookings</Link>}
           {/* {userType == 'owner' && <Link href="/ownerMain" color="gray.500" _hover={{ color: "black" }}>My Listings</Link>} */}
           {!user ? (
