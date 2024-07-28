@@ -14,6 +14,7 @@ const Header = ({userType}) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [displayName, setDisplayName] = useState(null);
+  const [userType, setUserType] = useState(null);
   const isMobile = useBreakpointValue({ base: true, md: false });
 
 
@@ -22,6 +23,7 @@ const fetchName = async () => {
     if (user) {
       setUser(auth.currentUser)
       setDisplayName(auth.currentUser.displayName);
+      setUserType(auth.currentUser.userType);
     } else {
       console.log('no user')
     }
@@ -54,6 +56,7 @@ return (
       h="20"
     >
       <Flex align="center">
+        <Link href={userType === 'dancer' ? '/' : '/ownerMain'}>
           <Image
             src="/logo-transparent.png"
             alt="DanceStations Logo"
@@ -63,6 +66,7 @@ return (
             left={8}
             top={5}
           />
+          </Link>
       </Flex>
 
       {!isMobile && userType=='dancer' && pathname !== '/login' && pathname !== '/register' && pathname !== '/' && (

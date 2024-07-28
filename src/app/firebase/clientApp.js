@@ -137,7 +137,7 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
 
     for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
       console.log('i:', i);
-      const bookingRef = doc(db, `reservations/${roomId}/${date}/${i}`);
+      const bookingRef = doc(db, `reservations/${roomId}/dates/${date}/time/${i}`);
 
       await getDoc(bookingRef).then((snapshot) => {
         if (snapshot.exists()) {
@@ -156,7 +156,7 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
   
 
   for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
-      const bookingRef = doc(db, `reservations/${roomId}/${date}/${i}`);
+      const bookingRef = doc(db, `reservations/${roomId}/dates/${date}/time/${i}`);
       //const bookingRef = doc(db, `reservations/${roomId}/${date}/-`);
       await setDoc(bookingRef, { userId: userId })
   }
@@ -194,6 +194,9 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
   const studioId = newStudioRef.id;
   const imageURL =`${studioId}_${Date.now()}`;
   const storageRef = ref(storage, `images/${imageURL}.jpg`);
+  const user = auth.currentUser;
+    const userId = user.uid;
+    const userDocRef = doc(db, 'users', userId);
 
   console.log('image', image)
  
@@ -214,7 +217,13 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
       ownerId: auth.currentUser.uid
 
     }).then(() => {
-      console.log('Studio created successfully');
+      console.log('Studio created successfully');});
+
+      await setDoc(userDocRef, {
+        studioId: studioId
+      }, { merge: true }).then(() => {
+      console.log('Studio added to user collection');
+    
     }).catch((error) => {
       console.error('Error creating studio:', error);
     });
@@ -224,7 +233,85 @@ async function retrievePhoto (studio) {
   const storageRef = ref(storage, `images/${studio.image}.jpg`);
   const url = await getBlob(storageRef);
   return url;
+}
   
+// }
+
+// structure of reservations collection
+// reservation > (ex) 4dGIA9hpyPX2VBGE3Aeu > date > (ex) 2022-12-31 > time > (ex) 10 > userId: '1234'
+async function fetchAllBookings(roomId) {
+  try {
+  console.log('fetching all bookings');
+  console.log('roomId:', roomId);
+ //const bookingRef = collection(db, `reservations/${roomId}`);
+
+ const studioDocRef = doc(db, 'reservations', roomId);
+ console.log('studioDocRef:', studioDocRef);
+
+    // Reference to the dates collection within the studio document
+    const datesCollectionRef = collection(studioDocRef, 'dates');
+    console.log('datesCollectionRef:', datesCollectionRef);
+
+    // Get all documents in the dates collection
+    const datesSnapshot = await getDocs(datesCollectionRef);
+    
+    const reservations = [];
+    console.log('datesSnapshot:', datesSnapshot);
+console.log('datesSnapshot.docs:', datesSnapshot.docs);
+
+    const promises = datesSnapshot.docs.map(async (dateDoc) => {
+      const date = dateDoc.id;
+      console.log('date:', date);
+      const timesCollectionRef = collection(datesCollectionRef, date);
+      const timesSnapshot = await getDocs(timesCollectionRef);
+      timesSnapshot.forEach((timeDoc) => {
+        const time = timeDoc.id;
+        const data = timeDoc.data();
+        reservations.push({ date, time, ...data });
+      });
+    });
+
+    // Await all promises to complete
+    await Promise.all(promises);
+
+    /*
+    datesSnapshot.forEach((doc) => {
+      const date = doc.id;
+      console.log('date:', date);
+      const timesCollectionRef = collection(datesCollectionRef, date);
+      const timesSnapshot = getDocs(timesCollectionRef);
+      timesSnapshot.forEach((doc) => {
+        const time = doc.id;
+        const data = doc.data();
+        reservations.push({ date, time, ...data });
+      });
+    });
+    
+/*
+    for (const dateDoc of datesSnapshot.docs) {
+      console.log('dateDoc:', dateDoc);
+      const date = dateDoc.id;
+      console.log('date:', date);
+
+      // Reference to the times collection within the date document
+      const timesCollectionRef = collection(datesCollectionRef, date);
+
+      // Get all documents in the times collection
+      const timesSnapshot = await getDocs(timesCollectionRef);
+
+      for (const timeDoc of timesSnapshot.docs) {
+        const time = timeDoc.id;
+        const data = timeDoc.data();
+        reservations.push({ date, time, ...data });
+      }
+    }
+      */
+    
+  console.log('firestore bookings', reservations);
+  return reservations;
+} catch (error) {
+  console.error('Error fetching bookings:', error);
+}
 }
 
 async function fetchBookingsForDay(roomId, date) {
@@ -314,7 +401,8 @@ const addToUserCollection = async ({userId, userType, username}) => {
 
   await setDoc(userDocRef, {
     userType: userType,
-    username: username
+    username: username,
+    studioId: ''
   }, { merge: true });
 
 };
@@ -429,8 +517,26 @@ const sendMessage = async (text, receiverId) => {
 }
 };
 
+const fetchUserById = async (userId) => {
+  console.log('fetching user by id');
+  console.log('fetchUserById -- userId:', userId);
+  const docRef = doc(db, 'users', userId);
+  const docSnap = await getDoc(docRef);
+  console.log('fetchUserById -- docSnap:', docSnap);
+  try {
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      console.log(docSnap.data());
+      return {...userData, id: docSnap.id};
 
+    } else {
+      console.log('No such document!');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching receiving user:', error);
+    return null;
+  }
+}
 
-
-
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection, retrievePhoto, doSignOut };
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings };
