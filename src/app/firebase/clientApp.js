@@ -13,12 +13,9 @@ import {
   orderBy, 
   startAt, 
   endAt,
-  GeoPoint, 
-  limit,
-  serverTimestamp,
-  addDoc
+  GeoPoint
  } from "firebase/firestore";
- import { useCollectionData } from 'react-firebase-hooks/firestore';
+
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
 
 import * as geofire from 'geofire-common';
@@ -72,7 +69,7 @@ const fetchUserData = async () => {
   });
 }
 
-export const doSignOut = () => {
+const doSignOut = () => {
   signOut(auth).then(() => {
       console.log('User signed out');
     }).catch((error) => {
@@ -205,9 +202,6 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
  
   const snapshot = await uploadBytes(storageRef, image);
 
-  const url = await getDownloadURL(storageRef);
-  console.log('url', url);  
-
   console.log('Uploaded a blob or file')
   await setDoc(newStudioRef, {
       name: name,
@@ -235,8 +229,11 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
     });
 }
 
-// async function retrievePhoto (studio) {
-//   return studio;
+async function retrievePhoto (studio) {
+  const storageRef = ref(storage, `images/${studio.image}.jpg`);
+  const url = await getBlob(storageRef);
+  return url;
+}
   
 // }
 
@@ -392,7 +389,6 @@ const fetchReservations = async () => {
     return [];
   }
 };
-
 
 // call this method directly under createNewAccount
 const addToUserCollection = async ({userId, userType, username}) => {

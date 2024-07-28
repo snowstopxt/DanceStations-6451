@@ -4,6 +4,7 @@ import { render, act, fireEvent, waitFor, screen } from '@testing-library/react'
 import Register from '../src/app/components/auth/register/index.jsx'
 import { doCreateUserWithEmailAndPassword } from '../src/app/firebase/auth.js';
 import { AuthProvider } from '../src/contexts/authContext.jsx';
+import { ChakraProvider } from '@chakra-ui/react';
 
 jest.mock('../src/app/firebase/auth.js', () => ({
     doCreateUserWithEmailAndPassword: jest.fn(),
@@ -41,7 +42,7 @@ describe('RegisterComponent', () => {
     it('allows the user to register', async () => {
   
       //const children = true;
-      render(<AuthProvider><Register /></AuthProvider>);
+      render(<Register />, {wrapper: ChakraProvider, AuthProvider});
         //render(<Register />);
       screen.debug();
   

@@ -45,7 +45,7 @@ try {
       console.log(studio);
       return (
         <div>
-          <Header />
+          <Header userType='dancer' />
 
           <Flex flexDirection="row">
         <Box m="3" flexBasis="50%" alignSelf="flex-start" justifySelf="center">

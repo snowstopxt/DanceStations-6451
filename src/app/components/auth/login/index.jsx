@@ -43,8 +43,8 @@ const Login = ({userType}) => {
             setIsSigningIn(true)
             try {
                 await doSignInWithEmailAndPassword(email, password)
-                console.log('onSubmit -- doSignInWithEmailAndPassword passed', userType);
-                router.push('/');
+                if (userType == 'dancer') router.push('/');
+                else if (userType == 'owner') router.push('/ownerMain');
             } catch (error) {
                 console.log('onsubmit error:', error)
                 if (error.code === 'auth/invalid-credential') {

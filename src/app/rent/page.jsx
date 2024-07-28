@@ -8,8 +8,8 @@ import StudioForm from '../components/studioForm/index'; // Ensure you adjust th
 const Page = () => {
   return (
     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
-      <Box w="full" h="full">
-        <Header />
+      <Box bg="brand.100" w="full" h="full" paddingBottom={30}>
+        <Header userType='owner'/>
         <StudioForm />
       </Box>
     </APIProvider>

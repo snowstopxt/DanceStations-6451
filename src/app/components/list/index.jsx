@@ -23,17 +23,27 @@ import { Button,
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
+    Spinner
 } from '@chakra-ui/react'; 
 import { BsChevronDown } from "react-icons/bs";
 import { useMap } from '@vis.gl/react-google-maps';
 import { useStudios } from '../../../contexts/studiosContext';
 import StudioCard from '../card/index'
+import { auth } from '../../firebase/clientApp';
 
 const List = (x) => {
     const map = useMap();
     const studios = useStudios();
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(100);
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(auth.currentUser || null );
+
+    useEffect(() => {
+        if (studios) {
+          setLoading(false); 
+        }
+      }, [studios]);
 
     const format = (val) => `$` + val;
     const parse = (val) => val.replace(/^\$/, '');
@@ -53,6 +63,14 @@ const List = (x) => {
 
     if (!Array.isArray(studios)) {
         return;
+    }
+
+    if (!user) {
+        return (
+          <Box padding='25px' overflow='auto'>
+            <Text fontSize='md'>Please log in to view studios.</Text>
+          </Box>
+        );
     }
 
     return (
@@ -139,13 +157,23 @@ const List = (x) => {
             </GridItem>
             </Grid>
             </FormControl>
-            <Grid templateColumns='repeat(auto-fill, minmax(350px, 1fr))' spacing={3}>
-                {studios?.map((studio, i) => (
-                    <GridItem key={i} xs={12} colSpan={1}>
-                        <StudioCard studio ={studio}></StudioCard>
-                    </GridItem>
-                ))}
-            </Grid>
+            {loading ? (
+        <Center>
+          <Spinner size="xl" />
+        </Center>
+      ) : (
+        <Grid templateColumns='repeat(auto-fill, minmax(350px, 1fr))' spacing={3}>
+          {studios.length > 0 ? (
+            studios.map((studio, i) => (
+              <GridItem key={i} xs={12} colSpan={1}>
+                <StudioCard studio={studio}></StudioCard>
+              </GridItem>
+            ))
+          ) : (
+            !loading && <Text>Try searching with a different parameter</Text>
+          )}
+        </Grid>
+      )}
         </Box>
     );
 };
