@@ -7,6 +7,7 @@ import LoginPage from '../src/app/login/page.tsx'
 import { AuthProvider } from '../src/contexts/authContext.jsx';
 import { doSignInWithEmailAndPassword } from '../src/app/firebase/auth.js';
 import { deselectOptions } from '@testing-library/user-event/dist/cjs/setup/directApi.js'
+import { ChakraProvider } from '@chakra-ui/react';
 
 jest.mock('../src/app/firebase/auth.js', () => ({
   doSignInWithEmailAndPassword: jest.fn(),
