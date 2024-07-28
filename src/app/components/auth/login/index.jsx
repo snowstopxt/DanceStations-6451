@@ -43,10 +43,18 @@ const Login = ({userType}) => {
             setIsSigningIn(true)
             try {
                 await doSignInWithEmailAndPassword(email, password)
+                console.log('onSubmit -- doSignInWithEmailAndPassword passed', userType);
                 router.push('/');
             } catch (error) {
-                setErrorMessage(error.message)
+                console.log('onsubmit error:', error)
+                if (error.code === 'auth/invalid-credential') {
+                    setErrorMessage('Invalid credentials. Please try again.');
+                } else {
+                    setErrorMessage(error.message);
+                }
+                //setErrorMessage(error.message)
                 setIsSigningIn(false)
+                router.push('/login');
             }
         }
     }
@@ -61,6 +69,7 @@ const Login = ({userType}) => {
             } catch (error) {
                 setErrorMessage(error.message)
                 setIsSigningIn(false)
+                router.push('/login');
             }
         }
     }

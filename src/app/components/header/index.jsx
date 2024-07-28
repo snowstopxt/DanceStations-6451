@@ -99,7 +99,7 @@ return (
                   My Chats
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem as='button' onClick={handleLogOut} color='gray.500' fontSize="lg">
+                <MenuItem as='button' href='/login' onClick={handleLogOut} color='gray.500' fontSize="lg">
                   Log out
                 </MenuItem>
               </MenuList>
