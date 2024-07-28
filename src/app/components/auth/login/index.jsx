@@ -44,7 +44,7 @@ const Login = ({userType}) => {
             try {
                 await doSignInWithEmailAndPassword(email, password)
                 if (userType == 'dancer') router.push('/');
-                else if (userType == 'studio owner') router.push('/ownerMain');
+                else if (userType == 'owner') router.push('/ownerMain');
             } catch (error) {
                 console.log('onsubmit error:', error)
                 if (error.code === 'auth/invalid-credential') {

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { MdCloudUpload, MdDelete } from 'react-icons/md';
 import { AiFillFileImage } from 'react-icons/ai';
 import { Image } from '@chakra-ui/next-js';
-import { Box, Button, FormControl, FormLabel, Input, Textarea, Stack } from '@chakra-ui/react';
+import { Box, Button, Text, FormControl, FormLabel, Input, Textarea, Stack } from '@chakra-ui/react';
 import { createStudio } from '../../firebase/clientApp';
 import { useMapsLibrary } from '@vis.gl/react-google-maps';
 import * as geofire from 'geofire-common';
@@ -108,8 +108,8 @@ const StudioForm = () => {
   );
 
   return (
-    <Box bgColor="white" marginX={40} marginY={20}>
-      <h1 className="text-2xl font-bold mb-6 text-center">List Your Studio</h1>
+    <Box bgColor="white" borderRadius="8px" padding={30} marginX={40} marginY={20}>
+      <Text fontSize="2xl" fontWeight="bold" mb={6} textAlign="center">List your studio</Text>
       <form>
         <Stack spacing={4}>
           <FormControl id="studioImage">

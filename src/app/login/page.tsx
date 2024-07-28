@@ -14,7 +14,7 @@ export default function Page() {
             </Text>
             <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={4} w="full" maxW="600px" marginY="60px">
               <SelectLogin userType='dancer' />
-              <SelectLogin userType='studio owner' />
+              <SelectLogin userType='owner' />
             </Grid>
           </Box>
         </Box>

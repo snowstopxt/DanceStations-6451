@@ -9,7 +9,7 @@ import NavSearch from '../searchInput/navSearch/index';
 import { Box, Flex, IconButton, Link, HStack, Menu, MenuButton, MenuList, MenuItem, MenuDivider, useBreakpointValue } from '@chakra-ui/react';
 
 
-const Header = () => {
+const Header = ({userType}) => {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState(null);
@@ -54,7 +54,6 @@ return (
       h="20"
     >
       <Flex align="center">
-        <Link href="/">
           <Image
             src="/logo-transparent.png"
             alt="DanceStations Logo"
@@ -64,10 +63,9 @@ return (
             left={8}
             top={5}
           />
-        </Link>
       </Flex>
 
-      {!isMobile && pathname !== '/login' && pathname !== '/register' && pathname !== '/' && (
+      {!isMobile && userType=='dancer' && pathname !== '/login' && pathname !== '/register' && pathname !== '/' && (
         <Box>
           <NavSearch />
         </Box>
@@ -76,18 +74,16 @@ return (
       {!isMobile && pathname !== '/login' && pathname !== '/register' && (
         <Flex ml={4} align="center" padding={10}>
           <HStack spacing={4}>
-          <Link href="/" color="gray.500" _hover={{ color: "black" }}>Home</Link>
-          <Link href="/" color="gray.500" _hover={{ color: "black" }}>My Chats</Link>
-          <Link href="/viewBookings" color="gray.500" _hover={{ color: "black" }}>My Bookings</Link>
+          {userType == 'dancer' && <Link href="/" color="gray.500" _hover={{ color: "black" }}>Home</Link>}
+          {userType == 'owner' && <Link href="/ownerMain" color="gray.500" _hover={{ color: "black" }}>Dashboard</Link>}
+          {userType == 'dancer' && <Link href="/viewBookings" color="gray.500" _hover={{ color: "black" }}>My Bookings</Link>}
+          {/* {userType == 'owner' && <Link href="/ownerMain" color="gray.500" _hover={{ color: "black" }}>My Listings</Link>} */}
           {!user ? (
             <Link href="/login" color="gray.500" _hover={{ color: "black" }}>Login</Link>
           ) : (
               <Menu position='absolute'>
               <MenuButton textColor='gray.500' hover='black' fontSize="lg">{displayName}</MenuButton>
               <MenuList >
-                <MenuItem  as='a' href='/viewBookings' textColor='gray.500' fontSize="lg" hover="black">
-                  My Bookings
-                </MenuItem>
                 <MenuItem as='a' href='/chat' textColor='gray.500' fontSize="lg" hover="black">
                   My Chats
                 </MenuItem>
