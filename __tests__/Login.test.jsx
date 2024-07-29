@@ -80,13 +80,44 @@ const mockInitializeUser = jest.fn(async (user) => {
 });
 
 
+const AllProviders = ({ children }) => {
+  return (
+    <ChakraProvider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </ChakraProvider>
+  );
+};
 
-
-describe('LoginComponent', () => {
+describe('DancerLoginComponent', () => {
   it('allows the user to log in', async () => {
 
     const children = true;
-    render(<Login/>);
+    render(<Login userType='dancer'/>,  {wrapper: AllProviders});
+
+    //screen.debug();
+
+    const emailInput =  await screen.findByPlaceholderText("Email");
+    const passwordInput = await screen.findByPlaceholderText("Password");
+    const loginButton = await screen.findByRole('button', { name: 'Sign In' });
+    
+    act(() => {
+      fireEvent.change(emailInput, { target: { value: 'user@example.com' } })
+      fireEvent.change(passwordInput, { target: { value: 'password' } })
+      fireEvent.click(loginButton)
+    });
+
+    expect(doSignInWithEmailAndPassword).toHaveBeenCalledWith('user@example.com', 'password');
+    });
+
+});
+
+describe('OwnerLoginComponent', () => {
+  it('allows the user to log in', async () => {
+
+    const children = true;
+    render(<Login userType='studio owner'/>,  {wrapper: AllProviders});
 
     //screen.debug();
 
