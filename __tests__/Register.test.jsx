@@ -38,18 +38,28 @@ jest.mock('../src/app/firebase/auth.js', () => ({
     }
   })
 
-describe('RegisterComponent', () => {
+  const AllProviders = ({ children }) => {
+    return (
+      <ChakraProvider>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </ChakraProvider>
+    );
+  };
+
+describe('DancerRegisterComponent', () => {
     it('allows the user to register', async () => {
   
       //const children = true;
-      render(<Register />, {wrapper: ChakraProvider, AuthProvider});
+      render(<Register userType='dancer'/>, {wrapper: AllProviders});
         //render(<Register />);
       screen.debug();
   
       const usernameInput =  await screen.findByPlaceholderText("Username");
       const emailInput =  await screen.findByPlaceholderText("Email");
       const passwordInput = await screen.findByPlaceholderText("Password");
-      const registerButton = await screen.findByRole('button', { name: 'Sign Up' });
+      const registerButton = await screen.findByRole('button', { name: 'Sign Up as Dancer' });
       
       act(() => {
         fireEvent.change(usernameInput, { target: { value: 'user' } })
@@ -58,6 +68,30 @@ describe('RegisterComponent', () => {
         fireEvent.click(registerButton)
       });
   
-      expect(doCreateUserWithEmailAndPassword).toHaveBeenCalledWith('user@example.com', 'password');
+      expect(doCreateUserWithEmailAndPassword).toHaveBeenCalledWith('user@example.com', 'password', "user", {"userType": "dancer"});
       });
     });
+
+    describe('OwnerRegisterComponent', () => {
+      it('allows the user to register', async () => {
+    
+        //const children = true;
+        render(<Register userType='studio owner'/>, {wrapper: AllProviders});
+          //render(<Register />);
+        screen.debug();
+    
+        const usernameInput =  await screen.findByPlaceholderText("Username");
+        const emailInput =  await screen.findByPlaceholderText("Email");
+        const passwordInput = await screen.findByPlaceholderText("Password");
+        const registerButton = await screen.findByRole('button', { name: 'Sign Up as Studio Owner' });
+        
+        act(() => {
+          fireEvent.change(usernameInput, { target: { value: 'user' } })
+          fireEvent.change(emailInput, { target: { value: 'user@example.com' } })
+          fireEvent.change(passwordInput, { target: { value: 'password' } })
+          fireEvent.click(registerButton)
+        });
+    
+        expect(doCreateUserWithEmailAndPassword).toHaveBeenCalledWith('user@example.com', 'password', "user", {"userType": "studio owner"});
+        });
+      });

@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import List from '../src/app/components/list'; 
 import { StudiosProvider, useStudios } from '../src/contexts/studiosContext'; 
 import { ChakraProvider } from '@chakra-ui/react';
+import { APIProvider } from '../src/contexts/apiContext';
 
 
 jest.mock('../src/contexts/studiosContext', () => ({
@@ -24,7 +25,7 @@ describe('List Component', () => {
 
   test('renders studios correctly', async () => {
     render(
-        <List setMinPrice={jest.fn()} setMaxPrice={jest.fn()} />
+        <APIProvider><List setMinPrice={jest.fn()} setMaxPrice={jest.fn()} /></APIProvider>
       );
 
     // Check if the loading indicator is displayed
@@ -44,7 +45,7 @@ describe('List Component', () => {
     useStudios.mockReturnValue([]);
 
     render(
-        <List setMinPrice={jest.fn()} setMaxPrice={jest.fn()} />
+        <APIProvider><List setMinPrice={jest.fn()} setMaxPrice={jest.fn()} /></APIProvider>
     );
 
     await waitFor(() => {
