@@ -58,7 +58,7 @@ const fetchName = async () => {
 
 useEffect(() => {
     if (studioId) {
-        fetchReservations();
+        fetchAllBookings(studioId);
     }
 }
     , [studioId]);

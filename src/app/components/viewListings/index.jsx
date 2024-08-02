@@ -1,8 +1,10 @@
 "use client"
 import React from 'react';
 import { Box, Text, Flex } from '@chakra-ui/react';
+import fetchOwnerStudio from '../../firebase/clientApp';
 
 const ViewListings = ({ listings }) => {
+
   return (
     <Box p={4}>
       <Text fontSize="2xl" mb={4}>My Listings</Text>
@@ -19,11 +21,14 @@ const ViewListings = ({ listings }) => {
               borderRadius="md"
               boxShadow="md"
             >
-              <Text>{listing.title}</Text>
+              <Text as="b">{listing.name}</Text>
+              
+              <Text>${listing.price}/h</Text>
             </Box>
           ))}
         </Flex>
       ) : (
+        
         <Text>You have no listings</Text>
       )}
     </Box>
