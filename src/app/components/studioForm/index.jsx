@@ -58,6 +58,7 @@ const StudioForm = () => {
       console.log('what is this image', image);
       await createStudio({ name, mrt, geohash, geocode: { lat, lng }, size, price, description, image });
       console.log('Studio created successfully!');
+      alert('Studio created successfully!');
     } catch (error) {
       console.error('Error geocoding address: ', error);
     }

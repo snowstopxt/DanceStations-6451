@@ -13,7 +13,9 @@ import {
   orderBy, 
   startAt, 
   endAt,
-  GeoPoint
+  GeoPoint,
+  addDoc,
+  serverTimestamp
  } from "firebase/firestore";
  import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
@@ -354,7 +356,9 @@ const fetchStudioById = async (studioId) => {
 const fetchReservations = async () => {
 
   const user = auth.currentUser;
+  console.log('fetching reservations');
   if (user) {
+    console.log('fetchReservations -- user:', user.uid);
     const userId = user.uid;
 
     // Create a reference to the user's document
@@ -539,4 +543,26 @@ const fetchUserById = async (userId) => {
   }
 }
 
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection,doSignOut, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings };
+const fetchOwnerStudio = async () => {
+
+  const userId = auth.currentUser.uid;
+
+  const docRef = doc(db, 'users', userId);
+  const docSnap = await getDoc(docRef);
+  try {
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      console.log(docSnap.data());
+      return userData.studioId;
+
+    } else {
+      console.log('No such document!');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching studio:', error);
+    return null;
+  }
+}
+
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection,doSignOut, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings, fetchOwnerStudio, retrievePhoto };
