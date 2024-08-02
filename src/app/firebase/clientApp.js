@@ -15,7 +15,8 @@ import {
   endAt,
   GeoPoint,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  Timestamp
  } from "firebase/firestore";
  import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
@@ -241,8 +242,36 @@ async function retrievePhoto (studio) {
 
 // structure of reservations collection
 // reservation > (ex) 4dGIA9hpyPX2VBGE3Aeu > date > (ex) 2022-12-31 > time > (ex) 10 > userId: '1234'
+// fetch bookings in the next ONE WEEKKKKKK
 async function fetchAllBookings(roomId) {
   try {
+
+    const today = new Date();
+    let reservations = [];
+
+      const addDays = (days) => {
+        let date = new Date(today.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+      }
+
+      for (let i = 0; i < 7; i++) {
+        const date = addDays(i);
+        const dateString = date.toISOString().split('T')[0];
+        console.log('dateString:', dateString);
+        const bookingRef = collection(db, `reservations/${roomId}/dates/${dateString}/time`);
+        const bookingSnapshot = await getDocs(bookingRef);
+        if (bookingSnapshot.empty) {
+          console.log('No bookings for this date');
+        }
+        bookingSnapshot.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
+          reservations.push({date: dateString, time: doc.id, ...doc.data()});
+        });
+      }
+
+
+/* 
   console.log('fetching all bookings');
   console.log('roomId:', roomId);
  //const bookingRef = collection(db, `reservations/${roomId}`);
@@ -314,6 +343,7 @@ console.log('datesSnapshot.docs:', datesSnapshot.docs);
 } catch (error) {
   console.error('Error fetching bookings:', error);
 }
+
 }
 
 async function fetchBookingsForDay(roomId, date) {

@@ -7,11 +7,12 @@ import React from 'react';
 import { Box, Stack, Grid, Text } from '@chakra-ui/react';
 import ReservationCard from '../components/reservationCard';
 import { auth } from '../firebase/clientApp';
+import OwnerReservationCard from '../components/ownerReservationCard';
 
 export default function Page () {
   //const user = auth.currentUser;
   //const userId = user?.uid || null;
-const [reservations, setReservations] = useState<any[]>([]);
+const [reservations, setReservations] = useState<any[]>(null);
 const [user, setUser] = useState<any>(null);
 const [studioId, setStudioId] = useState<string>('');
 
@@ -47,6 +48,7 @@ const fetchName = async () => {
     } else {
       setReservations([]);
     }
+    console.log('fetchReservations reservations :', reservations);
 };
 
 
@@ -58,37 +60,34 @@ const fetchName = async () => {
 
 useEffect(() => {
     if (studioId) {
-        fetchAllBookings(studioId);
+        fetchReservations();
     }
 }
     , [studioId]);
 
 
-    if (!reservations) {
-        return <div>Loading...</div>;
-    } else {
-        console.log(reservations);
-        /*
-        return (
+
+
+  
+
+    return (
             <div><Header />
-            <Text className="text-h1-s font-bold m-5">Studio Bookings</Text>
+            <Text className="text-h1-s font-bold m-5" margin={5}>Studio Bookings in the next 7 days</Text>
             <div> 
             <Box overflowX='hidden' overflowY='auto'>
             <Stack spacing={6} direction='column' m={5} >
-                {reservations?.map((reservation, i) => (
+                {!reservations ? <div>Loading...</div> : reservations.length === 0 ? <Text>No Bookings</Text> : reservations?.map((reservation, i) => (
                     console.log(reservation),
                     
-                        <ReservationCard reservation ={reservation}></ReservationCard>
+                        <OwnerReservationCard reservation ={reservation}></OwnerReservationCard>
                 ))}
                 </Stack>
             </Box>
             </div>
             </div>
         );
-        */
-    }
+  
 
-  return <div>{studioId}</div>
 /*
 try {
 useEffect(() => {
@@ -124,4 +123,5 @@ useEffect(() => {
   console.error('Error fetching reservations', error);
 }
   */
+    
 }

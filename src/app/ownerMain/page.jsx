@@ -59,8 +59,8 @@ export default function Page () {
           <Button as={Link} href="/rent" variant="brand-blue">
             Add a Studio
           </Button>
-          <Button as={Link} href="/chat" variant="brand-blue">
-            My Chats
+          <Button as={Link} href="/viewOwnerBookings" variant="brand-blue">
+            My Studio Bookings
           </Button>
         </HStack >
         </Flex>
