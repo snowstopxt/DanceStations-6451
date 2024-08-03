@@ -157,7 +157,7 @@ const Availability = (props) => {
                                             <Th
                                             textAlign='center'
                                             textColor={isBooked || isSelected ? 'white' : userBooked ? 'red' : 'brand.600'}
-                                            bg={isSelected ? 'brand.300' : isBooked ? 'brand.500' : 'white'}
+                                            bgColor={isBooked ? 'brand.500' : isSelected ? 'brand.300' : 'white'}
                                             cursor='pointer'
                                             onClick ={() => handleSlotClick(time)}
                                             >

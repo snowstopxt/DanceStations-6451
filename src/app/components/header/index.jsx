@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { auth, doSignOut, fetchUserById } from '../../firebase/clientApp';
 import { onAuthStateChanged } from 'firebase/auth';
 import NavSearch from '../searchInput/navSearch/index';
-import { Box, Flex, IconButton, Link, HStack, Menu, MenuButton, MenuList, MenuItem, MenuDivider, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Flex, Spinner,IconButton, Link, HStack, Menu, MenuButton, MenuList, MenuItem, MenuDivider, useBreakpointValue } from '@chakra-ui/react';
 
 
 const Header = () => {
@@ -14,9 +14,8 @@ const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [displayName, setDisplayName] = useState(null);
-  const [userType, setUserType] = useState(null);
+  const [userType, setUserType] = useState('');
   const isMobile = useBreakpointValue({ base: true, md: false });
-
 
 
 const fetchName = async () => {
@@ -26,8 +25,7 @@ const fetchName = async () => {
       setDisplayName(auth.currentUser.displayName);
       //setUserType(fetchUserById(auth.currentUser.uid).userType);
       const userInfo = await fetchUserById(auth.currentUser.uid);
-      console.log('userInfo:', userInfo);
-      setUserType(userInfo.userType);
+      setUserType(userInfo[0].userType);
     } else {
       console.log('no user')
     }
@@ -38,6 +36,10 @@ const fetchName = async () => {
 useEffect(() => {
   fetchName();
 }, []);
+
+useEffect(() => {
+  console.log('userType in header:', userType);
+}, [userType]);
 
 
 
@@ -50,9 +52,8 @@ const handleLogOut = async () => {
 
 }
 
-console.log('userType:', userType);
-
 return (
+  
   <Box bg="white" borderBottom="1px solid" borderColor="gray.200">
     <Flex
       mx="auto"
@@ -62,7 +63,7 @@ return (
       h="20"
     >
       <Flex align="center">
-        <Link href={userType === 'dancer' ? '/' : '/ownerMain'}>
+        <Link href={userType === "owner" ? '/ownerMain' : '/'}>
           <Image
             src="/logo-transparent.png"
             alt="DanceStations Logo"
@@ -72,10 +73,10 @@ return (
             left={8}
             top={5}
           />
-          </Link>
+        </Link>
       </Flex>
 
-      {!isMobile && userType=='dancer' && pathname !== '/login' && pathname !== '/register' && pathname !== '/' && (
+      {!isMobile && userType === 'dancer' && pathname !== '/login' && pathname !== '/register' && pathname !== '/' && (
         <Box>
           <NavSearch />
         </Box>
@@ -84,34 +85,53 @@ return (
       {!isMobile && pathname !== '/login' && pathname !== '/register' && (
         <Flex ml={4} align="center" padding={10}>
           <HStack spacing={4}>
-          {userType == 'dancer' && <Link href="/" color="gray.500" _hover={{ color: "black" }}>Home</Link>}
-          {userType == 'studio owner' && <Link href="/ownerMain" color="gray.500" _hover={{ color: "black" }}>Dashboard</Link>}
-          {userType == 'dancer' && <Link href="/viewBookings" color="gray.500" _hover={{ color: "black" }}>My Bookings</Link>}
-          {/* {userType == 'owner' && <Link href="/ownerMain" color="gray.500" _hover={{ color: "black" }}>My Listings</Link>} */}
-          {!user ? (
-            <Link href="/login" color="gray.500" _hover={{ color: "black" }}>Login</Link>
-          ) : (
+          {userType === 'dancer' && (
+        <Link href="/" fontSize="lg" color="gray.500" _hover={{ color: "black" }}>
+          Home
+        </Link>
+      )}
+      {userType === 'owner' && (
+        <Link href="/ownerMain" fontSize="lg" color="gray.500" _hover={{ color: "black" }}>
+          Dashboard
+        </Link>
+      )}
+      {userType === 'dancer' && (
+        <Link href="/viewBookings" fontSize="lg" color="gray.500" _hover={{ color: "black" }}>
+          My Bookings
+        </Link>
+      )}
+      {userType === 'owner' && (
+        <Link href="/viewOwnerBookings" fontSize="lg" color="gray.500" _hover={{ color: "black" }}>
+          My Listings
+        </Link>
+      )}
+
+            {!user ? (
+              <Link href="/login" fontSize="lg" color="gray.500" _hover={{ color: "black" }}>
+                Login
+              </Link>
+            ) : (
               <Menu position='absolute'>
-              <MenuButton textColor='gray.500' hover='black' fontSize="lg">{displayName}</MenuButton>
-              <MenuList >
-                <MenuItem as='a' href='/chat' textColor='gray.500' fontSize="lg" hover="black">
-                  My Chats
-                </MenuItem>
-                <MenuDivider />
-                <MenuItem as='button' onClick={handleLogOut} textColor='gray.500' fontSize="lg" hover="black">
-                  Log out
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          )}
+                <MenuButton textColor='gray.500' hover='black' fontSize="lg">
+                  {displayName}
+                </MenuButton>
+                <MenuList>
+                  <MenuItem as='a' href='/chat' textColor='gray.500' fontSize="lg" hover="black">
+                    My Chats
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem as='button' onClick={handleLogOut} textColor='gray.500' fontSize="lg" hover="black">
+                    Log out
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            )}
           </HStack>
         </Flex>
       )}
     </Flex>
   </Box>
 );
-
-  // return (
   //   <nav className="bg-white border"> 
   //   <div className="relative mx-auto px-4 sm:px-6 lg:px-8">
   //     <div className="flex items-center justify-between h-20">

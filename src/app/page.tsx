@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <Box position="relative">
       <Box position="relative" zIndex="10">
-        <Header />
+        <Header/>
       </Box>
       <Box position="relative" zIndex="1">
         <Home />

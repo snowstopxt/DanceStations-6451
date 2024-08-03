@@ -6,7 +6,7 @@ import { retrieveMessages, sendMessage, fetchUserById } from '../../firebase/cli
 import ChatMessage from '../../components/chatMessage/index';
 import ChatMessages from '../../components/chatMessages/index';
 
-export default function ChatPage ({params} : {params: {receiverId: string}}) {
+export default function ChatPage ({params}) {
 
   const [formValue, setFormValue] = useState('');
   
@@ -40,41 +40,23 @@ export default function ChatPage ({params} : {params: {receiverId: string}}) {
       return (
           <div>
              <Header />
-            {/* Sidebar */}
-            <Box className="w-1/4 bg-gray-800 text-white p-4">
-              {/*<VStack align="start" spacing={3}>
-                <Button variant="link" colorScheme="whiteAlpha">
-                  General
-                </Button>
-                <Button variant="link" colorScheme="whiteAlpha">
-                  Tech Talk
-                </Button>
-                <Button variant="link" colorScheme="whiteAlpha">
-                  Random
-                </Button>
-              </VStack>
-              */}
-            </Box>
-                
-            {/* Chat Area */}
-            <Flex className="flex-1 flex flex-col" margin={6} flexDirection="column">
-              <Box className="flex-1 p-4 bg-gray-100 overflow-y-auto">
-                {/* Chat messages */}
-                
+            
+            <Flex flex="1" flexDirection="column" m={6}>
+              <Box flex="1" p={4} bg="gray.100" overflowY="auto">
                 <ChatMessages receiverId={params.receiverId} />
 
-                {/*<VStack spacing={4} align="start">
+                <VStack spacing={4} align="start">
 
-                {messages.length > 0 && messages.map((msg: any) => 
+                {messages.length > 0 && messages.map((msg) => 
                 <ChatMessage msg={msg} />)}
-                </VStack>*/}
+                </VStack>
               </Box>
     
               {/* Message Input */}
-              <Box className="p-4 bg-white border-t border-gray-200" margin={6}>
+              <Box p={4} bg="white" borderTop="1px" borderColor="gray.200" m={6}>
                 <Flex>
                   <Input placeholder="Type a message..." type='text' value={formValue} onChange={(e) => setFormValue(e.target.value)}/>
-                  <Button colorScheme="teal" ml={2} onClick={onClick}>
+                  <Button variant="brand-blue" ml={2} onClick={onClick}>
                     Send
                   </Button>
                 </Flex>

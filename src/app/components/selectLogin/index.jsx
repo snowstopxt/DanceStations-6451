@@ -18,7 +18,7 @@ const SelectLogin = ({userType}) => {
                         <button
                             type="submit"
                             className="custom-button">
-                            Login as {userType === "dancer" ? "Dancer" : "Studio Owner"}
+                            Log in as {userType === "dancer" ? "Dancer" : "Studio Owner"}
                         </button>
                 </Link>    
             </Card>
