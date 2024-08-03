@@ -6,24 +6,22 @@ import { fetchStudioById } from "../../firebase/clientApp";
 //for testing
 // import Image from 'next/image';
 
-
-
 const ReservationCard = ({ reservation }) => {
 
-    const [studio, setStudio] = useState();
+  const [studio, setStudio] = useState();
 
-    try {
-        useEffect(() => {
-        const fetchStudio = async () => {
-            const fetchedStudio = await fetchStudioById(reservation.studioId);
-            setStudio(fetchedStudio);
-        };
-        if (reservation.studioId) {
-            fetchStudio();
-          }
-        }, [reservation.studioId]);
+  useEffect(() => {
+  const fetchStudio = async () => {
+      const fetchedStudio = await fetchStudioById(reservation.studioId);
+      setStudio(fetchedStudio);
+  };
+  if (reservation.studioId) {
+      fetchStudio();
+    }
+  }, [reservation.studioId]);
 
-
+        
+        
     console.log('studio: ', studio);
     console.log('reservation: ', reservation);
 
@@ -42,17 +40,13 @@ const ReservationCard = ({ reservation }) => {
                 <Text className="text-body-l ">{reservation.startTime}-{reservation.endTime}</Text>
             </Stack>
             <Link href={`/chat/${studio.ownerId}`}>
-            <Button colorScheme="teal" marginRight={5}>Chat with owner</Button>
+            <Button variant="brand-blue" marginRight={5}>Chat</Button>
             </Link>
             </Stack>
         </CardBody>
     </Card>
   );
 }
-} catch (error) {
-    console.error('Error fetching reservations', error);
-    return (<div>Error fetching reservations</div>);
-  }
 }
 
 export default ReservationCard;

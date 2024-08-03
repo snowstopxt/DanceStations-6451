@@ -28,7 +28,7 @@ useEffect(() => {
         console.log(reservations);
         return (
             <div><Header />
-            <Text className="text-h1-s font-bold m-5">My Bookings</Text>
+            <Text fontSize="3xl" fontWeight="bold" color='white' m={5}>My Bookings</Text>
             <div> 
             <Box overflowX='hidden' overflowY='auto'>
             <Stack spacing={6} direction='column' m={5} >

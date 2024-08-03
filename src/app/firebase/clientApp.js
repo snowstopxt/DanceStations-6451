@@ -2,9 +2,11 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signOut } from "firebase/auth";
 import { 
   collection,
+  collectionGroup,
   getFirestore, 
   doc,
   setDoc,
+  listCollections,
   updateDoc,
   getDoc,
   getDocs,
@@ -15,7 +17,7 @@ import {
   endAt,
   GeoPoint
  } from "firebase/firestore";
- import { useCollectionData } from 'react-firebase-hooks/firestore';
+//  import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob} from "firebase/storage"
 
 import * as geofire from 'geofire-common';
@@ -132,8 +134,18 @@ const returnData = async () => {
 
 
 async function createBooking(roomId, userId, date, startTime, endTime) {
-  console.log('creating booking');
     let isBooked = false;
+
+    //making a dummy docs for the collections
+  //   const dummyDocRef = doc(db, `reservations/${roomId}/dates/dummyDoc`);
+  //   // Check if the dummy document already exists
+  //   const dummyDocSnap = await getDoc(dummyDocRef);
+
+  //   if (!dummyDocSnap.exists()) {
+  //   // If the dummy document does not exist, create it
+  //     await setDoc(dummyDocRef, { dummyField: true });
+  //     console.log('Dummy field added to dates collection.');
+  // }
 
     for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
       console.log('i:', i);
@@ -153,15 +165,21 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
     return isBooked;
   }
 
-  
-
   for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
+    // const dummyTimeDocRef = doc(db, `reservations/${roomId}/dates/${date}/time/dummyTime`);
+    // // Check if the dummy document in the times collection already exists
+    // const dummyTimeDocSnap = await getDoc(dummyTimeDocRef);
+
+    // if (!dummyTimeDocSnap.exists()) {
+    //   // If the dummy document does not exist in the times collection, create it
+    //   await setDoc(dummyTimeDocRef, { dummyField: true });
+    //   console.log('Dummy field added to time collection.');
+    // }
       const bookingRef = doc(db, `reservations/${roomId}/dates/${date}/time/${i}`);
       //const bookingRef = doc(db, `reservations/${roomId}/${date}/-`);
       await setDoc(bookingRef, { userId: userId })
   }
-      //.then(async () => {
-
+      
 
     // Create a reference to the user's document
     const userDocRef = doc(db, 'users', userId);
@@ -229,7 +247,7 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
     });
 }
 
-async function retrievePhoto (studio) {
+async function retrievePhoto(studio) {
   const storageRef = ref(storage, `images/${studio.image}.jpg`);
   const url = await getBlob(storageRef);
   return url;
@@ -240,78 +258,24 @@ async function retrievePhoto (studio) {
 // structure of reservations collection
 // reservation > (ex) 4dGIA9hpyPX2VBGE3Aeu > date > (ex) 2022-12-31 > time > (ex) 10 > userId: '1234'
 async function fetchAllBookings(roomId) {
-  try {
-  console.log('fetching all bookings');
-  console.log('roomId:', roomId);
- //const bookingRef = collection(db, `reservations/${roomId}`);
+  const bookingsRef = collection(db, `reservations/${roomId}/bookings`);
 
- const studioDocRef = doc(db, 'reservations', roomId);
- console.log('studioDocRef:', studioDocRef);
+  // Placeholder for all reservations
+  const reservations = [];
 
-    // Reference to the dates collection within the studio document
-    const datesCollectionRef = collection(studioDocRef, 'dates');
-    console.log('datesCollectionRef:', datesCollectionRef);
+  // Get all date collections (in this case, documents under the dates path)
+  const bookingsSnapshot = await getDocs(bookingsRef);
+  console.log('Booking Snapshot:', bookingsSnapshot);
 
-    // Get all documents in the dates collection
-    const datesSnapshot = await getDocs(datesCollectionRef);
-    
-    const reservations = [];
-    console.log('datesSnapshot:', datesSnapshot);
-console.log('datesSnapshot.docs:', datesSnapshot.docs);
+  bookingsSnapshot.forEach((doc) => {
+    const data = doc.data();
+    console.log('Booking ID:', doc.id, 'Data:', data);
+    reservations.push({ studioId: roomId, id: doc.id, ...data });
+  });
 
-    const promises = datesSnapshot.docs.map(async (dateDoc) => {
-      const date = dateDoc.id;
-      console.log('date:', date);
-      const timesCollectionRef = collection(datesCollectionRef, date);
-      const timesSnapshot = await getDocs(timesCollectionRef);
-      timesSnapshot.forEach((timeDoc) => {
-        const time = timeDoc.id;
-        const data = timeDoc.data();
-        reservations.push({ date, time, ...data });
-      });
-    });
-
-    // Await all promises to complete
-    await Promise.all(promises);
-
-    /*
-    datesSnapshot.forEach((doc) => {
-      const date = doc.id;
-      console.log('date:', date);
-      const timesCollectionRef = collection(datesCollectionRef, date);
-      const timesSnapshot = getDocs(timesCollectionRef);
-      timesSnapshot.forEach((doc) => {
-        const time = doc.id;
-        const data = doc.data();
-        reservations.push({ date, time, ...data });
-      });
-    });
-    
-/*
-    for (const dateDoc of datesSnapshot.docs) {
-      console.log('dateDoc:', dateDoc);
-      const date = dateDoc.id;
-      console.log('date:', date);
-
-      // Reference to the times collection within the date document
-      const timesCollectionRef = collection(datesCollectionRef, date);
-
-      // Get all documents in the times collection
-      const timesSnapshot = await getDocs(timesCollectionRef);
-
-      for (const timeDoc of timesSnapshot.docs) {
-        const time = timeDoc.id;
-        const data = timeDoc.data();
-        reservations.push({ date, time, ...data });
-      }
-    }
-      */
-    
-  console.log('firestore bookings', reservations);
+  console.log('Fetched reservations:', reservations);
   return reservations;
-} catch (error) {
-  console.error('Error fetching bookings:', error);
-}
+
 }
 
 async function fetchBookingsForDay(roomId, date) {
@@ -410,7 +374,6 @@ const addToUserCollection = async ({userId, userType, username}) => {
 const retrieveMessages = (receiverId) => {
   console.log('retrieving messages');
 
-
   const senderId = auth.currentUser.uid;  
 
   console.log('senderId:', senderId);
@@ -422,25 +385,41 @@ const retrieveMessages = (receiverId) => {
   let receivedMessages = [];
 
   // query messages sent to specific receiver first
-  const q = query(sentCollectionRef, where('sentTo', '==', receiverId), orderBy('createdAt'));
+  const snapshotSent = getDocs(sentCollectionRef);
+  if (snapshotSent) {
+    const q = query(sentCollectionRef, where('sentTo', '==', receiverId), orderBy('createdAt'));
+    console.log('q:', q);
+  } else {
+    console.log('No messages found');
+  }
+
   // retrieve messages sent to receiver by the current user in an array
-  sentMessages = useCollectionData(q, { idField: 'id' })[0];
+  // sentMessages = useCollectionData(q, { idField: 'id' })[0];
   //const sentMessagesSnapshot = await getDocs(q);
   //sentMessagesSnapshot.forEach((doc) => {
     //sentMessages.push({id: doc.id, ...doc.data()});
   //});
   
-  console.log('sent messages:', sentMessages);
+  const snapshotR = getDocs(receivedCollectionRef);
+  if (snapshotR) {
+    const q2 = query(receivedCollectionRef, where('sentBy', '==', receiverId), orderBy('createdAt'));
+    console.log('q2:', q2);
+  } else {
+    console.log('No messages received');
+    ;
+  }
+
+  // console.log('sent messages:', sentMessages);
 
   // query messages received from specific sender
-  const q2 = query(receivedCollectionRef, where('sentBy', '==', receiverId), orderBy('createdAt'));
+  
   // retrieve messages received from sender by the current user in an array
-  receivedMessages = useCollectionData(q2, { idField: 'id' })[0];
+  // receivedMessages = useCollectionData(q2, { idField: 'id' })[0];
   //const receivedMessagesSnapshot = await getDocs(q2);
   //receivedMessagesSnapshot.forEach((doc) => {
     //receivedMessages.push({id: doc.id, ...doc.data()});
   //});
-  console.log('received messages:', receivedMessages);
+  // console.log('received messages:', receivedMessages);
 
   // merge the two arrays and sort by createdAt
   //const messages = [...sentMessages, ...receivedMessages].sort((a, b) => a.createdAt - b.createdAt);
@@ -518,25 +497,19 @@ const sendMessage = async (text, receiverId) => {
 };
 
 const fetchUserById = async (userId) => {
-  console.log('fetching user by id');
-  console.log('fetchUserById -- userId:', userId);
-  const docRef = doc(db, 'users', userId);
-  const docSnap = await getDoc(docRef);
-  console.log('fetchUserById -- docSnap:', docSnap);
   try {
+    const docRef = doc(db, 'users', userId);
+    const docSnap = await getDoc(docRef);
+
     if (docSnap.exists()) {
       const userData = docSnap.data();
-      console.log(docSnap.data());
-      return {...userData, id: docSnap.id};
-
+      return [{ ...userData, id: docSnap.id }];
     } else {
       console.log('No such document!');
-      return null;
     }
   } catch (error) {
-    console.error('Error fetching receiving user:', error);
-    return null;
+    console.error('Error fetching user data:', error);
   }
-}
+};
 
 export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection,doSignOut, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings };

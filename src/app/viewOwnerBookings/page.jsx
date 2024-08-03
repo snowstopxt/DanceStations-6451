@@ -11,84 +11,78 @@ import { auth } from '../firebase/clientApp';
 export default function Page () {
   //const user = auth.currentUser;
   //const userId = user?.uid || null;
-const [reservations, setReservations] = useState<any[]>([]);
-const [user, setUser] = useState<any>(null);
-const [studioId, setStudioId] = useState<string>('');
-
-const fetchName = async () => {
-    const user = auth.currentUser;
-    const userId = user?.uid || null;
-    if (!userId) {
-        console.error('No user is currently signed in.');
-        return;
-    }
-
-    try {
-        const fetchedUser = await fetchUserById(userId);
-        setUser(fetchedUser);
-
-        if (fetchedUser && fetchedUser.studioId!=='') {
-            setStudioId(fetchedUser.studioId);
-            console.log('This user has a studioId:', fetchedUser.studioId);
-        } else {
-            console.log('This user does not have a studioId.');
-        }
-            
-    } catch (error) {
-        console.error('Error fetching user:', error);
-    }
-  }
-
-  const fetchReservations = async () => {
-    console.log('fetchReservations studioId:', studioId);
-    const fetchedReservations = await fetchAllBookings(studioId);
-    if (fetchedReservations) {
-      setReservations(fetchedReservations);
-    } else {
-      setReservations([]);
-    }
-};
-
-
-  useEffect(() => {
-    fetchName();
-    
-  }
-    , []);
+const [reservations, setReservations] = useState([]);
+const [studioArr, setStudioArr] = useState([]);
+const user = auth.currentUser;
+const userId = user?.uid || null;
 
 useEffect(() => {
-    if (studioId) {
-        fetchReservations();
-    }
-}
-    , [studioId]);
+  const fetchUserData = async () => {
+    const fetchingUser = await fetchUserById(userId);
+    console.log('fetchedUser:', fetchingUser);
+    
+    if (fetchingUser[0].studioId) {
+      const studioIds = fetchingUser[0].studioId;
+      console.log('studioIds:', studioIds);
+      setStudioArr(studioIds);
+    } 
+  };
 
+  fetchUserData();
+}, [userId]);
+
+useEffect(() => {
+  console.log('studioArr updated:', studioArr);
+}, [studioArr]);
+
+
+useEffect(() => {
+  const fetchReservations = async () => {
+    let results = [];
+   
+    for (let i = 0; i < studioArr.length; i++) {
+      console.log('studioArr[i]:', studioArr[i]);
+      const fetchedReservations = await fetchAllBookings(studioArr[i]);
+      if (fetchedReservations && fetchedReservations.length > 0) {
+        results = [...results, ...fetchedReservations];
+      }
+    }
+
+    // Update state once after the loop
+    setReservations(results);
+  };
+
+  if (studioArr.length > 0) {
+    fetchReservations();
+  }
+}, [studioArr]);
 
     if (!reservations) {
         return <div>Loading...</div>;
     } else {
-        console.log(reservations);
-        /*
+        console.log('viewBookingsPage reservations', reservations);
+        
         return (
-            <div><Header />
-            <Text className="text-h1-s font-bold m-5">Studio Bookings</Text>
-            <div> 
+            <Box bgColor='brand.100' minH="100vh">
+            <Header />
+            <Text fontSize="3xl" fontWeight="bold" color='white' m={5}>Studio Bookings</Text>
+            <Box> 
             <Box overflowX='hidden' overflowY='auto'>
             <Stack spacing={6} direction='column' m={5} >
                 {reservations?.map((reservation, i) => (
                     console.log(reservation),
                     
-                        <ReservationCard reservation ={reservation}></ReservationCard>
+                        <ReservationCard reservation={reservation}></ReservationCard>
                 ))}
                 </Stack>
             </Box>
-            </div>
-            </div>
+            </Box>
+            </Box>
         );
-        */
+        
     }
 
-  return <div>{studioId}</div>
+}
 /*
 try {
 useEffect(() => {
@@ -123,5 +117,6 @@ useEffect(() => {
 } catch (error) {
   console.error('Error fetching reservations', error);
 }
-  */
+  
 }
+*/
