@@ -63,8 +63,6 @@ const Register = ({userType}) => {
     }
 
     return (
-        <Box minHeight="100vh" display="flex" flexDirection="column" bgColor="brand.100">
-            <Header />
           
           <Box as="main" flex="1" display="flex" justifyContent="center" alignItems="center" padding={4}>
             <Box width={{ base: 'full', sm: 'md' }} backgroundColor="white" boxShadow="lg" borderRadius="md" padding={4}>
@@ -127,7 +125,6 @@ const Register = ({userType}) => {
               </Stack>
             </Box>
           </Box>
-        </Box>
       );
 }
 

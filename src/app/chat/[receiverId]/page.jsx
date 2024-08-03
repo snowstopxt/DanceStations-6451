@@ -10,10 +10,11 @@ export default function ChatPage ({params}) {
 
   const [formValue, setFormValue] = useState('');
   
-  const messages = retrieveMessages(params.receiverId);
-  const receiver = fetchUserById(params.receiverId);
-  console.log('chat page params', params);
-  const onClick = async (e) => {
+  //const messages = retrieveMessages(params.receiverId);
+  //const receiver = fetchUserById(params.receiverId);
+
+
+  const onClick = async (e: { preventDefault: () => void; }) => {
     console.log('clicked');
     e.preventDefault();
     
@@ -29,6 +30,10 @@ export default function ChatPage ({params}) {
     console.error('Error sending message:', error);
     }
   }
+
+  useEffect(() => {
+    console.log('updated formValue:', formValue);
+  } , [formValue]);
 
   
 
