@@ -13,6 +13,7 @@ const ChatMessages = ({receiverId}) => {
 
   const [receiverUsername, setReceiverUsername] = useState(null);
 
+  
   useEffect(() => {
     const getReceiver = async () => {
       try {

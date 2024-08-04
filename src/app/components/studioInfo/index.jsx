@@ -1,6 +1,7 @@
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { AiOutlineStar } from 'react-icons/ai';
 import React from 'react';
+import { retrievePhoto } from "../../firebase/clientApp";
 import { Box, Image, Text, Divider, Flex } from "@chakra-ui/react";
 
 const StudioInfo = ({ stars, studio }) => {
@@ -26,7 +27,7 @@ const StudioInfo = ({ stars, studio }) => {
         <Box display="flex" flexDirection="column">
           <Image
             m="8"
-            src={studio.url || "/logo-transparent.png"}
+            src={retrievePhoto(studio) || "/logo-transparent.png"}
             alt={studio.name}
             borderRadius="lg"
             objectFit="contain"

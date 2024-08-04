@@ -14,7 +14,7 @@ export default function ChatPage ({params}) {
   //const receiver = fetchUserById(params.receiverId);
 
 
-  const onClick = async (e: { preventDefault: () => void; }) => {
+  const onClick = async (e) => {
     console.log('clicked');
     e.preventDefault();
     

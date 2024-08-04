@@ -51,7 +51,7 @@ export default function Page () {
         <div>
             <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '' }>
             <StudiosProvider queries = {queries}>
-            <Header userType='dancer'/>
+            <Header/>
             <Grid templateColumns='repeat(2, 1fr)' gap={0}>
                 <GridItem bg='white'>
                     <List setMinPrice={setMinPrice} setMaxPrice={setMaxPrice}/>
