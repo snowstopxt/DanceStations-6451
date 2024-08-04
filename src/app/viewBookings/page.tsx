@@ -22,6 +22,7 @@ useEffect(() => {
     fetchData();
 }, []);
 
+
     if (!reservations) {
         return <div>Loading...</div>;
     } else {
@@ -35,7 +36,7 @@ useEffect(() => {
                 {reservations?.map((reservation, i) => (
                     console.log(reservation),
                     
-                        <ReservationCard reservation ={reservation}></ReservationCard>
+                        <ReservationCard reservation ={reservation} receiverId={""}></ReservationCard>
                 ))}
                 </Stack>
             </Box>
