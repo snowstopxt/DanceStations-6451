@@ -5,7 +5,7 @@ import { retrieveMessages } from "../../firebase/clientApp";
 import { fetchUserById } from "../../firebase/clientApp";
 
 const ChatMessages = ({receiverId}) => {
-    console.log('chatMessages -- receiverId:', receiverId);
+  console.log('chatMessages -- receiverId:', receiverId);
     //const [messages, setMessages] = useState([]);
 
   const messages = retrieveMessages(receiverId);
@@ -18,11 +18,13 @@ const ChatMessages = ({receiverId}) => {
     const getReceiver = async () => {
       try {
         const receiver = await fetchUserById(receiverId);
-        setReceiverUsername(receiver.username);
+        console.log('receiver:', receiver);
+        setReceiverUsername(receiver[0].username);
       } catch (error) {
         console.error('Error fetching receiver username:', error);
       }
-    };getReceiver();
+    };
+    getReceiver();
 } , [receiverId]);
 
   try {

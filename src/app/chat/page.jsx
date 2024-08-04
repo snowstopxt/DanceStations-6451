@@ -8,8 +8,22 @@ import ChatMessage from '../components/chatMessage/index';
 export default function ChatPage () {
 
   const [formValue, setFormValue] = useState('');
+  const [messages, setMessages] = useState([]);
   
-  const messages = retrieveMessages();
+
+  
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const fetchedMessages = await retrieveMessages(params.receiverId);
+        setMessages(fetchedMessages);
+        } catch (err) {
+        console.error('Error fetching messages:', err);
+      };
+    };
+    fetchMessages();
+  }, []);
+
 
   const onClick = async (e) => {
     e.preventDefault();
@@ -53,8 +67,8 @@ export default function ChatPage () {
                 {/* Chat messages */}
                 <VStack spacing={4} align="start">
                 {console.log('chat page -- messages:', messages)}
-                {messages && messages.map((msg) => 
-                <ChatMessage msg={msg} />)}
+                {messages.length > 0 && messages.map((msg, i) => 
+                <ChatMessage msg={msg} key={i} />)}
                 </VStack>
               </Box>
     

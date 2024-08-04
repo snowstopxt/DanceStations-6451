@@ -32,10 +32,10 @@ const ChatMessage = ( {msg} ) => {
     console.log('chatMessage -- messageClass:', messageClass);
 
     return (
-                  <Card className="bg-white p-4 rounded shadow-sm w-full" alignSelf={messageClass==='sent'?"self-end":"self-start"}>
-                    <Text fontWeight="bold" color="teal.500" marginLeft={2} marginTop={1} marginRight={4}>{messageClass==='sent'? auth.currentUser.displayName : receiverUsername}</Text>
-                    <Text marginX={2} marginBottom={1}>{msg.text}</Text>
-                  </Card>
+      <Card bg="white" p={4} w="auto" alignSelf={messageClass==='sent'?"self-end":"self-start"}>
+        <Text fontWeight="bold" color="teal.500" marginLeft={2} marginTop={1} marginRight={4}>{messageClass==='sent'? auth.currentUser.displayName : receiverUsername}</Text>
+        <Text marginX={2} marginBottom={1}>{msg.text}</Text>
+      </Card>
     )
 }
 }
