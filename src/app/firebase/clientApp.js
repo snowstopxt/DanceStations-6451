@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signOut } from "firebase/auth";
 import { 
+  arrayUnion,
   collection,
   collectionGroup,
   getFirestore, 
@@ -215,8 +216,8 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
   const imageURL =`${studioId}_${Date.now()}`;
   const storageRef = ref(storage, `images/${imageURL}.jpg`);
   const user = auth.currentUser;
-    const userId = user.uid;
-    const userDocRef = doc(db, 'users', userId);
+  const userId = user.uid;
+  const userDocRef = doc(db, 'users', userId);
 
   console.log('image', image)
  
@@ -240,7 +241,7 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
       console.log('Studio created successfully');});
 
       await setDoc(userDocRef, {
-        studioId: studioId
+        studioId: arrayUnion(studioId)
       }, { merge: true }).then(() => {
       console.log('Studio added to user collection');
     

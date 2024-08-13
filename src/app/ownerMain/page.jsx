@@ -11,46 +11,58 @@ import {
 from '@chakra-ui/react';
 import Link from 'next/link'
 import { fetchOwnerStudio, fetchStudioById, fetchUserById } from '../firebase/clientApp';
-import StudioCard from '../components/card/index';
+import { OwnerProvider, useOwner } from '../../contexts/ownerStudios';
+import ViewListings from '../components/viewListings/index';
 import { auth } from '../firebase/clientApp';
 
 
 export default function Page () {
-  const [studioArr, setStudioArr] = useState([]);
+  const studioArr = useOwner();
   const [listings, setListings] = useState([]);
   const user = auth.currentUser;
   const userId = user?.uid || null;
-  console.log('userId:', userId);
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     const fetchingUser = await fetchUserById(userId);
+  //     console.log('fetchedUser:', fetchingUser);
+      
+  //     if (fetchingUser[0].studioId) {
+  //       const studioIds = fetchingUser[0].studioId;
+  //       console.log('studioIds:', studioIds);
+  //       setStudioArr(studioIds);
+  //     } 
+  //   };
+   
+  //   fetchUserData();
+  // }, [userId]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const fetchingUser = await fetchUserById(userId);
-      console.log('fetchedUser:', fetchingUser);
-      
-      if (fetchingUser[0].studioId) {
-        const studioIds = fetchingUser[0].studioId;
-        console.log('studioIds:', studioIds);
-        setStudioArr(studioIds);
-      } 
-    };
-   
-    fetchUserData();
-  }, [userId]);
+    console.log('ownerMain studioArr:', studioArr);
+  }, [studioArr]);
 
   useEffect(() => {
     const getStudios = async () => {
-      for (let i = 0; i < studioArr.length; i++) {
-        const studio = await fetchStudioById(studioArr[i]);
-        setListings([...listings, studio]);
+      if (studioArr) {
+        console.log('getting listings')
+        const studios = [];
+        for (let i = 0; i < studioArr.length; i++) {
+          const studio = await fetchStudioById(studioArr[i]);
+          studios.push(studio);
+        }
+        setListings(studios);
       }
-    }
+    };
+  
     getStudios();
-    console.log('listings:', listings);
   }, [studioArr]);
+
+  useEffect(() => {
+    console.log('listings:', listings);
+  }, [listings]);
 
         // const [studioId, setStudioId] = useState(null);
         // const [listings, setListings] = useState([]);
-        let retrieved = false;
 
         // fetch studio id
         // const getStudioId = async () => {
@@ -81,10 +93,9 @@ export default function Page () {
         // }
         // , [studioId]);
 
-
-
     
     return (
+        <OwnerProvider>
         <Box bg="brand.100" minH="100vh">
         <Header userType="owner" />
         <Box p={10}>
@@ -94,15 +105,17 @@ export default function Page () {
             Add a Studio
           </Button>
         </HStack >
-        <Text fontSize="3xl" fontWeight="bold" color='black' m={5}>View your studios</Text>
-        <Flex flexWrap="wrap" justifyContent="space-between" width="400px">
+        <Text fontSize="3xl" fontWeight="bold" color='white' m={5}>View your studios</Text>
+        <ViewListings/>
+        {/* <Flex flexWrap="wrap" justifyContent="space-between" width="400px">
           {listings.map((studio, i) => (
           <StudioCard key={i} studio={studio} />
         ))}
-        </Flex>
+        </Flex> */}
         </Flex>
       </Box>
       </Box>
+      </OwnerProvider>
     );
 
   
