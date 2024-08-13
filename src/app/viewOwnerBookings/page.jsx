@@ -63,16 +63,16 @@ useEffect(() => {
         console.log('viewBookingsPage reservations', reservations);
         
         return (
-            <Box bgColor='brand.100' minH="100vh">
+            <Box bgColor='white' minH="100vh">
             <Header />
-            <Text fontSize="3xl" fontWeight="bold" color='white' m={5}>Studio Bookings</Text>
+            <Text fontSize="3xl" fontWeight="bold" color='black' m={5}>Studio Bookings</Text>
             <Box> 
             <Box overflowX='hidden' overflowY='auto'>
             <Stack spacing={6} direction='column' m={5} >
                 {reservations?.map((reservation, i) => (
-                    console.log(reservation),
+                    console.log("indiv reservation", reservation),
                     
-                        <ReservationCard reservation={reservation}></ReservationCard>
+                        <ReservationCard reservation={reservation} receiverId={reservation.userId}></ReservationCard>
                 ))}
                 </Stack>
             </Box>

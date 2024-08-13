@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signOut } from "firebase/auth";
 import { 
+  arrayUnion,
   collection,
   collectionGroup,
   getFirestore, 
@@ -216,8 +217,8 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
   const imageURL =`${studioId}_${Date.now()}`;
   const storageRef = ref(storage, `images/${imageURL}.jpg`);
   const user = auth.currentUser;
-    const userId = user.uid;
-    const userDocRef = doc(db, 'users', userId);
+  const userId = user.uid;
+  const userDocRef = doc(db, 'users', userId);
 
   console.log('image', image)
  
@@ -241,7 +242,7 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
       console.log('Studio created successfully');});
 
       await setDoc(userDocRef, {
-        studioId: studioId
+        studioId: arrayUnion(studioId)
       }, { merge: true }).then(() => {
       console.log('Studio added to user collection');
     
@@ -299,10 +300,9 @@ async function fetchBookingsForDay(roomId, date) {
 }
 
 const fetchStudioById = async (studioId) => {
-  
-  const docRef = doc(db, 'studios', studioId);
-  const docSnap = await getDoc(docRef);
   try {
+    const docRef = doc(db, 'studios', studioId);
+    const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const studioData = docSnap.data();
       console.log(docSnap.data());
@@ -377,12 +377,12 @@ const addToUserCollection = async ({userId, userType, username}) => {
 
 };
 
-const retrieveMessages = (receiverId) => {
+const retrieveMessages = async (receiverId) => {
   console.log('retrieving messages');
 
   const senderId = auth.currentUser.uid;  
-
   console.log('senderId:', senderId);
+
   const senderDocRef = doc(db, 'users', senderId);
   const sentCollectionRef = collection(senderDocRef, 'sentMsgs');
   const receivedCollectionRef = collection(senderDocRef, 'receivedMsgs');
@@ -391,28 +391,43 @@ const retrieveMessages = (receiverId) => {
   let receivedMessages = [];
 
   // query messages sent to specific receiver first
-  const snapshotSent = getDocs(sentCollectionRef);
-  if (snapshotSent) {
-    const q = query(sentCollectionRef, where('sentTo', '==', receiverId), orderBy('createdAt'));
-    console.log('q:', q);
-  } else {
-    console.log('No messages found');
-  }
+ try {
+    // Query messages sent to specific receiver
+    const snapshot = await getDocs(sentCollectionRef);
 
+    if (!snapshot.empty) {
+      const qSent = query(sentCollectionRef, where('sentTo', '==', receiverId), orderBy('createdAt'));
+      const snapshotSent = await getDocs(qSent);
+
+      if (!snapshotSent.empty) {
+        sentMessages = snapshotSent.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log('sentMessages:', sentMessages);
+      } else {
+      console.log('No sent messages found');
+    }
+  } else {
+    console.log('No docs in sentMsgs collection');
+  }
   // retrieve messages sent to receiver by the current user in an array
   // sentMessages = useCollectionData(q, { idField: 'id' })[0];
   //const sentMessagesSnapshot = await getDocs(q);
   //sentMessagesSnapshot.forEach((doc) => {
     //sentMessages.push({id: doc.id, ...doc.data()});
   //});
+
+  const snapshotR = await getDocs(receivedCollectionRef);
   
-  const snapshotR = getDocs(receivedCollectionRef);
-  if (snapshotR) {
-    const q2 = query(receivedCollectionRef, where('sentBy', '==', receiverId), orderBy('createdAt'));
-    console.log('q2:', q2);
+  if (!snapshotR.empty) {
+    const qReceived = query(receivedCollectionRef, where('sentBy', '==', receiverId), orderBy('createdAt'));
+    const snapshotReceived = await getDocs(qReceived);
+    if (!snapshotReceived.empty) {
+      receivedMessages = snapshotReceived.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log('receivedMessages:', receivedMessages);
+    } else {
+      console.log('No received messages found from the specific sender');
+    }
   } else {
-    console.log('No messages received');
-    ;
+    console.log('No documents in the receivedMsgs collection');
   }
 
   // console.log('sent messages:', sentMessages);
@@ -429,44 +444,20 @@ const retrieveMessages = (receiverId) => {
 
   // merge the two arrays and sort by createdAt
   //const messages = [...sentMessages, ...receivedMessages].sort((a, b) => a.createdAt - b.createdAt);
-  if (sentMessages && receivedMessages) {
-  const messages = sentMessages.concat(receivedMessages).sort((a, b) => a.createdAt - b.createdAt);
-  console.log('messages:', messages);
+  let messages = [];
+    if (sentMessages.length > 0 || receivedMessages.length > 0) {
+      messages = sentMessages.concat(receivedMessages).sort((a, b) => a.createdAt - b.createdAt);
+    }
+
+    console.log('messages:', messages);
     return messages;
-  } else if (sentMessages) {
-    return sentMessages;
-  } else if (receivedMessages) {
-    return receivedMessages;
-  } else {
-    console.log('No messages found');
+
+  } catch (error) {
+    console.error('Error retrieving messages:', error);
     return [];
   }
-  
-/*
-  if (messages) {
-    return messages;
-  } else {
-    console.log('No messages found');
-    return [];
-  }
-    */
-
-
-/*
-  const messagesRef = collection(db, 'messages');
-  //const query = messagesRef.orderBy('createdAt').limit(25); 
-  const messagesQuery = query(messagesRef, orderBy('createdAt'), limit(25));
-  const [messages] = useCollectionData(messagesQuery, {idField: 'id'});
-
-  console.log('messages:', messages);
-  if (messages) {
-    return messages;
-  } else {
-    return [];
-  }
-    */
-  
 };
+
 
 // message will be stored in (i) user1 > sent and (ii) user2 > received
 // storage architecture:

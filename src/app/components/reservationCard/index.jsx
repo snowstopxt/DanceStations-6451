@@ -6,8 +6,7 @@ import { fetchStudioById } from "../../firebase/clientApp";
 //for testing
 // import Image from 'next/image';
 
-const ReservationCard = ({ reservation }) => {
-
+const ReservationCard = ({ reservation, receiverId }) => {
   const [studio, setStudio] = useState();
 
   useEffect(() => {
@@ -30,6 +29,10 @@ const ReservationCard = ({ reservation }) => {
         return <div>Loading...</div>;
       } else {
 
+    if (!receiverId) {
+      receiverId = studio.ownerId;
+    }
+
   return (
     <Card>
         <CardBody>
@@ -37,9 +40,9 @@ const ReservationCard = ({ reservation }) => {
             <Stack spacing = {0}>
                 <Text className="text-h2-s font-bold ">{studio.name}</Text>
                 <Text className="text-body-l ">{reservation.date}</Text>
-                <Text className="text-body-l ">{reservation.startTime}-{reservation.endTime}</Text>
+                <Text className="text-body-l ">{reservation.startTime}:00-{reservation.endTime}:00</Text>
             </Stack>
-            <Link href={`/chat/${studio.ownerId}`}>
+            <Link href={`/chat/${receiverId}`}>
             <Button variant="brand-blue" marginRight={5}>Chat</Button>
             </Link>
             </Stack>
