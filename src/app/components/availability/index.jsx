@@ -45,7 +45,6 @@ const Availability = (props) => {
             }
         }
         fetchData();
-        console.log('bookedSlots: ', bookedSlots);
         }, [date, newBooking]);
 
     useEffect(() => {
@@ -79,7 +78,7 @@ const Availability = (props) => {
         console.log('endTime: ', endTime);
         const promise = createBooking(studioId, userId, date, startTime, endTime);
         const result = await promise;
-        if (result === false) {
+        if (result === false && parseInt(startTime[startTime.length - 1].split(':')[0]) >= 9 && parseInt(endTime[endTime.length - 1].split(':')[0]) <= 24) {
             setNewBooking(newBooking + 1);
             alert('Reservation successful, please make payment through chat to confirm your booking');
         } else {
@@ -149,9 +148,12 @@ const Availability = (props) => {
                             for (let hour = 9; hour < 24; hour++) {
                                 for (let minute = 0; minute < 60; minute += 60) { 
                                     const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                                    const isBooked = bookedSlots.some(slot => slot.time == hour);
+                                    const isBooked = bookedSlots.some(slot => slot.time === hour);
                                     const userBooked = bookedSlots.some(slot => slot.userId === userId && slot.time === hour);
                                     const isSelected = selectedTimeSlots.includes(time);
+                                    console.log('bookedSlots:', bookedSlots);
+                                    console.log('time:', time);
+                                    console.log('isBooked:', isBooked);
                                     timeSlots.push(
                                         <Tr key={time}>
                                             <Th
