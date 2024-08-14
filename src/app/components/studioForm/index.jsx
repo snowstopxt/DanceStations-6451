@@ -60,6 +60,7 @@ const StudioForm = () => {
       console.log('Studio created successfully!');
       alert('Studio created successfully!');
     } catch (error) {
+      alert('Please fill in all compulsory fields');
       console.error('Error geocoding address: ', error);
     }
   };
@@ -144,7 +145,7 @@ const StudioForm = () => {
             <Input type="number" placeholder="Enter price per hour" value={price} onChange={(e) => handleNumericInput(e, setPrice)} />
           </FormControl>
           <FormControl id="description">
-            <FormLabel>Description</FormLabel>
+            <FormLabel>Description (optional)</FormLabel>
             <Textarea placeholder="Enter studio description" value={description} onChange={(e) => setDescription(e.target.value)} />
           </FormControl>
 

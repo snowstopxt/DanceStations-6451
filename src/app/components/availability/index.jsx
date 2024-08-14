@@ -74,11 +74,17 @@ const Availability = (props) => {
     // right now, selectedTimeSlots not updated
     const handleReserveClick = async () => {
 
-        console.log('startTime: ', startTime);
-        console.log('endTime: ', endTime);
+        
         const promise = createBooking(studioId, userId, date, startTime, endTime);
         const result = await promise;
-        if (result === false && parseInt(startTime[startTime.length - 1].split(':')[0]) >= 9 && parseInt(endTime[endTime.length - 1].split(':')[0]) <= 24) {
+
+        console.log('startTime: ', startTime);
+        console.log('endTime: ', endTime);
+        console.log('startTimeParseInt: ', parseInt(startTime.split(':')[0], 10));
+        //console.log('startTimeParseInt: ', parseInt(startTime.split(':')[0], 10));
+        console.log('endTimeParseInt: ', parseInt(endTime.split(':')[0], 10));
+
+        if (result === false && parseInt(startTime.split(':')[0], 10) >= 9 && parseInt(endTime.split(':')[0], 10) <= 24) {
             setNewBooking(newBooking + 1);
             alert('Reservation successful, please make payment through chat to confirm your booking');
         } else {

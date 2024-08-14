@@ -151,6 +151,11 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
   //     console.log('Dummy field added to dates collection.');
   // }
 
+  if (parseInt(startTime.split(':')[0], 10) < 9 || parseInt(endTime.split(':')[0], 10) < 9) {
+    console.log('Invalid booking time');
+    return false;
+  }
+
     for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
       console.log('i:', i);
       const bookingRef = doc(db, `reservations/${roomId}/dates/${date}/time/${i}`);
@@ -290,6 +295,36 @@ async function fetchAllBookings(roomId) {
     const data = doc.data();
     console.log('Booking ID:', doc.id, 'Data:', data);
     reservations.push({ studioId: roomId, id: doc.id, ...data });
+  });
+
+  console.log('Fetched reservations:', reservations);
+  return reservations;
+
+}
+
+async function fetchAllBookingsRetry(roomId) {
+
+  //const bookingsRef = collection(db, `reservations/${roomId}/dates`);
+
+  const bookingsRef1 = doc(db, 'reservations', roomId);
+  console.log('bookingsRef1:', bookingsRef1);
+  const bookingsRef = collection(bookingsRef1, 'dates');
+  console.log('bookingsRef:', bookingsRef);
+
+   //const bookingsRef = collection(db, 'reservations');
+
+  // Placeholder for all reservations
+  const reservations = [];
+
+  // Get all date collections (in this case, documents under the dates path)
+  const snapshot = await getDocs(bookingsRef)
+  console.log('Booking Snapshot:', snapshot);
+
+  snapshot.forEach((doc) => {
+    console.log('doc:', doc);
+    const data = doc.data();
+    console.log('Booking ID:', doc.id, 'Data:', data);
+    //reservations.push({ studioId: roomId, id: doc.id, ...data });
   });
 
   console.log('Fetched reservations:', reservations);
@@ -545,4 +580,4 @@ const fetchOwnerStudio = async () => {
   }
 }
 
-export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection,doSignOut, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings, fetchOwnerStudio, retrievePhoto };
+export { app, auth, fetchUserData, getData, returnData, fetchStudioById, createBooking, fetchBookingsForDay, fetchReservations, createStudio, addToUserCollection,doSignOut, retrieveMessages, sendMessage, fetchUserById, fetchAllBookings, fetchAllBookingsRetry, fetchOwnerStudio, retrievePhoto };

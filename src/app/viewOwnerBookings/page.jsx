@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { fetchAllBookings, fetchUserById } from '../firebase/clientApp';
+import { fetchAllBookings, fetchAllBookingsRetry, fetchUserById } from '../firebase/clientApp';
 import Header from '../components/header/index';
 import React from 'react';
 import { Box, Stack, Grid, Text } from '@chakra-ui/react';
@@ -43,8 +43,10 @@ useEffect(() => {
     for (let i = 0; i < studioArr.length; i++) {
       console.log('studioArr[i]:', studioArr[i]);
       const fetchedReservations = await fetchAllBookings(studioArr[i]);
+      console.log('fetchedReservations:', fetchedReservations);
       if (fetchedReservations && fetchedReservations.length > 0) {
         results = [...results, ...fetchedReservations];
+        console.log('results:', results);
       }
     }
 
