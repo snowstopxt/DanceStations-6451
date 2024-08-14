@@ -215,16 +215,20 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
   const newStudioRef = doc(studioRef);
   const studioId = newStudioRef.id;
   const imageURL =`${studioId}_${Date.now()}`;
-  const storageRef = ref(storage, `images/${imageURL}.jpg`);
+  const storageRef = ref(storage, `images/${imageURL}`);
   const user = auth.currentUser;
   const userId = user.uid;
   const userDocRef = doc(db, 'users', userId);
 
   console.log('image', image)
- 
-  const snapshot = await uploadBytes(storageRef, image);
 
-  console.log('Uploaded a blob or file')
+
+  const snapshot = await uploadBytes(storageRef, image, {
+    contentType: image.type,
+  });
+
+  console.log('Uploaded a blob or file', snapshot);
+
   await setDoc(newStudioRef, {
       name: name,
       mrt: mrt,
@@ -252,9 +256,19 @@ async function createStudio({name, mrt, geohash, geocode, size, price, descripti
 }
 
 async function retrievePhoto(studio) {
-  const storageRef = ref(storage, `images/${studio.image}.jpg`);
-  const url = await getBlob(storageRef);
-  return url;
+  const storageRef = ref(storage, `images/${studio.image}`);
+  try {
+    const url = await getDownloadURL(storageRef);
+    return url;
+  } catch (error) {
+    if (error.code === 'storage/object-not-found') {
+      console.log('Image not found:', studio.image);
+      return null;
+    } else {
+      throw error; // Re-throw other errors
+    }
+  }
+  
 }
   
 // }

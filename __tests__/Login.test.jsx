@@ -79,22 +79,19 @@ const mockInitializeUser = jest.fn(async (user) => {
   setLoading(false); 
 });
 
-
-const AllProviders = ({ children }) => {
-  return (
-    <ChakraProvider>
-      <AuthProvider>
-        {children}
-      </AuthProvider>
-    </ChakraProvider>
-  );
-};
+const LoginComponent = ({ userType }) => (
+  <ChakraProvider>
+    <AuthProvider>
+      <Login userType={userType} />
+    </AuthProvider>
+  </ChakraProvider>
+);
 
 describe('DancerLoginComponent', () => {
   it('allows the user to log in', async () => {
 
     const children = true;
-    render(<Login userType='dancer'/>,  {wrapper: AllProviders});
+    render(<LoginComponent userType="dancer"/>);
 
     //screen.debug();
 
@@ -117,7 +114,7 @@ describe('OwnerLoginComponent', () => {
   it('allows the user to log in', async () => {
 
     const children = true;
-    render(<Login userType='studio owner'/>,  {wrapper: AllProviders});
+    render(<LoginComponent userType="owner"/>);
 
     //screen.debug();
 

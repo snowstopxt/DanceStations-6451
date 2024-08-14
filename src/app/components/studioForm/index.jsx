@@ -11,6 +11,7 @@ import './styles.css';
 
 const StudioForm = () => {
   const [image, setImage] = useState(null);
+  const [imageURL, setImageURL] = useState('');
   const [fileName, setFileName] = useState('No image selected');
   const [name, setName] = useState('');
   const [mrt, setMrt] = useState('');
@@ -79,13 +80,19 @@ const StudioForm = () => {
           hidden
           onChange={({ target: { files } }) => {
             if (files[0]) {
-              setFileName(files[0].name);
-              setImage(URL.createObjectURL(files[0]));
+              const file = files[0];
+              if (file.type.startsWith('image/')) {
+              setFileName(file.name);
+              setImage(file);
+              setImageURL(URL.createObjectURL(file));
+            } else {
+              alert('Please upload a valid image file');
             }
-          }}
+            
+          }}}
         />
         {image ? (
-          <Image src={image} width={150} height={100} alt={fileName} />
+          <Image src={imageURL} width={150} height={100} alt={fileName} />
         ) : (
           <>
             <MdCloudUpload color="#1475cf" size={20} marginx={10} />

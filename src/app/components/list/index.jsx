@@ -74,7 +74,7 @@ const List = (x) => {
     }
 
     return (
-        <Box padding='25px' overflow='auto'>
+        <Box padding='25px' overflow='hidden'>
             <Text fontSize='md'>{ studios.length > 1 ? `${studios.length} studios in this area` : `${studios.length} studio in this area` }</Text>
             <FormControl margin={3} mb='30px' minW='120px'>
             <Grid templateColumns='repeat(2, 1fr)'>
@@ -162,6 +162,7 @@ const List = (x) => {
           <Spinner size="xl" />
         </Center>
       ) : (
+        <Box maxH="400px" overflowY="auto">
         <Grid templateColumns='repeat(auto-fill, minmax(350px, 1fr))' spacing={3}>
           {studios.length > 0 ? (
             studios.map((studio, i) => (
@@ -173,6 +174,7 @@ const List = (x) => {
             !loading && <Text>Try searching with a different parameter</Text>
           )}
         </Grid>
+        </Box>
       )}
         </Box>
     );

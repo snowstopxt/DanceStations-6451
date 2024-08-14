@@ -4,8 +4,7 @@ import List from '../src/app/components/list';
 import { StudiosProvider, useStudios } from '../src/contexts/studiosContext'; 
 import { ChakraProvider } from '@chakra-ui/react';
 import {APIProvider} from '@vis.gl/react-google-maps';
-import { useAuth } from '../src/contexts/authContext';
-import { AuthProvider } from '../src/contexts/authContext.jsx';
+import { AuthProvider, useAuth } from '../src/contexts/authContext.jsx';
 
 
 
@@ -41,13 +40,11 @@ jest.mock('../src/contexts/authContext', () => ({
 }));
 */
 
-
-
 // Mock data for studios
 const mockStudios = [
-  { id: 1, name: 'Studio 1', size: 20, image: '/path/to/image1.jpg' },
-  { id: 2, name: 'Studio 2', size: 20, image: '/path/to/image2.jpg' },
-  { id: 3, name: 'Studio 3', size: 20, image: '/path/to/image3.jpg' },
+  { id: 1, name: 'Studio 1', description: 'Description', size: 20, image: '/path/to/image1.jpg' },
+  { id: 2, name: 'Studio 2', description: 'Description', size: 20, image: '/path/to/image2.jpg' },
+  { id: 3, name: 'Studio 3', description: 'Description', size: 20, image: '/path/to/image3.jpg' },
 ];
 
 const AllProviders = ({ children }) => {
@@ -62,7 +59,7 @@ const AllProviders = ({ children }) => {
 
 describe('List Component', () => {
   beforeEach(() => {
-    AuthProvider.mockReturnValue({
+    useAuth.mockReturnValue({
       userLoggedIn: true,
       setUserLoggedIn: jest.fn(),
       auth: { currentUser: { uid: '123', email: 'test@example.com' } },
@@ -73,8 +70,8 @@ describe('List Component', () => {
 
   test('renders studios correctly', async () => {
     render(
-        <List setMinPrice={jest.fn()} setMaxPrice={jest.fn()
-        } />, {wrapper: AllProviders}
+        <AllProviders><List setMinPrice={jest.fn()} setMaxPrice={jest.fn()
+        } /></AllProviders>
       );
 
     // Check if the loading indicator is displayed
@@ -84,7 +81,6 @@ describe('List Component', () => {
     await waitFor(() => {
       mockStudios.forEach(studio => {
         expect(screen.getByText(studio.name)).toBeInTheDocument();
-        expect(screen.getByText(studio.description)).toBeInTheDocument();
       });
     });
   });

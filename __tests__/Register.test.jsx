@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 import { render, act, fireEvent, waitFor, screen } from '@testing-library/react'
 import Register from '../src/app/components/auth/register/index.jsx'
 import { doCreateUserWithEmailAndPassword } from '../src/app/firebase/auth.js';
-import { AuthProvider } from '../src/contexts/authContext.jsx';
+import { AuthProvider, useAuth } from '../src/contexts/authContext.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 
 jest.mock('../src/app/firebase/auth.js', () => ({
@@ -42,14 +42,14 @@ describe('RegisterComponent', () => {
     it('allows the user to register', async () => {
   
       //const children = true;
-      render(<AuthProvider><Register /></AuthProvider>);
+      render(<AuthProvider><Register userType="dancer" /></AuthProvider>);
         //render(<Register />);
       screen.debug();
   
       const usernameInput =  await screen.findByPlaceholderText("Username");
       const emailInput =  await screen.findByPlaceholderText("Email");
       const passwordInput = await screen.findByPlaceholderText("Password");
-      const registerButton = await screen.findByRole('button', { name: 'Sign Up' });
+      const registerButton = await screen.findByRole('button', { name: /sign up as dancer/i });
       
       act(() => {
         fireEvent.change(usernameInput, { target: { value: 'user' } })
@@ -58,6 +58,6 @@ describe('RegisterComponent', () => {
         fireEvent.click(registerButton)
       });
   
-      expect(doCreateUserWithEmailAndPassword).toHaveBeenCalledWith('user@example.com', 'password');
+      expect(doCreateUserWithEmailAndPassword).toHaveBeenCalledWith('user@example.com', 'password', "user", {userType: "dancer"});
       });
     });

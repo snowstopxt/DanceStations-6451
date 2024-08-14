@@ -43,8 +43,14 @@ const Login = ({userType}) => {
             setIsSigningIn(true)
             try {
                 await doSignInWithEmailAndPassword(email, password)
-                if (userType == 'dancer') router.push('/');
-                else if (userType == 'owner') router.push('/ownerMain');
+                if (userType === 'dancer') {
+                  router.push('/');
+              } else if (userType === 'owner') {
+                  router.push('/ownerMain');
+              } else {
+                  // Default or handle unexpected userType
+                  router.push('/dashboard');
+              }
             } catch (error) {
                 console.log('onsubmit error:', error)
                 if (error.code === 'auth/invalid-credential') {
@@ -110,8 +116,9 @@ const Login = ({userType}) => {
                     )}
                     <Button
                       type="submit"
-                      colorScheme="brand"
-                      variant="brand-lg"
+                      size="lg"
+                      fontSize="16px"
+                      variant="brand-blue"
                       isLoading={isSigningIn}
                       loadingText="Signing In..."
                       width="full"

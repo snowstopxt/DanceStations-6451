@@ -106,8 +106,9 @@ const Register = ({userType}) => {
                     )}
                     <Button
                       type="submit"
-                      colorScheme="brand"
-                      variant="brand-lg"
+                      size="lg"
+                      fontSize="16px"
+                      variant="brand-blue"
                       isLoading={isSigningUp}
                       loadingText="Signing Up..."
                       width="full"

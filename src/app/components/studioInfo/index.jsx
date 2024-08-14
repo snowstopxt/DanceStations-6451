@@ -1,10 +1,24 @@
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { AiOutlineStar } from 'react-icons/ai';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { retrievePhoto } from "../../firebase/clientApp";
 import { Box, Image, Text, Divider, Flex } from "@chakra-ui/react";
 
 const StudioInfo = ({ stars, studio }) => {
+  const [photoUrl, setPhotoUrl] = useState(null);
+
+  useEffect(() => {
+    async function fetchPhoto() {
+      const url = await retrievePhoto(studio);
+      setPhotoUrl(url);
+    }
+
+    if (studio && studio.image) {
+      fetchPhoto();
+    }
+  }, [studio]);
+
+
 
     const starRating = Array.from({ length: 5 }, (elem, index) => {
             
@@ -21,13 +35,13 @@ const StudioInfo = ({ stars, studio }) => {
         );
     });
     
-    console.log("studio.url", studio.url)
+    console.log("studio.image", studio.image)
 
     return (
         <Box display="flex" flexDirection="column">
           <Image
             m="8"
-            src={retrievePhoto(studio) || "/logo-transparent.png"}
+            src={photoUrl || "/logo-transparent.png"}
             alt={studio.name}
             borderRadius="lg"
             objectFit="contain"
