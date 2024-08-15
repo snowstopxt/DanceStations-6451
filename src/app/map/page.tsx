@@ -53,7 +53,7 @@ export default function Page () {
             <StudiosProvider queries = {queries}>
             <Header/>
             <Grid templateColumns='repeat(2, 1fr)' gap={0}>
-                <GridItem bg='white'>
+                <GridItem bg='white' minH="full">
                     <List setMinPrice={setMinPrice} setMaxPrice={setMaxPrice}/>
                 </GridItem>
                 <GridItem>

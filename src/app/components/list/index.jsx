@@ -74,10 +74,10 @@ const List = (x) => {
     }
 
     return (
-        <Box padding='25px' overflow='hidden'>
+        <Box display="flex" flexDirection="column" padding='25px' overflow='hidden' >
             <Text fontSize='md'>{ studios.length > 1 ? `${studios.length} studios in this area` : `${studios.length} studio in this area` }</Text>
             <FormControl margin={3} mb='30px' minW='120px'>
-            <Grid templateColumns='repeat(2, 1fr)'>
+            <Grid templateColumns='repeat(2, 1fr)' >
             <GridItem spacing={3} >
                 <Stack direction="row" spacing={3}>
                 <Button
@@ -149,12 +149,12 @@ const List = (x) => {
                 </Menu>
                 </Stack>
             </GridItem>
-            <GridItem colEnd={3} pos="absolute" right="3">
+            {/* <GridItem colEnd={3} pos="absolute" right="3">
                 <Button 
                 variant="outline">
                 Sort By
             </Button>
-            </GridItem>
+            </GridItem> */}
             </Grid>
             </FormControl>
             {loading ? (
@@ -162,7 +162,7 @@ const List = (x) => {
           <Spinner size="xl" />
         </Center>
       ) : (
-        <Box maxH="400px" overflowY="auto">
+        <Box flex="1" maxH="450px" overflowY="auto">
         <Grid templateColumns='repeat(auto-fill, minmax(350px, 1fr))' spacing={3}>
           {studios.length > 0 ? (
             studios.map((studio, i) => (
