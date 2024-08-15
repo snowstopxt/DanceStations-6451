@@ -97,12 +97,12 @@ return (
       )}
       {userType === 'dancer' && (
         <Link href="/viewBookings" fontSize="lg" color="gray.500" _hover={{ color: "black" }}>
-          My Bookings
+          Bookings
         </Link>
       )}
       {userType === 'owner' && (
         <Link href="/viewOwnerBookings" fontSize="lg" color="gray.500" _hover={{ color: "black" }}>
-          My Listings
+          Bookings
         </Link>
       )}
 

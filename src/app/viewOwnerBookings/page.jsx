@@ -65,9 +65,9 @@ useEffect(() => {
         console.log('viewBookingsPage reservations', reservations);
         
         return (
-            <Box bgColor='white' minH="100vh">
+            <Box bgColor='brand.100' minH="100vh">
             <Header />
-            <Text fontSize="3xl" fontWeight="bold" color='black' m={5}>Studio Bookings</Text>
+            <Text fontSize="3xl" fontWeight="bold" color='white' m={5}>Studio Bookings</Text>
             <Box> 
             <Box overflowX='hidden' overflowY='auto'>
             <Stack spacing={6} direction='column' m={5} >

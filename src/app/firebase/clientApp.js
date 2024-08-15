@@ -140,17 +140,6 @@ const returnData = async () => {
 async function createBooking(roomId, userId, date, startTime, endTime) {
     let isBooked = false;
 
-    //making a dummy docs for the collections
-  //   const dummyDocRef = doc(db, `reservations/${roomId}/dates/dummyDoc`);
-  //   // Check if the dummy document already exists
-  //   const dummyDocSnap = await getDoc(dummyDocRef);
-
-  //   if (!dummyDocSnap.exists()) {
-  //   // If the dummy document does not exist, create it
-  //     await setDoc(dummyDocRef, { dummyField: true });
-  //     console.log('Dummy field added to dates collection.');
-  // }
-
   if (parseInt(startTime.split(':')[0], 10) < 9 || parseInt(endTime.split(':')[0], 10) < 9) {
     console.log('Invalid booking time');
     return false;
@@ -175,15 +164,7 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
   }
 
   for (let i = parseInt(startTime); i < parseInt(endTime); i+=1) {
-    // const dummyTimeDocRef = doc(db, `reservations/${roomId}/dates/${date}/time/dummyTime`);
-    // // Check if the dummy document in the times collection already exists
-    // const dummyTimeDocSnap = await getDoc(dummyTimeDocRef);
-
-    // if (!dummyTimeDocSnap.exists()) {
-    //   // If the dummy document does not exist in the times collection, create it
-    //   await setDoc(dummyTimeDocRef, { dummyField: true });
-    //   console.log('Dummy field added to time collection.');
-    // }
+    
       const bookingRef = doc(db, `reservations/${roomId}/dates/${date}/time/${i}`);
       //const bookingRef = doc(db, `reservations/${roomId}/${date}/-`);
       await setDoc(bookingRef, { userId: userId })
@@ -208,8 +189,19 @@ async function createBooking(roomId, userId, date, startTime, endTime) {
       endTime: endTime
     }).then(() => {
       console.log('Booking successful!!')});
+    
+
+    const bookingsRef = collection(db, `reservations/${roomId}/bookings`);
+    const bookingDocRef = doc(bookingsRef);
+    await setDoc(bookingDocRef, {
+      userId: userId,
+      date: date,
+      startTime: startTime,
+      endTime: endTime
+    }).then(() => {
+      console.log('added to bookings in studios!')});
   
-  
+
   return isBooked;
   
 }
